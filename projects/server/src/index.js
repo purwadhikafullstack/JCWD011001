@@ -7,16 +7,15 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
   cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
+    origin: [process.env.WHITELISTED_DOMAIN && process.env.WHITELISTED_DOMAIN.split(",")],
   })
 );
 
 app.use(express.json());
 
 //#region API ROUTES
+const db = require("../models");
+db.sequelize.sync({ alter: true });
 
 // ===========================
 // NOTE : Add your routes here
