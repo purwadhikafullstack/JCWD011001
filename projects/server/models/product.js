@@ -8,15 +8,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // has
+      this.hasMany(models.ProductStore, { foreignKey: "product_id" });
+      this.hasMany(models.Cartitem, { foreignKey: "product_id" });
+      this.hasMany(models.Transactionitem, { foreignKey: "product_id" });
+      this.hasMany(models.Voucherdetail, { foreignKey: "product_id" });
+      //belongs
+      this.belongsTo(models.Category, { foreignKey: "category_id" });
+      this.belongsTo(models.Store, { foreignKey: "store_id" });
     }
   }
   Product.init(
     {
       name: DataTypes.STRING,
       category_id: DataTypes.INTEGER,
-      price: DataTypes.INTEGER,
       store_id: DataTypes.INTEGER,
+      price: DataTypes.INTEGER,
       admin_discount: DataTypes.INTEGER,
       product_img: DataTypes.STRING,
       isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
