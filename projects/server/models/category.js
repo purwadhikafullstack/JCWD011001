@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Category.init(
     {
       name: DataTypes.STRING,
+      isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {
       sequelize,
