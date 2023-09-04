@@ -2,15 +2,18 @@ import axios from "axios";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { useEffect, useState } from "react";
-import UserLanding from "./pages/UserLanding";
-import Shop from "./pages/Shop";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import "./style/main.css"
+import UserLanding from "./pages/user/UserLanding";
+import Shop from "./pages/user/Shop";
+import About from "./pages/user/About";
+import Store from "./pages/user/Store";
+import AdminSignIn from "./pages/admin/AdminSignIn";
+import SuperDashboard from "./pages/admin/SuperDashboard";
+import BranchDashboard from "./pages/admin/BranchDashboard";
 import Signin from "./pages/Signin";
 import Register from "./pages/Register";
 import UserAuth from "./userAuth";
-import Navbar from "./components/landing/Navbar";
+// import Navbar from "./components/landing/Navbar";
+import "./style/main.css";
 
 function App() {
   // const [message, setMessage] = useState("");
@@ -26,14 +29,16 @@ function App() {
   return (
     <>
       <UserAuth>
-      <Navbar />
       <Routes>
         <Route path="/" element={<UserLanding />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/store" element={<Store />} />
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/register" element={<Register />} />
+        <Route path="/admin" element={<AdminSignIn />}/>
+      <Route path="/admin/super" element={<SuperDashboard />}/>
+      <Route path="/admin/branch" element={<BranchDashboard />}/>
       </Routes>
       </UserAuth>
     </>

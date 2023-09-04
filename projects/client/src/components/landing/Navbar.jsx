@@ -48,18 +48,26 @@ const navigate = useNavigate();
           borderBottom={1}
           borderStyle={"solid"}
           borderColor={"#D7F0AA"}
-          align={"center"}>
-          <Box w={"50%"} m={"16px 60px"}>
+          align={"center"}
+        >
+          <Box w={"50%"} m={"16px 100px"}>
             <Flex justifyContent={"flex-start"} align={"center"}>
               <Link to={"/"}>
-                <Image src={Logo} h={"28px"} _hover={{ filter: "brightness(70%)", transition: "300ms" }}></Image>
+                <div style={{ width: "184px" }}>
+                  <Image
+                    src={Logo}
+                    h={"28px"}
+                    _hover={{ filter: "brightness(70%)", transition: "300ms" }}
+                  />
+                </div>
               </Link>
               <Text ml={8} fontWeight={"medium"} _hover={{ color: "#1c1c1c" }}>
                 <Link
                   to={"/"}
                   style={{
                     color: location.pathname === "/" ? "#59981A" : "inherit",
-                  }}>
+                  }}
+                >
                   Home
                 </Link>
               </Text>
@@ -67,7 +75,8 @@ const navigate = useNavigate();
                 to={"/shop"}
                 style={{
                   color: location.pathname === "/shop" ? "#59981A" : "inherit",
-                }}>
+                }}
+              >
                 <Text ml={4} fontWeight={"medium"}>
                   Shop
                 </Text>
@@ -76,30 +85,40 @@ const navigate = useNavigate();
                 to={"/about"}
                 style={{
                   color: location.pathname === "/about" ? "#59981A" : "inherit",
-                }}>
+                }}
+              >
                 <Text ml={4} fontWeight={"medium"}>
                   About
                 </Text>
               </Link>
               <Link
-                to={"/contact"}
+                to={"/store"}
                 style={{
-                  color: location.pathname === "/contact" ? "#59981A" : "inherit",
-                }}>
+                  color: location.pathname === "/store" ? "#59981A" : "inherit",
+                }}
+              >
                 <Text ml={4} fontWeight={"medium"}>
-                  Contact
+                  Store
                 </Text>
               </Link>
             </Flex>
           </Box>
-          <Box w={"50%"} m={"16px 60px"}>
+          <Box w={"50%"} m={"16px 100px"}>
             <Flex justifyContent={"flex-end"} align={"center"} gap={4}>
               <Link to={"/search"}>
-                <HiOutlineSearch fontSize={24} cursor={"pointer"} color={"gray.800"} />
+                <HiOutlineSearch
+                  fontSize={24}
+                  cursor={"pointer"}
+                  color={"gray.800"}
+                />
               </Link>
               <Link to={"/cart"} ml={4}>
                 <Flex alignItems={"center"} position="relative">
-                  <HiOutlineShoppingCart fontSize={24} cursor={"pointer"} color={"gray.800"} />
+                  <HiOutlineShoppingCart
+                    fontSize={24}
+                    cursor={"pointer"}
+                    color={"gray.800"}
+                  />
                   <Box
                     position="absolute"
                     top="-8px"
@@ -110,7 +129,8 @@ const navigate = useNavigate();
                     width={`${cartItemCount.toString().length * 10 + 8}px`}
                     display="flex"
                     alignItems="center"
-                    justifyContent="center">
+                    justifyContent="center"
+                  >
                     <Text fontSize={"xs"}>{cartItemCount}</Text>
                   </Box>
                 </Flex>
@@ -118,7 +138,13 @@ const navigate = useNavigate();
               {login ? (
                 <Flex alignItems={"center"} ml={10}>
                   <Menu>
-                    <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
+                    <MenuButton
+                      as={Button}
+                      rounded={"full"}
+                      variant={"link"}
+                      cursor={"pointer"}
+                      minW={0}
+                    >
                       <Avatar size={"sm"} name="User" src={"/profile"} />
                     </MenuButton>
                     <MenuList>
@@ -130,7 +156,9 @@ const navigate = useNavigate();
                       </Link>
                       <MenuDivider />
                       <Link>
-                        <MenuItem color={"red"} onClick={() => onKlik()}>Sign Out</MenuItem>
+                        <MenuItem color={"red"} onClick={() => onKlik()}>
+                          Sign Out
+                        </MenuItem>
                       </Link>
                     </MenuList>
                   </Menu>
@@ -148,11 +176,14 @@ const navigate = useNavigate();
                       border={"1px"}
                       borderColor={"#37630A"}
                       rounded={"lg"}
-                      href={"/sign-up"}
-                      _hover={{
+                      onClick={() => {
+                        navigate("/signin");
+                      }}
+                      _hover=
+                      {{
                         bg: "gray.100",
-                      }}>
-                      Log In
+                      }}
+                      > Log In
                     </Button>
                     <Button
                       as={"a"}
@@ -170,7 +201,8 @@ const navigate = useNavigate();
                       }}
                       onClick={() => {
                         navigate("/register");
-                      }}>
+                      }}
+                    >
                       Register
                     </Button>
                   </Stack>
