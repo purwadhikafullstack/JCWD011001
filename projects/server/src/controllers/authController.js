@@ -25,6 +25,37 @@ const authController = {
       res.status(500).json({ message: err.message });
     }
   },
+  signIn : async (req,res) => {
+    const {email, password} = req.body
+    try {
+        if(!(email || password)) return res.status(500).json({message : "Please complete the form"})
+        const checkUser = await User.findOne({ where : {email}})
+        if(!checkUser) return res.status(500).json({message : "Account not defined"})
+        const checkPassword = await bcrypt.compare(password, checkUser.password)
+        if(!checkPassword) return res.status(500).json({message : "Invalid Password"})
+        let payload = {
+            id : checkUser.id,
+            email : checkUser.email,
+            username : checkUser.username,
+            name : checkUser.name,
+            gender : checkUser.gender,
+            refcode : checkUser.refcode
+        }
+        const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn : "10h"})
+        return res.status(200).json({message : "Login Success", Account : checkUser, token : token})
+    } catch (error) {
+        res.status(500).json({message : error.message})
+    }
+  },
+  keepLogin : async (req,res) => {
+    try {
+        const {id} = req.user
+        const findUser = await User.findOne({where : {id}})
+        return res.status(200).json({message : "Still Login", findUser})
+    } catch (error) {
+        return res.status(500).json({message : error.message})
+    }
+  }
 };
 
 module.exports = authController;

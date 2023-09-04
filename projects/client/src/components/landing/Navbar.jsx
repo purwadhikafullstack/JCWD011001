@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   Flex,
   Image,
   Menu,
@@ -11,18 +12,32 @@ import {
   MenuList,
   Stack,
   Text,
+  useMediaQuery,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo_main.png";
 import { HiOutlineSearch, HiOutlineShoppingCart } from "react-icons/hi";
+import Hamburger from "./Hamburger";
+import ButtonSignIn from "./ButtonSignIn";
+import ButtonRegist from "./ButtonRegist";
+import { useDispatch } from "react-redux";
+import { logoutAuth, logoutSuccess } from "../../redux/reducer/AuthReducer";
 
 const Navbar = () => {
   const login = localStorage.getItem("token");
   const [cartItemCount, setCartItemCount] = useState(0);
   const location = useLocation();
-  const navigate = useNavigate();
+const dispatch = useDispatch()
+const toast = useToast()  
+const navigate = useNavigate();
 
+  function onKlik() {
+    dispatch(logoutAuth(toast));
+  }
+
+  const [isLargerThanMD] = useMediaQuery("(min-width: 768px)");
   return (
     <header>
       <Box>
@@ -115,7 +130,7 @@ const Navbar = () => {
                       </Link>
                       <MenuDivider />
                       <Link>
-                        <MenuItem color={"red"}>Sign Out</MenuItem>
+                        <MenuItem color={"red"} onClick={() => onKlik()}>Sign Out</MenuItem>
                       </Link>
                     </MenuList>
                   </Menu>
