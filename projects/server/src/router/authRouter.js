@@ -7,5 +7,6 @@ const { verifyToken } = require("../middleware/auth");
 router.post("/user", authController.register);
 router.post("/auth", loginValidator, validateRegist, authController.signIn)
 router.get("/keep", verifyToken, authController.keepLogin)
+router.patch("/verify", verifyToken, authController.verifyAccount)
 
 module.exports = router;

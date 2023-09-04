@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import UserAuth from "./userAuth";
 // import Navbar from "./components/landing/Navbar";
 import "./style/main.css";
+import Verify from "./pages/verify";
 
 function App() {
   // const [message, setMessage] = useState("");
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin" element={<AdminSignIn />}/>
       <Route path="/admin/super" element={<SuperDashboard />}/>
       <Route path="/admin/branch" element={<BranchDashboard />}/>
+      <Route path="/verification/:token" element={<Verify/>}/>
       </Routes>
       </UserAuth>
     </>
