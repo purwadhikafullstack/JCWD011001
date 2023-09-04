@@ -5,7 +5,7 @@ import Navbar from '../components/landing/Navbar'
 const Shop = () => {
   return (
     <Box>
-        <Navbar />
+        {/* <Navbar /> */}
     </Box>
   )
 }

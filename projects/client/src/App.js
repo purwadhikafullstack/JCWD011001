@@ -6,6 +6,8 @@ import UserLanding from "./pages/UserLanding";
 import Shop from "./pages/Shop";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Register from "./pages/Register";
+import Navbar from "./components/landing/Navbar";
 
 function App() {
   // const [message, setMessage] = useState("");
@@ -20,12 +22,14 @@ function App() {
   // }, []);
   return (
     <>
-    <Routes>
-      <Route path="/" element={<UserLanding />}/>
-      <Route path="/shop" element={<Shop />}/>
-      <Route path="/about" element={<About />}/>
-      <Route path="/contact" element={<Contact />}/>
-    </Routes>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<UserLanding />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
     </>
   );
 }
