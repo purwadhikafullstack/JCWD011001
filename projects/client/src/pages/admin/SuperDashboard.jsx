@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import {
   IoPersonOutline,
   IoCartOutline,
+  IoGridOutline,
   IoBarChartOutline,
-  IoFileTrayStackedOutline,
 } from "react-icons/io5";
 import MenuDashboard from '../../components/admin/MenuDashboard';
 import AdminManagement from '../../components/admin/super/AdminManagement';
@@ -47,7 +47,7 @@ const SuperDashboard = () => {
               <MenuDashboard icon={IoCartOutline} name="Transaction" />
             </Link>
             <Link as={"button"} onClick={() => setActivePage("stock")}>
-              <MenuDashboard icon={IoFileTrayStackedOutline} name="Stock History" />
+              <MenuDashboard icon={IoGridOutline} name="Stock History" />
             </Link>
             <Link as={"button"} onClick={() => setActivePage("report")}>
               <MenuDashboard icon={IoBarChartOutline} name="Sales Report" />
