@@ -14,9 +14,11 @@ import Register from "./pages/Register";
 import UserAuth from "./userAuth";
 // import Navbar from "./components/landing/Navbar";
 import "./style/main.css";
+import Notfound from "./pages/Notfound";
 import Verify from "./pages/verify";
 
 function App() {
+  const role = "";
   // const [message, setMessage] = useState("");
 
   // useEffect(() => {
@@ -27,21 +29,70 @@ function App() {
   //     setMessage(data?.message || "");
   //   })();
   // }, []);
+
+  const defaultRoutes = () => {
+    if (role === "") {
+      return (
+        <>
+          <Route path="/" element={<UserLanding />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin" element={<AdminSignIn />} />
+          <Route path="/verification/:token" element={<Verify />} />
+        </>
+      );
+    }
+    return <Route path="/*" element={<Notfound />} />;
+  };
+
+  const adminRoutes = () => {
+    if (role === "2") {
+      return (
+        <>
+          <Route path="/admin/super" element={<SuperDashboard />} />
+          <Route path="/admin/branch" element={<BranchDashboard />} />
+        </>
+      );
+    }
+    return <Route path="/*" element={<Notfound />} />;
+  };
+
+  const superadminRoutes = () => {
+    if (role === "1") {
+      return (
+        <>
+          <Route path="/admin/super" element={<SuperDashboard />} />
+          <Route path="/admin/branch" element={<BranchDashboard />} />
+        </>
+      );
+    }
+    return <Route path="/*" element={<Notfound />} />;
+  };
+
+  const userRoutes = () => {
+    if (role === "3") {
+      return (
+        <>
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/store" element={<Store />} />
+        </>
+      );
+    }
+    return <Route path="/*" element={<Notfound />} />;
+  };
   return (
     <>
       <UserAuth>
-      <Routes>
-        <Route path="/" element={<UserLanding />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/store" element={<Store />} />
-        <Route path="/signin" element={<Signin/>}/>
-        <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<AdminSignIn />}/>
-      <Route path="/admin/super" element={<SuperDashboard />}/>
-      <Route path="/admin/branch" element={<BranchDashboard />}/>
-      <Route path="/verification/:token" element={<Verify/>}/>
-      </Routes>
+        <Routes>
+          {defaultRoutes()}
+          {adminRoutes()}
+          {superadminRoutes()}
+          {userRoutes()}
+        </Routes>
       </UserAuth>
     </>
   );

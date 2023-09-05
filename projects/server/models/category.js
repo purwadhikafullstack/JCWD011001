@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Category.init(
     {
       name: DataTypes.STRING,
+      category_img: DataTypes.STRING,
       isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {

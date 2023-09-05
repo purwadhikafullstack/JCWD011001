@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Uservoucher, { foreignKey: "user_id" });
       this.hasMany(models.Transaction, { foreignKey: "user_id" });
       this.hasOne(models.Cart, { foreignKey: "user_id" });
+      this.belongsTo(models.Role, { foreignKey: "role_id" });
     }
   }
   User.init(
@@ -28,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       refcode: DataTypes.STRING,
       refby: DataTypes.STRING,
       isverify: { type: DataTypes.BOOLEAN, defaultValue: false },
+      role_id: DataTypes.INTEGER,
     },
     {
       sequelize,
