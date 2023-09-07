@@ -29,9 +29,9 @@ const Navbar = () => {
   const login = localStorage.getItem("token");
   const [cartItemCount, setCartItemCount] = useState(0);
   const location = useLocation();
-const dispatch = useDispatch()
-const toast = useToast()  
-const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const navigate = useNavigate();
 
   function onKlik() {
     dispatch(logoutAuth(toast));
@@ -148,7 +148,7 @@ const navigate = useNavigate();
                       <Avatar size={"sm"} name="User" src={"/profile"} />
                     </MenuButton>
                     <MenuList>
-                      <Link to={"/user-profile"}>
+                      <Link to={"/profile"}>
                         <MenuItem>Profile</MenuItem>
                       </Link>
                       <Link to={"/change-password"}>
@@ -179,11 +179,12 @@ const navigate = useNavigate();
                       onClick={() => {
                         navigate("/signin");
                       }}
-                      _hover=
-                      {{
+                      _hover={{
                         bg: "gray.100",
                       }}
-                      > Log In
+                    >
+                      {" "}
+                      Log In
                     </Button>
                     <Button
                       as={"a"}

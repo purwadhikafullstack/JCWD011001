@@ -19,13 +19,14 @@ app.use(express.json());
 
 //#region API ROUTES
 const db = require("../models");
-const { authRouter, adminRouter } = require("./router");
+const { authRouter, adminRouter, profileRouter } = require("./router");
 // db.sequelize.sync({ alter: true });
 
 // ===========================
 // NOTE : Add your routes here
 
 app.use("/api/auth", authRouter)
+app.use("/api", profileRouter)
 app.use("/api/admin", adminRouter)
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

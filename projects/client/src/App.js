@@ -16,6 +16,7 @@ import UserAuth from "./userAuth";
 import "./style/main.css";
 import Notfound from "./pages/Notfound";
 import Verify from "./pages/verify";
+import UserProfile from "./components/landing/UserProfile";
 import { useSelector } from "react-redux";
 
 function App() {
