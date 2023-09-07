@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { setBranchAdmin } from "./AdminReducer";
 const URL_API = process.env.REACT_APP_API_BASE_URL
 
 const initialState = {
@@ -26,6 +27,7 @@ export const AuthReducer = createSlice({
       console.log("isi", action.payload)
       const {id, username, name, birhdate, email, gender, profileimg, refcode, refby} = action.payload
       state.user = {id, username, name, birhdate, email, gender, profileimg, refcode, refby}
+      state.login = true;
     },
     loginSuccess: (state, action) => {
       // state.user = {...action.payload};
@@ -128,8 +130,9 @@ export const keepLogin = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      dispatch(setUser(respon.data.findUser))
-      dispatch(loginSuccess())
+      console.log(respon.data)
+      if (respon.data.findAdmin) dispatch(setBranchAdmin(respon.data.findAdmin))
+      if (respon.data.findUser) dispatch(setUser(respon.data.findUser))
     } catch (error) {
       console.log(error)
     }

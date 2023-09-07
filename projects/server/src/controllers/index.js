@@ -1,3 +1,4 @@
 const authController = require("./authController");
+const adminController = require("./adminController");
 
-module.exports = { authController };
+module.exports = { authController, adminController };

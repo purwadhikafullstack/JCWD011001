@@ -10,6 +10,7 @@ const verifyToken = async (req, res, next) => {
     if (token === "null" || !token) return res.status(401).send("access denied");
     let verifiedUser = jwt.verify(token, process.env.JWT_KEY);
     if (!verifiedUser) return res.status(401).send("unauthorized request");
+    console.log(verifiedUser);
     req.user = verifiedUser;
     next();
   } catch (err) {

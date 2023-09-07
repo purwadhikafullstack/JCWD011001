@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 const db = require("../../models");
 const User = db.User;
+const Admin = db.Admin;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -53,6 +54,11 @@ const authController = {
   keepLogin: async (req, res) => {
     try {
       const { id } = req.user;
+      console.log(req.user);
+      if (req.user.role) {
+        const findAdmin = await Admin.findOne({ where: { id } });
+        return res.status(200).json({ message: "Still Login", findAdmin });
+      }
       const findUser = await User.findOne({ where: { id } });
       return res.status(200).json({ message: "Still Login", findUser });
     } catch (error) {

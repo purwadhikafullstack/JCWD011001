@@ -10,52 +10,33 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   Text,
   VStack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-import { loginSuccess } from "../../redux/reducer/AuthReducer";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { loginAdmin } from "../../redux/reducer/AdminReducer";
+import { useNavigate } from "react-router-dom";
 // import ForgotPasswordModal from "../components/ForgotPasswordModal";
 
 const AdminSignIn = () => {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const handleClick = () => setShow(!show);
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onForgot = () => {
     onOpen();
-  };
-
-  const navigate = useNavigate();
-
-  const dispatch = useDispatch();
-
-  const login = async (values) => {
-    try {
-      const res = await axios.post("http://localhost:8000/api/auth/login", {
-        email: values.email,
-        password: values.password,
-      });
-      console.log(res);
-      if (res.status === 200) {
-        dispatch(loginSuccess(res.data.token));
-        if (res.data.role === "Cashier") {
-          navigate("/cashier/landing");
-        } else if (res.data.role === "Admin") {
-          navigate("/admin/landing");
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   const LoginSchema = Yup.object().shape({
@@ -72,7 +53,7 @@ const AdminSignIn = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      login(values);
+      dispatch(loginAdmin(values, setLoading, toast, navigate));
     },
   });
 
@@ -181,7 +162,7 @@ const AdminSignIn = () => {
                 _hover={{ bgColor: "#457811" }}
                 _active={{ bgColor: "#2D5406" }}
               >
-                Sign In
+                {isLoading ? <Spinner /> : "Sign In"}
               </Button>
             </form>
           </Box>

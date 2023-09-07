@@ -30,8 +30,8 @@ const Notfound = () => {
           _active={{
             bg: "#2D5406",
           }}
-          onClick={() => navigate("/")}>
-          Go to Home Page
+          onClick={() => navigate(-1)}>
+          Go Back
         </Button>
       </Box>
     </Center>
