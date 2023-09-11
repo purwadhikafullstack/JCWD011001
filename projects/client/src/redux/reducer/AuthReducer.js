@@ -19,16 +19,18 @@ const initialState = {
   },
   login: false,
   location: null,
+  lon: null,
+  lat: null,
 };
 
 export const AuthReducer = createSlice({
   name: "AuthReducer",
   initialState,
   reducers: {
-    setUser : (state, action) => {
-      console.log("isi", action.payload)
-      const {id, username, name, birthdate, email, gender, profileimg, refcode, refby} = action.payload
-      state.user = {id, username, name, birthdate, email, gender, profileimg, refcode, refby}
+    setUser: (state, action) => {
+      console.log("isi", action.payload);
+      const { id, username, name, birthdate, email, gender, profileimg, refcode, refby } = action.payload;
+      state.user = { id, username, name, birthdate, email, gender, profileimg, refcode, refby };
       state.login = true;
     },
     loginSuccess: (state, action) => {
@@ -45,6 +47,10 @@ export const AuthReducer = createSlice({
     },
     setLocation: (state, action) => {
       state.location = action.payload;
+    },
+    setLonLat: (state, action) => {
+      state.lon = action.payload.lng;
+      state.lat = action.payload.lat;
     },
   },
 });
@@ -132,16 +138,12 @@ export const keepLogin = () => {
     try {
       const respon = await axios.get(`${URL_API}/auth/keep`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      console.log(respon.data)
-      if (respon.data.findAdmin) {
-        dispatch(setBranchAdmin(respon.data.findAdmin))
-      }
-      if (respon.data.findUser) {
-        dispatch(setUser(respon.data.findUser))
-      }
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(respon.data);
+      if (respon.data.findAdmin) dispatch(setBranchAdmin(respon.data.findAdmin));
+      if (respon.data.findUser) dispatch(setUser(respon.data.findUser));
     } catch (error) {
       console.log(error);
     }
@@ -152,12 +154,12 @@ export const setUserLocation = (latitude, longitude) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${KEY}`
+        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${KEY}&language=id`
       );
-      const foundLocation = data.results;
       for (let i = 0; i < data.results.length; i++) {
-        if (data.results[i].components.city) {
+        if (data.results[i].components.state) {
           dispatch(setLocation(data.results[i].components));
+          dispatch(setLonLat(data.results[i].geometry));
           break;
         } else throw new Error("Location not found");
       }
@@ -167,6 +169,6 @@ export const setUserLocation = (latitude, longitude) => {
   };
 };
 
-export const { loginSuccess, logoutSuccess, setUser, setLocation } = AuthReducer.actions;
+export const { loginSuccess, logoutSuccess, setUser, setLocation, setLonLat } = AuthReducer.actions;
 
 export default AuthReducer.reducer;

@@ -2,27 +2,53 @@ const { Sequelize } = require("sequelize");
 const db = require("../../models");
 const User = db.User;
 const Admin = db.Admin;
+const Cart = db.Cart;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
+const createRefCode = (length = 8) => {
+  const characters = "ABCDEF789GHIstuJKLMN34OPQRST125UVWXYZabcdefghijklmnopqrvwxyz06";
+  let refCode = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    refCode += characters.charAt(randomIndex);
+  }
+
+  return refCode;
+};
 
 const authController = {
   register: async (req, res) => {
     try {
-      const { username, email, phone, password, confirmpassword } = req.body;
+      const { username, email, phone, password, confirmpassword, refcode } = req.body;
+      console.log(req.body);
       if (!(username || email || phone || password))
         return res.status(400).json({ message: "Please fill in all fields" });
       const finduser = await User.findOne({ where: { [Sequelize.Op.or]: [{ username }, { email }] } });
       if (finduser) return res.status(400).json({ message: "Username or Email already exists" });
       if (password !== confirmpassword) return res.status(400).json({ message: "Password does not match" });
-
+      if (refcode) {
+        const findRefUser = await User.findOne({ where: { refcode } });
+        if (!findRefUser) return res.status(404).json({ message: "error, Ref code not found" });
+      }
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(password, salt);
 
       await db.sequelize.transaction(async (t) => {
         const newUser = await User.create(
-          { username, email, phone, password: hashPassword, role_id: 3 },
+          {
+            username,
+            email,
+            phone,
+            password: hashPassword,
+            role_id: 3,
+            refcode: await createRefCode(),
+            refby: refcode,
+          },
           { transaction: t }
         );
+        await Cart.create({ user_id: newUser.id, total_price: 0 }, { transaction: t });
         res.status(200).json({ message: "Register Success", data: newUser });
       });
     } catch (err) {

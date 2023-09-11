@@ -5,6 +5,7 @@ const URL_API = process.env.REACT_APP_API_BASE_URL;
 const initialState = {
   product: [],
   store_id: null,
+  page: 1,
 };
 
 export const ProductReducer = createSlice({
@@ -32,10 +33,11 @@ export const getProduct = () => {
   };
 };
 
-export const getStoreProduct = (userLocation) => {
+export const getStoreProduct = ({ userLocation, lat, lon }) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${URL_API}/store/?location=${userLocation.city}`);
+      // const { data } = await axios.get(`${URL_API}/store/?location=${userLocation.state}`);
+      const { data } = await axios.get(`${URL_API}/store/nearest/?lat=${lat} &lon=${lon}`);
       dispatch(setStore_id(data.data.id));
       const products = await axios.get(`${URL_API}/product/store/?store_id=${data.data.id}`);
       dispatch(setProduct(products.data.data));

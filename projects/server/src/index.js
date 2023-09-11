@@ -27,7 +27,7 @@ const { authRouter, productRouter, storeRouter, adminRouter } = require("./route
 
 app.use("/api/auth", authRouter);
 app.use("/api/product", productRouter);
-app.use("/api/admin", adminRouter)
+app.use("/api/admin", adminRouter);
 app.use("/api/store", storeRouter);
 
 app.get("/api", (req, res) => {

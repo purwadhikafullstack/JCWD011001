@@ -6,9 +6,8 @@ import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer"
 const KEY = process.env.REACT_APP_KEY;
 
 const UserLocation = () => {
-  const userLocation = useSelector((state) => state.AuthReducer.location);
+  const { location, lon, lat } = useSelector((state) => state.AuthReducer);
   const dispatch = useDispatch();
-  // console.log(userLocation);
 
   //ini untuk dapatin lokasi search buat produk dimana
   // const fetchLoc = async () => {
@@ -25,15 +24,15 @@ const UserLocation = () => {
   // };
 
   useEffect(() => {
-    if (!userLocation) dispatch(getProduct());
-    if (userLocation) dispatch(getStoreProduct(userLocation));
-  }, [userLocation]);
+    if (!location) dispatch(getProduct());
+    if (location) dispatch(getStoreProduct({ location, lon, lat }));
+  }, [location]);
 
   return (
     <Box p={4}>
       <Center>
-        {userLocation ? (
-          <Flex align={"center"}>{<Text fontSize="xl">Lokasi Anda: {userLocation.city}</Text>}</Flex>
+        {location ? (
+          <Flex align={"center"}>{<Text fontSize="xl">Lokasi Anda: {location.state}</Text>}</Flex>
         ) : (
           <Spinner size="xs" />
         )}

@@ -1,17 +1,22 @@
 const { Sequelize } = require("sequelize");
 const db = require("../../models");
-const Product = db.Product;
-const Store = db.Store;
-const ProductStore = db.ProductStore;
-
-const includeProductStore = [{ model: Product, attributes: { exclude: ["createdAt", "updatedAt"] } }];
+const { Product, Category, Store, ProductStore } = db;
 
 const includeStore = [{ model: Store, attributes: { exclude: ["createdAt", "updatedAt"] } }];
+const includeCategory = [{ model: Category, attributes: { exclude: ["createdAt", "updatedAt"] } }];
+const includeProductStore = [
+  { model: Product, attributes: { exclude: ["createdAt", "updatedAt"] }, include: includeCategory },
+];
 
 const productController = {
   getProduct: async (req, res) => {
     try {
-      const products = await Product.findAll();
+      const products = await Product.findAll({
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "category_id"],
+        },
+        include: includeCategory,
+      });
       res.status(200).json({ data: products });
     } catch (error) {
       res.status(500).json({ message: error.message });

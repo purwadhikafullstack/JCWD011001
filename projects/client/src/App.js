@@ -24,7 +24,6 @@ import Cart from "./components/landing/cart";
 
 function App() {
   const role = useSelector((state) => state.AdminReducer.branchAdmin.role_id);
-  // const roleUser = use
   const [userlocation, setUserlocation] = useState("");
   const dispatch = useDispatch();
 
@@ -48,7 +47,7 @@ function App() {
   }, []);
 
   const defaultRoutes = () => {
-    if (role === "" || role === 3) {
+    if (role === "" || role === "3") {
       return (
         <>
           <Route path="/" element={<UserLanding />} />
@@ -59,9 +58,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminSignIn />} />
           <Route path="/verification/:token" element={<Verify />} />
-          <Route path="/cart" element={<Cart/>}/>
-          <Route path="/profile" element={<UserProfile/>}/>
-          
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<UserProfile />} />
         </>
       );
     }
@@ -72,7 +70,6 @@ function App() {
     if (role === 2) {
       return (
         <>
-          <Route path="/admin/super" element={<SuperDashboard />} />
           <Route path="/admin/branch" element={<BranchDashboard />} />
         </>
       );
@@ -85,7 +82,6 @@ function App() {
       return (
         <>
           <Route path="/admin/super" element={<SuperDashboard />} />
-          <Route path="/admin/branch" element={<BranchDashboard />} />
         </>
       );
     }
@@ -99,7 +95,7 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<About />} />
           <Route path="/store" element={<Store />} />
-          
+          <Route path="/profile" element={<UserProfile />} />
         </>
       );
     }

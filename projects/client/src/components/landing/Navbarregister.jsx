@@ -13,7 +13,7 @@ import {
   InputRightElement,
   useToast,
 } from "@chakra-ui/react";
-import { MdAlternateEmail, MdLockOutline, MdPhone, MdPeopleOutline } from "react-icons/md";
+import { MdAlternateEmail, MdLockOutline, MdPhone, MdPeopleOutline, MdOutlineEscalatorWarning } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "../../redux/reducer/AuthReducer";
@@ -49,6 +49,7 @@ const Navbarregister = () => {
       phone: "",
       password: "",
       confirmpassword: "",
+      refcode: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -145,6 +146,14 @@ const Navbarregister = () => {
               {...formik.getFieldProps("phone")}
               isInvalid={formik.touched.phone && formik.errors.phone}
             />
+          </InputGroup>
+          <Flex justify={"space-between"}>
+            <FormLabel>Ref Code</FormLabel>
+            <FormHelperText color="red">*Optional</FormHelperText>
+          </Flex>
+          <InputGroup mb={4}>
+            <InputLeftAddon children={<MdOutlineEscalatorWarning />} />
+            <Input type="text" {...formik.getFieldProps("refcode")} />
           </InputGroup>
           <Button type="submit" mt={"2%"} width={"100%"} isLoading={submitLoading}>
             Register

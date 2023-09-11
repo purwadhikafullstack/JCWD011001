@@ -1,10 +1,15 @@
-import { Box, Center, Heading, Spinner, Text } from "@chakra-ui/react";
-import React from "react";
+import { Box, Center, Flex, Heading, Spinner, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ProductListItem from "./ProductListItem";
+import { Pagination } from "../components/Pagination";
 
 const ProductList = () => {
   const products = useSelector((state) => state.ProductReducer.product);
-  console.log(products);
+  const [index, setIndex] = useState(1);
+  const { page } = useSelector((state) => state.ProductReducer);
+
+  useEffect(() => {}, [index]);
 
   if (products.length < 1) {
     return (
@@ -21,13 +26,14 @@ const ProductList = () => {
           <Heading as={"h2"}>Products</Heading>
         </Center>
       </Box>
-      <Box>
+      <Flex gap={{ base: 4, md: 8 }} w={"80%"} justifyContent={"center"}>
         {products.map((product) => (
-          <Box>
-            {product.Product.name} harga: {product.Product.price}
-          </Box>
+          <ProductListItem product={product} key={product.id} />
         ))}
-      </Box>
+      </Flex>
+      <Pagination
+      // page={page} index={index} setIndex={setIndex}
+      />
     </Box>
   );
 };
