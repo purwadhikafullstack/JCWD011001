@@ -31,6 +31,9 @@ export const AdminReducer = createSlice({
         document.location.href = "/admin";
       }, 1000);
     },
+    setAdmin: (state, action) => {
+      state.admin = action.payload;
+    }
   },
 });
 
@@ -42,7 +45,6 @@ export const loginAdmin = (values, setLoading, toast, navigate) => {
         email: values.email,
         password: values.password,
       });
-      console.log("ini respon", respon);
       const token = respon.data.token;
       localStorage.setItem("token", token);
       dispatch(setBranchAdmin(respon.data.Account));
@@ -59,7 +61,6 @@ export const loginAdmin = (values, setLoading, toast, navigate) => {
         isClosable: true,
       });
     } catch (error) {
-      console.log(error);
       toast({
         title: "Login Failed",
         description: error?.response?.data?.message,
@@ -69,23 +70,6 @@ export const loginAdmin = (values, setLoading, toast, navigate) => {
       });
     } finally {
       setLoading(false);
-    }
-  };
-};
-
-export const keepLoginAdmin = () => {
-  return async (dispatch) => {
-    const token = localStorage.getItem("token");
-    try {
-      const respon = await axios.get(`${URL_API}/keep`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      dispatch(setBranchAdmin(respon.data.findAdmin));
-      dispatch(loginSuccess());
-    } catch (error) {
-      console.log(error);
     }
   };
 };
@@ -107,20 +91,22 @@ export const logoutAdmin = (toast) => {
   };
 };
 
-export const createBranchAdmin = (value, toast) => {
-  return async (dispatch) => {
+export const createBranchAdmin = (value, toast, onClose, resetForm) => {
+  return async () => {
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/admin/branch-admin`,
+        `${URL_API}/admin/branch-admin`,
         value
       );
       toast({
         title: "Success",
-        description: `${value.name} berhasil dibuat`,
+        description: "New branch admin has been created",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
+      onClose();
+      resetForm();
     } catch (error) {
       toast({
         title: "Failed",
@@ -133,7 +119,23 @@ export const createBranchAdmin = (value, toast) => {
   };
 };
 
-export const { setBranchAdmin, loginSuccess, logoutSuccess } =
+export const getBranchAdmin = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(
+        `${URL_API}/admin/branch-admin`
+      );
+      const activeBranchAdmins = data.data.filter(
+        (item) => item.isactive === true
+      );
+      dispatch(setAdmin(activeBranchAdmins));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const { setBranchAdmin, setAdmin, loginSuccess, logoutSuccess } =
   AdminReducer.actions;
 
 export default AdminReducer.reducer;

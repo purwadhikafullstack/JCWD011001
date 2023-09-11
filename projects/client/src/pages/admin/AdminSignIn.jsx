@@ -158,9 +158,9 @@ const AdminSignIn = () => {
                 mt={"6"}
                 rounded={"lg"}
                 color={"white"}
-                bgColor={"#37630A"}
-                _hover={{ bgColor: "#457811" }}
-                _active={{ bgColor: "#2D5406" }}
+                bgColor={"brand.main"}
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
               >
                 {isLoading ? <Spinner /> : "Sign In"}
               </Button>

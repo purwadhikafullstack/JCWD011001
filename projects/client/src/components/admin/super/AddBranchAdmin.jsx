@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -13,15 +14,17 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { createBranchAdmin } from "../../../redux/reducer/AdminReducer";
+import stateData from "../../../data/stateData.json";
+import { getBranchAdmin } from "../../../redux/reducer/AdminReducer";
 
 const AddBranchAdmin = ({ isOpen, onClose }) => {
   const [show, setShow] = useState(false);
@@ -32,11 +35,27 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
   const toast = useToast();
   const dispatch = useDispatch();
 
+  const cityOptions = () => {
+    const sortedStateData = stateData.sort((a, b) => {
+      if (a.province < b.province) return -1;
+      if (a.province > b.province) return 1;
+      return 0;
+    });
+
+    return sortedStateData.map((state) => (
+      <option key={state.province_id} value={state.province}>
+        {state.province}
+      </option>
+    ));
+  };
+
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
+    branch: Yup.string().required("Branch is required"),
     password: Yup.string()
       .required("Password is required")
       .matches(
@@ -52,6 +71,7 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
     initialValues: {
       name: "",
       email: "",
+      branch: "",
       password: "",
       confirmPassword: "",
     },
@@ -59,10 +79,9 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
     onSubmit: async (values, { resetForm }) => {
       try {
         setSubmitLoading(true);
-        await dispatch(createBranchAdmin(values, toast));
+        await dispatch(createBranchAdmin(values, toast, onClose, resetForm));
         setSubmitLoading(false);
-        onClose();
-        resetForm();
+        await dispatch(getBranchAdmin());
       } catch (error) {
         console.error(error);
       }
@@ -115,6 +134,26 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
               />
               {formik.touched.email && formik.errors.email && (
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+              )}
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={formik.touched.branch && formik.errors.branch}
+            >
+              <FormLabel mt={4}>Branch</FormLabel>
+              <Select
+                id="branch"
+                name="branch"
+                rounded={"lg"}
+                placeholder="Select Branch"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.branch}
+              >
+                {cityOptions()}
+              </Select>
+              {formik.touched.branch && formik.errors.branch && (
+                <FormErrorMessage>{formik.errors.branch}</FormErrorMessage>
               )}
             </FormControl>
             <FormControl
@@ -194,10 +233,10 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
               mt={"6"}
               rounded={"lg"}
               color={"white"}
-              bgColor={"#37630A"}
+              bgColor={"brand.main"}
               isLoading={submitLoading}
-              _hover={{ bgColor: "#457811" }}
-              _active={{ bgColor: "#2D5406" }}
+              _hover={{ bgColor: "brand.hover" }}
+              _active={{ bgColor: "brand.active" }}
             >
               Create Admin
             </Button>

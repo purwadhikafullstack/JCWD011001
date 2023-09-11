@@ -2,6 +2,7 @@ import { Box, Button, Text, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
 import { IoAddOutline } from "react-icons/io5";
 import AddBranchAdmin from './AddBranchAdmin';
+import AdminList from './AdminList';
 
 const AdminManagement = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,16 +33,19 @@ const AdminManagement = () => {
             onClick={onCreate}
             gap={2}
             rounded={"lg"}
-            bg={"#37630A"}
+            bg={"brand.main"}
             ml={4}
             color={"white"}
-            _hover={{ bg: "#457811" }}
-            _active={{ bg: "#2D5406" }}
+            _hover={{ bg: "brand.hover" }}
+            _active={{ bg: "brand.active" }}
           >
             <IoAddOutline size={24} />
             Add Admin
           </Button>
         </Box>
+      </Box>
+      <Box w={"full"}>
+        <AdminList />
       </Box>
       <AddBranchAdmin isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </Box>

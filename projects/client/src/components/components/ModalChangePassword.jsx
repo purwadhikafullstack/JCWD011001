@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 // import Navbar from "../Components/navbar/Navbar";
 import React from "react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+// import { ArrowForwardIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import * as Yup from "yup";
 import { useFormik } from "formik";
