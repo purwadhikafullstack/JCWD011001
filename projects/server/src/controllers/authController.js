@@ -41,6 +41,7 @@ const authController = {
         id: checkUser.id,
         email: checkUser.email,
         username: checkUser.username,
+        birthdate : checkUser.birthdate,
         name: checkUser.name,
         gender: checkUser.gender,
         refcode: checkUser.refcode,

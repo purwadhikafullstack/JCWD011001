@@ -19,9 +19,6 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo_main.png";
 import { HiOutlineSearch, HiOutlineShoppingCart } from "react-icons/hi";
-import Hamburger from "./Hamburger";
-import ButtonSignIn from "./ButtonSignIn";
-import ButtonRegist from "./ButtonRegist";
 import { useDispatch } from "react-redux";
 import { logoutAuth, logoutSuccess } from "../../redux/reducer/AuthReducer";
 

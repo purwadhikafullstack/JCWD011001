@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { BsPersonCircle } from "react-icons/bs";
 import { BiSolidLockAlt } from "react-icons/bi";
-import { AiFillEyeInvisible, AiFillEye, AiOutlineLogin } from "react-icons/ai";
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import Navbar from "../components/landing/Navbar";
 import ForgetPassword from "../components/landing/ForgetPassword";
 import { loginAuth } from "../redux/reducer/AuthReducer";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()

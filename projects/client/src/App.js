@@ -20,9 +20,11 @@ import { setUserLocation } from "./redux/reducer/AuthReducer";
 import { useDispatch } from "react-redux";
 import UserProfile from "./components/landing/UserProfile";
 import { useSelector } from "react-redux";
+import Cart from "./components/landing/cart";
 
 function App() {
   const role = useSelector((state) => state.AdminReducer.branchAdmin.role_id);
+  // const roleUser = use
   const [userlocation, setUserlocation] = useState("");
   const dispatch = useDispatch();
 
@@ -46,7 +48,7 @@ function App() {
   }, []);
 
   const defaultRoutes = () => {
-    if (role === "") {
+    if (role === "" || role === 3) {
       return (
         <>
           <Route path="/" element={<UserLanding />} />
@@ -57,6 +59,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminSignIn />} />
           <Route path="/verification/:token" element={<Verify />} />
+          <Route path="/cart" element={<Cart/>}/>
+          <Route path="/profile" element={<UserProfile/>}/>
+          
         </>
       );
     }
@@ -94,6 +99,7 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<About />} />
           <Route path="/store" element={<Store />} />
+          
         </>
       );
     }
