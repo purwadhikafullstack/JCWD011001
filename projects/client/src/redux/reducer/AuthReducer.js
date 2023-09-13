@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { setBranchAdmin } from "./AdminReducer";
+import { setBranchAdmin, setRoleId } from "./AdminReducer";
+import { getStore_id } from "./ProductReducer";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 const KEY = process.env.REACT_APP_KEY;
 
@@ -128,6 +129,7 @@ export const loginAuth = (values, setLoading, toast) => {
       });
     } finally {
       setLoading(false);
+      dispatch(setRoleId(3));
     }
   };
 };
@@ -143,7 +145,10 @@ export const keepLogin = () => {
       });
       console.log(respon.data);
       if (respon.data.findAdmin) dispatch(setBranchAdmin(respon.data.findAdmin));
-      if (respon.data.findUser) dispatch(setUser(respon.data.findUser));
+      if (respon.data.findUser) {
+        dispatch(setUser(respon.data.findUser));
+        dispatch(setRoleId(3));
+      }
     } catch (error) {
       console.log(error);
     }

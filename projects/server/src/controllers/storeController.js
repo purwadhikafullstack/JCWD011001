@@ -36,7 +36,7 @@ const storeController = {
   cekNearestStore: async (req, res) => {
     try {
       const { lat, lon } = req.query;
-      let nearest = 50;
+      let nearest = 100;
       let data = {};
       const cek = await Store.findAll();
       for (let i = 0; i < cek.length; i++) {
@@ -44,9 +44,9 @@ const storeController = {
         if (nearest >= distance) {
           nearest = distance;
           data = cek[i];
-          console.log(`Updated data at item ${i}:`, data);
         }
       }
+
       return res.status(200).json({ data });
     } catch (error) {
       return res.status(500).json({ message: error.message });
