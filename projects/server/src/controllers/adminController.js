@@ -131,8 +131,8 @@ const adminController = {
           { isactive: false },
           { where: { admin_id: id }, transaction: t }
         );
+        return res.status(200).json({ message: "Admin is deleted" });
       });
-      return res.status(200).json({ message: "Admin is deleted" });
     } catch (error) {
       return res.status(500).json({ message: "Failed to delete admin", error: error.message });
     }

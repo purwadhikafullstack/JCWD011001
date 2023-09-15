@@ -21,7 +21,7 @@ const DeleteAdminModal = ({ isOpen, onClose, admin_id }) => {
   const toast = useToast();
   const deleteBranchAdmin = async (id) => {
     try {
-      const res = await axios.patch(`${URL_API}/admin/branch-admin/${id}`);
+      await axios.patch(`${URL_API}/admin/branch-admin/${id}`);
       toast({
         title: "Success",
         description: "Admin has been deleted",

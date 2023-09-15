@@ -7,6 +7,7 @@ import {
   IoGridOutline,
   IoBarChartOutline,
 } from "react-icons/io5";
+import NavbarAdmin from "../../components/admin/NavbarAdmin";
 import MenuDashboard from '../../components/admin/MenuDashboard';
 import AdminManagement from '../../components/admin/super/AdminManagement';
 import Transaction from '../../components/admin/super/Transaction';
@@ -31,6 +32,7 @@ const SuperDashboard = () => {
     };
   return (
     <Box>
+      <NavbarAdmin title="Admin Dashboard" />
       <Flex>
         <Box
           w={{ base: "100%", md: "26%" }}

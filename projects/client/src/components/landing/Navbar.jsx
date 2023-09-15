@@ -20,7 +20,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo_main.png";
 import { HiOutlineSearch, HiOutlineShoppingCart } from "react-icons/hi";
 import { useDispatch } from "react-redux";
-import { logoutAuth, logoutSuccess } from "../../redux/reducer/AuthReducer";
+import { logoutAuth } from "../../redux/reducer/AuthReducer";
 
 const Navbar = () => {
   const login = localStorage.getItem("token");

@@ -14,6 +14,7 @@ import ProductManagement from '../../components/admin/branch/ProductManagement';
 import DiscountManagement from '../../components/admin/branch/DiscountManagement';
 import CategoryManagement from '../../components/admin/branch/CategoryManagement';
 import BranchSalesReport from '../../components/admin/branch/BranchSalesReport';
+import NavbarAdmin from '../../components/admin/NavbarAdmin';
 
 const BranchDashboard = () => {
     const [activePage, setActivePage] = useState("transaction");
@@ -35,6 +36,7 @@ const BranchDashboard = () => {
     };
   return (
     <Box>
+      <NavbarAdmin title="Branch Admin Dashboard" />
       <Flex>
         <Box
           w={{ base: "100%", md: "26%" }}

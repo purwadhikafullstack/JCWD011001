@@ -33,12 +33,6 @@ const AdminSignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const onForgot = () => {
-    onOpen();
-  };
-
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address format")
@@ -109,22 +103,7 @@ const AdminSignIn = () => {
                 isInvalid={formik.touched.password && formik.errors.password}
               >
                 <FormLabel htmlFor="password" mt={"4"}>
-                  <Flex
-                    alignItems={"baseline"}
-                    justifyContent={"space-between"}
-                  >
-                    Password
-                    <Button variant={"link"} onClick={onForgot}>
-                      <Text
-                        fontSize={"xs"}
-                        fontWeight={400}
-                        color={"blue"}
-                        _hover={{ textDecoration: "underline" }}
-                      >
-                        Forgot Password?
-                      </Text>
-                    </Button>
-                  </Flex>
+                  Password
                 </FormLabel>
                 <InputGroup>
                   <Input
