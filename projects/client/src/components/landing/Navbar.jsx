@@ -15,14 +15,19 @@ import {
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo_main.png";
 import { HiOutlineSearch, HiOutlineShoppingCart } from "react-icons/hi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getItem } from "../../redux/reducer/CartReducer";
 import { logoutAuth } from "../../redux/reducer/AuthReducer";
 
 const Navbar = () => {
+  const { item, carts } = useSelector((state) => state.CartReducer);
+  const cartItem = item.reduce((total, item) => total + item.quantity, 0);
+  const cartItems = carts.reduce((total, item) => total + item.quantity, 0);
+
   const login = localStorage.getItem("token");
   const [cartItemCount, setCartItemCount] = useState(0);
   const location = useLocation();
@@ -33,6 +38,10 @@ const Navbar = () => {
   function onKlik() {
     dispatch(logoutAuth(toast));
   }
+
+  useEffect(() => {
+    dispatch(getItem());
+  }, []);
 
   const [isLargerThanMD] = useMediaQuery("(min-width: 768px)");
   return (
@@ -123,12 +132,12 @@ const Navbar = () => {
                     bg="red"
                     color="white"
                     borderRadius="100%"
-                    width={`${cartItemCount.toString().length * 10 + 8}px`}
+                    width={`${cartItem.toString().length * 10 + 8}px`}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Text fontSize={"xs"}>{cartItemCount}</Text>
+                    <Text fontSize={"xs"}>{cartItem || cartItems}</Text>
                   </Box>
                 </Flex>
               </Link>

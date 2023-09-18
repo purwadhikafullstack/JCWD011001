@@ -23,12 +23,12 @@ const verifyToken = async (req, res, next) => {
 };
 
 const verifyName = async (req, res, next) => {
-    const {id,name} = req.user
+    const {id,username} = req.user
     const {newName, currentName} = req.body
     if(newName === currentName){
         return res.status(200).json({message : "Please select other username"})
     }
-    if(name !== currentName){
+    if(username !== currentName){
         return res.status(500).json({message : "Invalid Username"})
     }
     const isUsernameExist = await user.findOne({

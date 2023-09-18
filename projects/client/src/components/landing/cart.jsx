@@ -12,13 +12,46 @@ import {
   Spacer,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Navbar from "./Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import Transactions from "./Transactions";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import {
+  addCart,
+  addToCart,
+  deleteFromCart,
+  deleteItem,
+  getCart,
+  getItem,
+} from "../../redux/reducer/CartReducer";
 export default function Cart() {
   const { login } = useSelector((state) => state.AuthReducer);
+  const { cart, carts, item } = useSelector((state) => state.CartReducer);
+  const toast = useToast();
+  // const {total_harga}
+  const dispatch = useDispatch();
+  const inCart = async (products) => {
+    await dispatch(addToCart(products));
+    await dispatch(addCart(products));
+    await dispatch(getItem());
+    await dispatch(getCart());
+  };
+
+  const outCart = async (products) => {
+    await dispatch(deleteFromCart(products));
+    await dispatch(deleteItem(products));
+    await dispatch(getItem());
+    await dispatch(getCart());
+  };
+
+  useEffect(() => {
+    dispatch(getItem());
+  }, []);
   return (
     <>
       <Navbar />
@@ -32,52 +65,71 @@ export default function Cart() {
               fontWeight={"bold"}
               fontFamily={"montserrat"}
             >
-              <Text>Keranjang</Text>
+              <Text>Cart</Text>
             </Box>
             <Divider colorScheme="blackAlpha"></Divider>
-            <Card w={"800px"} ml={"100px"} boxShadow={"lg"}>
-              <CardBody>
-                <Box fontWeight={"bold"} mb={"24px"}>
-                  <Text>Click and Play</Text>
-                </Box>
-                <Flex>
-                  <Box w={"100px"} h={"100px"} bgColor={"gray"}>
-                    Image
-                  </Box>
-                  <Box ml={"32px"}>
-                    <Text>
-                      konektor converter usb type c to hdmi multiport macbook
-                      2016
-                    </Text>
-                    <Text fontWeight={"bold"}>Rp. 30.000</Text>
-                  </Box>
-                </Flex>
-              </CardBody>
-              <CardFooter>
-                <Flex justify={"space-between"}>
+            <Flex>
+              {item.map((products) => {
+                return (
                   <Box>
-                    <IconButton
-                      color={"blackAlpha.600"}
-                      variant={""}
-                      icon={<IoTrashOutline size={"md"} />}
-                    />
+                    <Card
+                      w={"800px"}
+                      ml={"100px"}
+                      boxShadow={"lg"}
+                      key={products.id}
+                    >
+                      <CardBody>
+                        <Box fontWeight={"bold"} mb={"24px"}>
+                          <Text>Click and Play</Text>
+                        </Box>
+                        <Flex>
+                          <Box w={"100px"} h={"100px"} bgColor={"gray"}>
+                            Image
+                          </Box>
+                          <Box ml={"32px"}>
+                            <Text>{products.name}</Text>
+                            <Text fontWeight={"bold"}>
+                              Rp. {products.price}
+                            </Text>
+                          </Box>
+                        </Flex>
+                      </CardBody>
+                      <CardFooter>
+                        <Flex justify={"space-between"}>
+                          <Box>
+                            <IconButton
+                              color={"blackAlpha.600"}
+                              variant={""}
+                              icon={<IoTrashOutline size={"md"} />}
+                            />
+                          </Box>
+                          <Box ml={"600px"}>
+                            <ButtonGroup variant={"none"}>
+                              <IconButton
+                                color={"red"}
+                                icon={<AiOutlineMinusCircle />}
+                                isDisabled={products.quantity === 1}
+                                onClick={() => outCart(products)}
+                              ></IconButton>
+                              <Text fontSize={"2xl"}>{products.quantity}</Text>
+                              <IconButton
+                                color={"green"}
+                                icon={<AiOutlinePlusCircle />}
+                                onClick={() => inCart(products)}
+                              ></IconButton>
+                            </ButtonGroup>
+                          </Box>
+                        </Flex>
+                      </CardFooter>
+                    </Card>
                   </Box>
-                  <Box ml={"600px"}>
-                    <ButtonGroup variant={"none"}>
-                      <IconButton
-                        color={"red"}
-                        icon={<AiOutlineMinusCircle />}
-                      ></IconButton>
-                      <Text fontSize={"2xl"}>1</Text>
-                      <IconButton
-                        color={"green"}
-                        icon={<AiOutlinePlusCircle />}
-                      ></IconButton>
-                    </ButtonGroup>
-                  </Box>
-                </Flex>
-              </CardFooter>
-            </Card>
+                );
+              })}
+
+              <Box>
+                <Transactions />
+              </Box>
+            </Flex>
           </Stack>
         </Box>
       ) : (

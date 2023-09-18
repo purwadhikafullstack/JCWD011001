@@ -1,8 +1,10 @@
 import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 export default function Verify() {
+  const navigate = useNavigate();
   const toast = useToast();
   async function verify() {
     const url = window.location.href.split("/");
@@ -24,7 +26,8 @@ export default function Verify() {
         duration: 9000,
         isClosable: true,
       });
-      document.location.href("?");
+      // document.location.href("/");
+      navigate("/");
     } catch (error) {
       console.log(error);
       toast({

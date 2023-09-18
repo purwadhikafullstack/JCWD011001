@@ -26,6 +26,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { RiEye2Line, RiEyeCloseFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ChangeSchema = Yup.object().shape({
   currentPassword: Yup.string().required("currentPassword is required"),
@@ -69,16 +70,11 @@ export default function ModalChangePassword({ isOpen, onClose }) {
         }
       );
       console.log(respon);
-      toast({
-        title: "Password change",
-        description: "your password has been change",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      onClose();
+      await Swal.fire("Success!", "Your password has been change", "success");
       setTimeout(() => {
         window.location.reload();
-      }, 550);
+      }, 2000);
     } catch (error) {
       console.log(error);
       toast({

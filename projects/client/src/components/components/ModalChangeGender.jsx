@@ -18,6 +18,7 @@ import {
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const GenderSchema = Yup.object().shape({
   gender: Yup.string().required("Gender is required"),
@@ -31,7 +32,7 @@ export default function ModalChangeGender({ isOpen, onClose }) {
     try {
       const { currentGender } = values;
       const respon = await axios.patch(
-        `${URL_API}/auth/gender"`,
+        `${URL_API}/auth/gender`,
         {
           currentGender: currentGender,
           chooseGender: values.gender,
@@ -43,15 +44,11 @@ export default function ModalChangeGender({ isOpen, onClose }) {
         }
       );
       console.log("gender", respon);
-      toast({
-        title: "Gender Update",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      onClose();
+      await Swal.fire("Success!", "Gender has chosen", "success");
       setTimeout(() => {
         window.location.reload();
-      }, 550);
+      }, 1000);
     } catch (error) {
       console.log(error);
       toast({

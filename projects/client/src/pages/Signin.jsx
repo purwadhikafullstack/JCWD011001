@@ -42,6 +42,7 @@ export default function Signin() {
   const [isLoading, setLoading] = useState(false);
   const toast = useToast();
   const dispath = useDispatch();
+  const navigate = useNavigate();
 
   const showPassword = () => {
     setShow(!show);
@@ -54,7 +55,7 @@ export default function Signin() {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      dispath(loginAuth(values, setLoading, toast));
+      dispath(loginAuth(values, setLoading, toast, navigate));
     },
   });
 

@@ -32,12 +32,6 @@ export default function UserProfile() {
             </Box>
             <Box mt={"30px"}>
               <Flex justifyContent={"space-between"}>
-                <Text>Name</Text>
-                <Text>{user.name}</Text>
-              </Flex>
-            </Box>
-            <Box mt={"30px"}>
-              <Flex justifyContent={"space-between"}>
                 <Text>Email address</Text>
                 <Text>{user.email}</Text>
               </Flex>
@@ -65,7 +59,7 @@ export default function UserProfile() {
             </Box>
             <Box mt={"30px"}>
               <Flex justifyContent={"space-between"}>
-                <Text>Change Name</Text>
+                <Text>Change Username</Text>
                 <ButtonChangeName />
               </Flex>
             </Box>

@@ -5,6 +5,15 @@ const Admin = db.Admin;
 const Cart = db.Cart;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const handlebars = require("handlebars");
+const fs = require("fs").promises
+const path = require("path");
+require("dotenv").config({
+  path: path.resolve("../.env"),
+});
+
+
+const transporter  = require("../helpers/transporter");
 
 const createRefCode = (length = 8) => {
   const characters = "ABCDEF789GHIstuJKLMN34OPQRST125UVWXYZabcdefghijklmnopqrvwxyz06";
@@ -49,6 +58,16 @@ const authController = {
           { transaction: t }
         );
         await Cart.create({ user_id: newUser.id, total_price: 0 }, { transaction: t });
+        const token = jwt.sign({id : newUser.id, username : username, email : email}, process.env.JWT_KEY, {expiresIn : "1h"})
+        const redirect = `http://localhost:3000/verification/${token}`
+        const data = await fs.readFile(path.resolve(__dirname, "../emails/registerEmail.html"), "utf-8")
+        const tempCompile = await handlebars.compile(data)
+        const tempResult = tempCompile({username, email, redirect})
+        await transporter.sendMail({
+          to : email,
+          subject : "Verification Account", 
+          html : tempResult
+        })
         res.status(200).json({ message: "Register Success", data: newUser });
       });
     } catch (err) {
@@ -61,6 +80,7 @@ const authController = {
       if (!(email || password)) return res.status(500).json({ message: "Please complete the form" });
       const checkUser = await User.findOne({ where: { email } });
       if (!checkUser) return res.status(500).json({ message: "Account not defined" });
+      if(checkUser.isverify === false) return res.status(500).json({message : "Account is not verify"}) 
       const checkPassword = await bcrypt.compare(password, checkUser.password);
       if (!checkPassword) return res.status(500).json({ message: "Invalid Password" });
       let payload = {
@@ -87,7 +107,8 @@ const authController = {
         return res.status(200).json({ message: "Still Login", findAdmin });
       }
       const findUser = await User.findOne({ where: { id } });
-      return res.status(200).json({ message: "Still Login", findUser });
+      const token = jwt.sign({findUser}, process.env.JWT_KEY)
+      return res.status(200).json({ message: "Still Login", findUser, token : token });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const db = require("../../models");
+const { check } = require("express-validator");
 const { Product, Category, Store, ProductStore } = db;
 
 const includeStore = [{ model: Store, attributes: { exclude: ["createdAt", "updatedAt"] } }];
@@ -101,7 +102,7 @@ const productController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  },
+  },  
 };
 
 module.exports = productController;

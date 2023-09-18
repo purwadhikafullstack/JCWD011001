@@ -19,6 +19,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const ChangeEmailSchema = Yup.object().shape({
   currentEmail: Yup.string()
@@ -53,16 +54,15 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
         }
       );
       console.log(respon);
-      toast({
-        title: "Email change",
-        description: "Please check your email and login again",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      onClose();
+      await Swal.fire(
+        "Success!",
+        "Please to verify your new email on inbox/spam and login again",
+        "success"
+      );
       setTimeout(() => {
         window.location.reload();
-      }, 550);
+      }, 2000);
     } catch (error) {
       console.log(error);
       toast({

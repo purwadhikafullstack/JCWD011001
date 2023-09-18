@@ -18,6 +18,7 @@ import {
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const birthSchema = Yup.object().shape({
   birthdate: Yup.date().required("Date is required"),
@@ -42,16 +43,15 @@ export default function ModalChangeBirthdate({ isOpen, onClose }) {
           },
         }
       );
-      toast({
-        title: "Birthdate change",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      onClose();
+      await Swal.fire(
+        "Success!",
+        "Please logout first if you wanna change again",
+        "success"
+      );
       setTimeout(() => {
         window.location.reload();
-      }, 550);
-      console.log("Birthdate", respon);
+      }, 1000);
     } catch (error) {
       console.log(error);
       toast({

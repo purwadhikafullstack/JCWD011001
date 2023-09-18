@@ -20,6 +20,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducer/AuthReducer";
+import Swal from "sweetalert2";
 
 const ChangeUsernameSchema = Yup.object().shape({
   currentName: Yup.string().required("Name is required"),
@@ -57,17 +59,17 @@ export default function ModalChangeName({ isOpen, onClose }) {
           },
         }
       );
-      console.log("ini respon changeusername", respon);
-      toast({
-        title: "Username change",
-        description: "Please remember your new username to login",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      console.log("ini respon changeusername", respon.data?.data);
+      dispatch(setUser(respon.data?.data));
+      onClose();
+      await Swal.fire(
+        "Success!",
+        "Please logout first if you wanna change again",
+        "success"
+      );
       setTimeout(() => {
         window.location.reload();
-      }, 550);
+      }, 2000);
     } catch (error) {
       console.log(error);
       toast({
