@@ -26,7 +26,7 @@ const ProductListItem = ({ product }) => {
           cursor: "pointer",
         }}
         onClick={() => {
-          navigate(`/product/${product.id}`);
+          navigate(`/product/${product.Product.id}`);
         }}>
         <Image
           src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"

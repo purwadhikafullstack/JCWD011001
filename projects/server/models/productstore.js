@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       product_id: DataTypes.INTEGER,
       store_id: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
+      isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {
       sequelize,

@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setProductDetail } from "../redux/reducer/ProductReducer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProductStock from "./ProductStock";
 import { store } from "../redux/store";
 import AddtoCart from "../components/components/ButtonAddCart";
+import Notfound from "./Notfound";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const ProductDetail = () => {
@@ -16,6 +17,7 @@ const ProductDetail = () => {
   const [isDiscount, setIsDiscount] = useState(false);
   const pathname = window.location.pathname.split("/");
   const id = pathname[pathname.length - 1];
+  const navigate = useNavigate();
 
   const getProductStock = async (id) => {
     try {
@@ -33,7 +35,7 @@ const ProductDetail = () => {
       getProductStock(id);
       const { data } = await axios.get(apiUrl);
       const productData = data.data?.Product || data.data;
-      setProduct(productData);
+      await setProduct(productData);
       if (productData.admin_discount > 0) setIsDiscount(true);
       if (data.data.quantity) setStock(data.data);
     } catch (error) {
@@ -45,12 +47,14 @@ const ProductDetail = () => {
     getProductDetail();
   }, [store_id, id]);
 
+  if (!product) return <Notfound />;
+
   return (
-    <Box border={"1px solid red"} width={"50%"} mx={"auto"} mt={4}>
+    <Box width={"50%"} mx={"auto"} mt={4}>
       <Box mb={4}>
-        <Link>Home</Link>
+        <Link to={"/"}>Home</Link>
         {" > "}
-        <Link>{product?.Category?.name}</Link>
+        <Link to={`/category/${product?.Category?.id}`}>{product?.Category?.name}</Link>
         {" > "}
         <Link>{product?.name}</Link>
       </Box>

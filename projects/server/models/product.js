@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       admin_discount: DataTypes.INTEGER,
       product_img: DataTypes.STRING,
       description: DataTypes.STRING,
+      weight: DataTypes.INTEGER,
       isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {

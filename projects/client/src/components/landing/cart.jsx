@@ -21,14 +21,7 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import Transactions from "./Transactions";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  addCart,
-  addToCart,
-  deleteFromCart,
-  deleteItem,
-  getCart,
-  getItem,
-} from "../../redux/reducer/CartReducer";
+import { addCart, addToCart, deleteFromCart, deleteItem, getCart, getItem } from "../../redux/reducer/CartReducer";
 export default function Cart() {
   const { login } = useSelector((state) => state.AuthReducer);
   const { cart, carts, item } = useSelector((state) => state.CartReducer);
@@ -58,13 +51,7 @@ export default function Cart() {
       {login ? (
         <Box>
           <Stack>
-            <Box
-              ml={"100px"}
-              mt={"48px"}
-              fontSize={"2xl"}
-              fontWeight={"bold"}
-              fontFamily={"montserrat"}
-            >
+            <Box ml={"100px"} mt={"48px"} fontSize={"2xl"} fontWeight={"bold"} fontFamily={"montserrat"}>
               <Text>Cart</Text>
             </Box>
             <Divider colorScheme="blackAlpha"></Divider>
@@ -72,12 +59,7 @@ export default function Cart() {
               {item.map((products) => {
                 return (
                   <Box>
-                    <Card
-                      w={"800px"}
-                      ml={"100px"}
-                      boxShadow={"lg"}
-                      key={products.id}
-                    >
+                    <Card w={"800px"} ml={"100px"} boxShadow={"lg"} key={products.id}>
                       <CardBody>
                         <Box fontWeight={"bold"} mb={"24px"}>
                           <Text>Click and Play</Text>
@@ -88,20 +70,14 @@ export default function Cart() {
                           </Box>
                           <Box ml={"32px"}>
                             <Text>{products.name}</Text>
-                            <Text fontWeight={"bold"}>
-                              Rp. {products.price}
-                            </Text>
+                            <Text fontWeight={"bold"}>Rp. {products.price}</Text>
                           </Box>
                         </Flex>
                       </CardBody>
                       <CardFooter>
                         <Flex justify={"space-between"}>
                           <Box>
-                            <IconButton
-                              color={"blackAlpha.600"}
-                              variant={""}
-                              icon={<IoTrashOutline size={"md"} />}
-                            />
+                            <IconButton color={"blackAlpha.600"} variant={""} icon={<IoTrashOutline size={"md"} />} />
                           </Box>
                           <Box ml={"600px"}>
                             <ButtonGroup variant={"none"}>
@@ -109,14 +85,12 @@ export default function Cart() {
                                 color={"red"}
                                 icon={<AiOutlineMinusCircle />}
                                 isDisabled={products.quantity === 1}
-                                onClick={() => outCart(products)}
-                              ></IconButton>
+                                onClick={() => outCart(products)}></IconButton>
                               <Text fontSize={"2xl"}>{products.quantity}</Text>
                               <IconButton
                                 color={"green"}
                                 icon={<AiOutlinePlusCircle />}
-                                onClick={() => inCart(products)}
-                              ></IconButton>
+                                onClick={() => inCart(products)}></IconButton>
                             </ButtonGroup>
                           </Box>
                         </Flex>
