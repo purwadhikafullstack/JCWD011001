@@ -20,7 +20,15 @@ app.use(express.json());
 
 //#region API ROUTES
 const db = require("../models");
-const { authRouter, productRouter, storeRouter, adminRouter, cartRouter, profileRouter, categoryRouter } = require("./router");
+const {
+  authRouter,
+  productRouter,
+  storeRouter,
+  adminRouter,
+  categoryRouter,
+  addressRouter,
+  regionRouter, cartRouter, profileRouter
+} = require("./router");
 // db.sequelize.sync({ alter: true });
 
 // ===========================
@@ -33,6 +41,8 @@ app.use("/api/store", storeRouter);
 app.use("/api/cart", cartRouter)
 app.use("/api", profileRouter)
 app.use("/api/category", categoryRouter);
+app.use("/api/address", addressRouter);
+app.use("/api/region", regionRouter);
 app.use("/public", express.static(path.resolve(__dirname, "../public")));
 
 app.get("/api", (req, res) => {

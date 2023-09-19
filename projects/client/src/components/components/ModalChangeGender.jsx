@@ -87,7 +87,7 @@ export default function ModalChangeGender({ isOpen, onClose }) {
                   w={"350px"}
                   placeholder="Select Gender"
                 >
-                  <option>Male</option>
+                  <option value={"male"}>Male</option>
                   <option>Female</option>
                 </Select>
                 <ModalFooter>

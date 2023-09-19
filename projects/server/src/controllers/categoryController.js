@@ -91,9 +91,7 @@ const categoryController = {
           { where: { id: id } },
           { transaction: t }
         );
-        return res
-          .status(200)
-          .json({ message: "Category updated", updatedCategory });
+        return res.status(200).json({ message: "Category updated", updatedCategory });
       });
     } catch (error) {
       return res.status(500).json({ message: error.message });

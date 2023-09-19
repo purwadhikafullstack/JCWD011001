@@ -11,33 +11,35 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { deleteBranchAdmin, getBranchAdmin } from "../../../redux/reducer/AdminReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAddress, getAddress } from "../../redux/reducer/AddressReducer";
 
-const DeleteAdminModal = ({ isOpen, onClose, admin_id }) => {
+const DeleteAddressModal = ({ isOpen, onClose, address_id }) => {
   const dispatch = useDispatch();
   const toast = useToast();
+  const { user } = useSelector((state) => state.AuthReducer);
+
+  const id = user.id;
 
   const handleDelete = async () => {
-    await dispatch(deleteBranchAdmin(admin_id, toast));
+    await dispatch(deleteAddress(address_id, toast));
     onClose();
-    await dispatch(getBranchAdmin());
-  };
-
+    await dispatch(getAddress(id));
+  }
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
           <Text fontSize={"xl"} fontWeight={700}>
-            Delete Admin
+            Delete Address
           </Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>
-            Once you delete this admin, it cannot be undone. Are you sure want
-            to delete this admin?
+            Once you delete this address, it cannot be undone. Are you sure want
+            to delete this address?
           </Text>
         </ModalBody>
 
@@ -67,4 +69,4 @@ const DeleteAdminModal = ({ isOpen, onClose, admin_id }) => {
   );
 };
 
-export default DeleteAdminModal;
+export default DeleteAddressModal;

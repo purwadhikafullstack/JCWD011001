@@ -54,7 +54,7 @@ const adminController = {
         where: { location: branch, isactive: true },
       });
       if (branchAdminExist)
-        return res.status(400).json({ message: "Admin in this branch already exists" });
+        return res.status(400).json({ message: "Store already exists" });
 
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(password, salt);
@@ -128,13 +128,13 @@ const adminController = {
       const { id } = req.params;
       await db.sequelize.transaction(async (t) => {
         const updateBranchAdmin = await Store.update(
-          { isactive: false },
+          { admin_id: 1 },
           { where: { admin_id: id }, transaction: t }
         );
-        return res.status(200).json({ message: "Admin is deleted" });
+        return res.status(200).json({ message: "Admin deactivated" });
       });
     } catch (error) {
-      return res.status(500).json({ message: "Failed to delete admin", error: error.message });
+      return res.status(500).json({ message: "Failed to deactivate admin", error: error.message });
     }
   },
 };

@@ -165,8 +165,8 @@ export const setUserLocation = (latitude, longitude) => {
       );
       for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].components.state) {
-          dispatch(setLocation(data.results[i].components));
-          dispatch(setLonLat(data.results[i].geometry));
+          await dispatch(setLocation(data.results[i].components));
+          await dispatch(setLonLat(data.results[i].geometry));
           break;
         } else throw new Error("Location not found");
       }

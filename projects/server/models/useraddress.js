@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       longitude: DataTypes.STRING,
       latitude: DataTypes.STRING,
       isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
+      isdefault: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
       sequelize,

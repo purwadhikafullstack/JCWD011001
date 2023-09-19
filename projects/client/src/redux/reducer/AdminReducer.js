@@ -97,7 +97,7 @@ export const logoutAdmin = (toast) => {
 export const createBranchAdmin = (value, toast, onClose, resetForm) => {
   return async () => {
     try {
-      const { data } = await axios.post(`${URL_API}/admin/branch-admin`, value);
+      await axios.post(`${URL_API}/admin/branch-admin`, value);
       toast({
         title: "Success",
         description: "New branch admin has been created",
@@ -118,6 +118,29 @@ export const createBranchAdmin = (value, toast, onClose, resetForm) => {
     }
   };
 };
+
+export const deleteBranchAdmin  = (admin_id, toast) => {
+  return async () => {
+    try {
+      await axios.patch(`${URL_API}/admin/branch-admin/${admin_id}`);
+      toast({
+        title: "Success",
+        description: "Admin has been deleted",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Failed",
+        description: error.response.data.message,
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+}
 
 export const getBranchAdmin = () => {
   return async (dispatch) => {
