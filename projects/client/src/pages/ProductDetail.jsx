@@ -1,4 +1,12 @@
-import { Box, Divider, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -6,18 +14,23 @@ import { setProductDetail } from "../redux/reducer/ProductReducer";
 import { Link, useNavigate } from "react-router-dom";
 import ProductStock from "./ProductStock";
 import { store } from "../redux/store";
-import AddtoCart from "../components/components/ButtonAddCart";
 import Notfound from "./Notfound";
+import { HiOutlineShoppingCart } from "react-icons/hi";
+import { addCart, addToCart } from "../redux/reducer/CartReducer";
+import Swal from "sweetalert2";
+
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const ProductDetail = () => {
   const { store_id } = useSelector((state) => state.ProductReducer);
+  const { login } = useSelector((state) => state.AuthReducer);
   const [product, setProduct] = useState([]);
   const [stock, setStock] = useState([]);
   const [isDiscount, setIsDiscount] = useState(false);
   const pathname = window.location.pathname.split("/");
   const id = pathname[pathname.length - 1];
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const getProductStock = async (id) => {
     try {
@@ -43,6 +56,13 @@ const ProductDetail = () => {
     }
   };
 
+  const inCart = async (products) => {
+    console.log("product list", products);
+    console.log("product list discount admin", products.admin_discount);
+    await dispatch(addToCart(products));
+    await dispatch(addCart(products, Swal));
+  };
+
   useEffect(() => {
     getProductDetail();
   }, [store_id, id]);
@@ -54,7 +74,9 @@ const ProductDetail = () => {
       <Box mb={4}>
         <Link to={"/"}>Home</Link>
         {" > "}
-        <Link to={`/category/${product?.Category?.id}`}>{product?.Category?.name}</Link>
+        <Link to={`/category/${product?.Category?.id}`}>
+          {product?.Category?.name}
+        </Link>
         {" > "}
         <Link>{product?.name}</Link>
       </Box>
@@ -73,7 +95,12 @@ const ProductDetail = () => {
             {isDiscount && (
               <>
                 <Flex gap={2}>
-                  <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
+                  <Text
+                    textAlign={"center"}
+                    fontWeight={"bold"}
+                    textDecoration={"line-through"}
+                    color={"#9b9b9b"}
+                  >
                     Rp.{product?.price},-
                   </Text>
                   <Text textAlign={"center"} fontWeight={"bold"}>
@@ -86,7 +113,9 @@ const ProductDetail = () => {
                 </Flex>
               </>
             )}
-            {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>}{" "}
+            {!isDiscount && (
+              <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>
+            )}{" "}
             <Box my={4} textAlign={"justify"} pr={4}>
               {product?.description}
             </Box>
@@ -108,6 +137,15 @@ const ProductDetail = () => {
                     <ProductStock key={product.id} product={product} />
                   ))}
                 </Flex>
+                <Button
+                  variant={"outline"}
+                  colorScheme="teal"
+                  leftIcon={<HiOutlineShoppingCart />}
+                  onClick={() => inCart(product)}
+                  isDisabled={login === false}
+                >
+                  Add Cart
+                </Button>
               </>
             )}
           </Box>

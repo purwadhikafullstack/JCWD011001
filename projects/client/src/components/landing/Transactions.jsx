@@ -28,28 +28,23 @@ export default function Transactions() {
   }, []);
   return (
     <>
-      <Box ml={"24px"}>
-        {item.map((item) => {
-          return (
-            <Box>
-              <Card key={item.key}>
-                <CardBody>
-                  <Text fontWeight={"bold"}>Shopping Summary</Text>
-                  <Divider />
-                  <Text>Product price Rp. {item.price}</Text>
-                  <Text>Total products: {cartLength}</Text>
-                  <Divider mt={"20px"} bgColor={"black"} />
-                  <Text fontWeight={"bold"}>Total price : Rp. {price}</Text>
-                  <CardFooter mt={"24px"}>
-                    <Button w={"200px"} isDisabled={cartLength <= 0}>
-                      Checkout
-                    </Button>
-                  </CardFooter>
-                </CardBody>
-              </Card>
-            </Box>
-          );
-        })}
+      <Box ml={"24px"} position={"sticky"} top={"20px"}>
+        <Box>
+          <Card>
+            <CardBody>
+              <Text fontWeight={"bold"}>Shopping Summary</Text>
+              <Divider />
+              <Text>Total products: {cartLength}</Text>
+              <Divider mt={"20px"} bgColor={"black"} />
+              <Text fontWeight={"bold"}>Total price : Rp. {price}</Text>
+              <CardFooter mt={"24px"}>
+                <Button w={"200px"} isDisabled={cartLength <= 0}>
+                  Checkout
+                </Button>
+              </CardFooter>
+            </CardBody>
+          </Card>
+        </Box>
       </Box>
     </>
   );

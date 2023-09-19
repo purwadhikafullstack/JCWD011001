@@ -137,7 +137,7 @@ const Navbar = () => {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Text fontSize={"xs"}>{cartItem || cartItems}</Text>
+                    <Text fontSize={"xs"}>{cartItem || cartItems || 0}</Text>
                   </Box>
                 </Flex>
               </Link>
