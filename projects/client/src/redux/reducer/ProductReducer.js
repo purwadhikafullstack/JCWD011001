@@ -31,15 +31,6 @@ export const ProductReducer = createSlice({
     setStoreStock: (state, action) => {
       state.storeStock = [...action.payload];
     },
-    setPage: (state, action) => {
-      state.page = action.payload;
-    },
-    setProductDetail: (state, action) => {
-      state.productDetail = action.payload;
-    },
-    setStoreStock: (state, action) => {
-      state.storeStock = [...action.payload];
-    },
   },
 });
 
@@ -50,6 +41,7 @@ export const getProduct = ({ index = 1, order = "ASC", orderBy = "name", categor
       if (order) query += `&order=${order}`;
       if (orderBy) query += `&orderBy=${orderBy}`;
       if (category) query += `&category=${category}`;
+      console.log(query);
       const { data } = await axios.get(`${URL_API}/product/${query}`);
       console.log(data);
       dispatch(setPage(data.totalPage));
@@ -79,7 +71,6 @@ export const getStoreProductNext = ({ store_id, index, order, orderBy, category 
       if (order) query += `&order=${order}`;
       if (orderBy) query += `&orderBy=${orderBy}`;
       if (category) query += `&category=${category}`;
-      console.log(query);
       const products = await axios.get(`${URL_API}/product/store/?store_id=${store_id}${query}`);
       console.log(products.data);
       dispatch(setPage(products.data.totalPage));

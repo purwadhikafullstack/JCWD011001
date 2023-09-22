@@ -14,13 +14,7 @@ export default function UserProfile() {
       <Navbar />
       <Box fontFamily={"montserrat"}>
         <Stack>
-          <Text
-            ml={"96px"}
-            mt={"24px"}
-            fontSize={"48px"}
-            borderBottomColor={"red"}
-            border={"10px"}
-          >
+          <Text ml={"96px"} mt={"24px"} fontSize={"48px"} borderBottomColor={"red"} border={"10px"}>
             Profile Setting
           </Text>
           <Box m={"16px auto"} w={"850px"}>

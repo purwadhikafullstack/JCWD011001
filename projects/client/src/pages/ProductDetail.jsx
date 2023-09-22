@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -67,6 +59,8 @@ const ProductDetail = () => {
     getProductDetail();
   }, [store_id, id]);
 
+  console.log(store_id);
+
   if (!product) return <Notfound />;
 
   return (
@@ -74,9 +68,7 @@ const ProductDetail = () => {
       <Box mb={4}>
         <Link to={"/"}>Home</Link>
         {" > "}
-        <Link to={`/category/${product?.Category?.id}`}>
-          {product?.Category?.name}
-        </Link>
+        <Link to={`/category/${product?.Category?.id}`}>{product?.Category?.name}</Link>
         {" > "}
         <Link>{product?.name}</Link>
       </Box>
@@ -95,12 +87,7 @@ const ProductDetail = () => {
             {isDiscount && (
               <>
                 <Flex gap={2}>
-                  <Text
-                    textAlign={"center"}
-                    fontWeight={"bold"}
-                    textDecoration={"line-through"}
-                    color={"#9b9b9b"}
-                  >
+                  <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
                     Rp.{product?.price},-
                   </Text>
                   <Text textAlign={"center"} fontWeight={"bold"}>
@@ -113,9 +100,7 @@ const ProductDetail = () => {
                 </Flex>
               </>
             )}
-            {!isDiscount && (
-              <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>
-            )}{" "}
+            {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>}{" "}
             <Box my={4} textAlign={"justify"} pr={4}>
               {product?.description}
             </Box>
@@ -129,25 +114,26 @@ const ProductDetail = () => {
             )}
             {!store_id && (
               <>
-                <Text textTransform={"uppercase"} fontWeight={"bold"}>
-                  Tersedia di:
+                <Text textTransform={"uppercase"} fontWeight={"bold"} mb={4}>
+                  Kami Belum Menyediakan Layanan di Lokasimu, Sementara ini kami menyediakan produk di toko ini:
                 </Text>
                 <Flex gap={4} justify={"center"}>
                   {stock.map((product) => (
                     <ProductStock key={product.id} product={product} />
                   ))}
                 </Flex>
-                <Button
-                  variant={"outline"}
-                  colorScheme="teal"
-                  leftIcon={<HiOutlineShoppingCart />}
-                  onClick={() => inCart(product)}
-                  isDisabled={login === false}
-                >
-                  Add Cart
-                </Button>
               </>
             )}
+            <Button
+              w={"full"}
+              mt={4}
+              variant={"outline"}
+              colorScheme="teal"
+              leftIcon={<HiOutlineShoppingCart />}
+              onClick={() => inCart(product)}
+              isDisabled={login === false || store_id === null}>
+              Add Cart
+            </Button>
           </Box>
         </Flex>
       </Box>

@@ -119,7 +119,7 @@ export const createBranchAdmin = (value, toast, onClose, resetForm) => {
   };
 };
 
-export const deleteBranchAdmin  = (admin_id, toast) => {
+export const deleteBranchAdmin = (admin_id, toast) => {
   return async () => {
     try {
       await axios.patch(`${URL_API}/admin/branch-admin/${admin_id}`);
@@ -139,14 +139,15 @@ export const deleteBranchAdmin  = (admin_id, toast) => {
         isClosable: true,
       });
     }
-  }
-}
+  };
+};
 
 export const getBranchAdmin = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL_API}/admin/branch-admin`);
       const activeBranchAdmins = data.data.filter((item) => item.isactive === true);
+      console.log(activeBranchAdmins);
       dispatch(setAdmin(activeBranchAdmins));
     } catch (error) {
       console.log(error);

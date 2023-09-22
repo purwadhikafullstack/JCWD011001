@@ -26,6 +26,8 @@ import { getProduct, getStoreProduct, getStore_id } from "./redux/reducer/Produc
 import Address from "./pages/user/Address";
 import { getAddress, getDefaultAddress, setPrimaryAddress } from "./redux/reducer/AddressReducer";
 import Category from "./pages/Category";
+import UserOrder from "./components/landing/UserOrder";
+import UserOrderOngoingCardDetails from "./components/landing/UserOrderOngoingCardDetails";
 
 function App() {
   const role = useSelector((state) => state.AdminReducer.branchAdmin.role_id);
@@ -129,6 +131,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/store" element={<Store />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/User-Order" element={<UserOrder />} />
           <Route path="address" element={<Address />} />
         </>
       );

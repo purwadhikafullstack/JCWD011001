@@ -55,17 +55,12 @@ const Navbar = () => {
           borderBottom={1}
           borderStyle={"solid"}
           borderColor={"#D7F0AA"}
-          align={"center"}
-        >
+          align={"center"}>
           <Box w={"50%"} m={"16px 100px"}>
             <Flex justifyContent={"flex-start"} align={"center"}>
               <Link to={"/"}>
                 <div style={{ width: "184px" }}>
-                  <Image
-                    src={Logo}
-                    h={"28px"}
-                    _hover={{ filter: "brightness(70%)", transition: "300ms" }}
-                  />
+                  <Image src={Logo} h={"28px"} _hover={{ filter: "brightness(70%)", transition: "300ms" }} />
                 </div>
               </Link>
               <Text ml={8} fontWeight={"medium"} _hover={{ color: "#1c1c1c" }}>
@@ -73,8 +68,7 @@ const Navbar = () => {
                   to={"/"}
                   style={{
                     color: location.pathname === "/" ? "#59981A" : "inherit",
-                  }}
-                >
+                  }}>
                   Home
                 </Link>
               </Text>
@@ -82,8 +76,7 @@ const Navbar = () => {
                 to={"/shop"}
                 style={{
                   color: location.pathname === "/shop" ? "#59981A" : "inherit",
-                }}
-              >
+                }}>
                 <Text ml={4} fontWeight={"medium"}>
                   Shop
                 </Text>
@@ -92,8 +85,7 @@ const Navbar = () => {
                 to={"/about"}
                 style={{
                   color: location.pathname === "/about" ? "#59981A" : "inherit",
-                }}
-              >
+                }}>
                 <Text ml={4} fontWeight={"medium"}>
                   About
                 </Text>
@@ -102,8 +94,7 @@ const Navbar = () => {
                 to={"/store"}
                 style={{
                   color: location.pathname === "/store" ? "#59981A" : "inherit",
-                }}
-              >
+                }}>
                 <Text ml={4} fontWeight={"medium"}>
                   Store
                 </Text>
@@ -113,19 +104,11 @@ const Navbar = () => {
           <Box w={"50%"} m={"16px 100px"}>
             <Flex justifyContent={"flex-end"} align={"center"} gap={4}>
               <Link to={"/search"}>
-                <HiOutlineSearch
-                  fontSize={24}
-                  cursor={"pointer"}
-                  color={"gray.800"}
-                />
+                <HiOutlineSearch fontSize={24} cursor={"pointer"} color={"gray.800"} />
               </Link>
               <Link to={"/cart"} ml={4}>
                 <Flex alignItems={"center"} position="relative">
-                  <HiOutlineShoppingCart
-                    fontSize={24}
-                    cursor={"pointer"}
-                    color={"gray.800"}
-                  />
+                  <HiOutlineShoppingCart fontSize={24} cursor={"pointer"} color={"gray.800"} />
                   <Box
                     position="absolute"
                     top="-8px"
@@ -136,8 +119,7 @@ const Navbar = () => {
                     width={`${cartItem.toString().length * 10 + 8}px`}
                     display="flex"
                     alignItems="center"
-                    justifyContent="center"
-                  >
+                    justifyContent="center">
                     <Text fontSize={"xs"}>{cartItem || cartItems || 0}</Text>
                   </Box>
                 </Flex>
@@ -145,13 +127,7 @@ const Navbar = () => {
               {login ? (
                 <Flex alignItems={"center"} ml={10}>
                   <Menu>
-                    <MenuButton
-                      as={Button}
-                      rounded={"full"}
-                      variant={"link"}
-                      cursor={"pointer"}
-                      minW={0}
-                    >
+                    <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
                       <Avatar size={"sm"} name={user.username} src={"/profile"} />
                     </MenuButton>
                     <MenuList>
@@ -163,6 +139,9 @@ const Navbar = () => {
                       </Link>
                       <Link to={"/change-password"}>
                         <MenuItem>Change Password</MenuItem>
+                      </Link>
+                      <Link to={"/User-Order"}>
+                        <MenuItem>Order List</MenuItem>
                       </Link>
                       <MenuDivider />
                       <Link>
@@ -191,8 +170,7 @@ const Navbar = () => {
                       }}
                       _hover={{
                         bg: "gray.100",
-                      }}
-                    >
+                      }}>
                       {" "}
                       Log In
                     </Button>
@@ -212,8 +190,7 @@ const Navbar = () => {
                       }}
                       onClick={() => {
                         navigate("/register");
-                      }}
-                    >
+                      }}>
                       Register
                     </Button>
                   </Stack>

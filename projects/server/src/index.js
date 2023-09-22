@@ -25,9 +25,12 @@ const {
   productRouter,
   storeRouter,
   adminRouter,
+  cartRouter,
+  profileRouter,
   categoryRouter,
+  transactionRouter,
   addressRouter,
-  regionRouter, cartRouter, profileRouter
+  regionRouter,
 } = require("./router");
 // db.sequelize.sync({ alter: true });
 
@@ -38,9 +41,10 @@ app.use("/api/auth", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/store", storeRouter);
-app.use("/api/cart", cartRouter)
-app.use("/api", profileRouter)
+app.use("/api/cart", cartRouter);
+app.use("/api", profileRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/region", regionRouter);
 app.use("/public", express.static(path.resolve(__dirname, "../public")));

@@ -1,23 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getBranchAdmin } from "../../../redux/reducer/AdminReducer";
-import {
-  Box,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Flex,
-  IconButton,
-  useDisclosure,
-} from "@chakra-ui/react";
-import {
-  IoChevronDownOutline,
-  IoChevronUpOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
+import { Box, Table, Thead, Tr, Th, Tbody, Td, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
+import { IoChevronDownOutline, IoChevronUpOutline, IoTrashOutline } from "react-icons/io5";
 import DeleteAdminModal from "./DeleteAdminModal";
 
 const AdminList = () => {
@@ -49,11 +34,7 @@ const AdminList = () => {
 
   const renderSortIcon = (column) => {
     if (sortColumn === column) {
-      return sortDirection === "asc" ? (
-        <IoChevronDownOutline />
-      ) : (
-        <IoChevronUpOutline />
-      );
+      return sortDirection === "asc" ? <IoChevronDownOutline /> : <IoChevronUpOutline />;
     }
     return null;
   };
@@ -68,9 +49,7 @@ const AdminList = () => {
         ? a.Admin.email.localeCompare(b.Admin.email)
         : b.Admin.email.localeCompare(a.Admin.email);
     } else if (sortColumn === "Branch") {
-      return sortDirection === "asc"
-        ? a.location.localeCompare(b.location)
-        : b.location.localeCompare(a.location);
+      return sortDirection === "asc" ? a.location.localeCompare(b.location) : b.location.localeCompare(a.location);
     }
     return 0;
   });
@@ -122,11 +101,7 @@ const AdminList = () => {
           ))}
         </Tbody>
       </Table>
-      <DeleteAdminModal
-        isOpen={isOpen}
-        onClose={onClose}
-        admin_id={adminToDeleteId}
-      />
+      <DeleteAdminModal isOpen={isOpen} onClose={onClose} admin_id={adminToDeleteId} />
     </Box>
   );
 };
