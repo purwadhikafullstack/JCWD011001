@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 const ProductListItem = ({ product }) => {
   const [isDiscount, setIsDiscount] = useState(false);
   const navigate = useNavigate();
+  const [productDetail, setProductDetail] = useState({});
 
   useEffect(() => {
     if (product?.admin_discount > 0 || product.Product?.admin_discount > 0) {

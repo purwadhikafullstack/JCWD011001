@@ -20,7 +20,7 @@ const ProductList = () => {
   useEffect(() => {
     if (!location) dispatch(getProduct({ index, orderBy, order }));
     if (location) dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
-  }, [index, location, orderBy, order]);
+  }, [index, lon, lat, store, location, orderBy, order]);
 
   const handleOrderBy = () => {
     setOrderBy(orderBy === "name" ? "price" : "name");
@@ -28,6 +28,8 @@ const ProductList = () => {
   const handleOrder = () => {
     setOrder(order === "ASC" ? "DESC" : "ASC");
   };
+
+  console.log(store);
 
   if (products.length < 1) {
     return (

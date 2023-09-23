@@ -6,8 +6,7 @@ import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer"
 const KEY = process.env.REACT_APP_KEY;
 
 const UserLocation = () => {
-  const { location, lon, lat } = useSelector((state) => state.AuthReducer);
-  const dispatch = useDispatch();
+  const { location } = useSelector((state) => state.AuthReducer);
 
   return (
     <Box p={4}>

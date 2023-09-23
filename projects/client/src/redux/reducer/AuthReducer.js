@@ -118,8 +118,8 @@ export const loginAuth = (values, setLoading, toast, navigate) => {
         isClosable: true,
       });
       setTimeout(() => {
-        navigate("/")
-      }, 550)
+        navigate("/");
+      }, 550);
     } catch (error) {
       console.log(error);
       toast({
