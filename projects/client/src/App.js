@@ -26,6 +26,7 @@ import { getProduct, getStoreProduct, getStore_id } from "./redux/reducer/Produc
 import Address from "./pages/user/Address";
 import { getAddress, getDefaultAddress, setPrimaryAddress } from "./redux/reducer/AddressReducer";
 import Category from "./pages/Category";
+import Checkout from "./pages/user/Checkout";
 import UserOrder from "./components/landing/UserOrder";
 import UserOrderOngoingCardDetails from "./components/landing/UserOrderOngoingCardDetails";
 
@@ -133,8 +134,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/store" element={<Store />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/address" element={<Address />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/User-Order" element={<UserOrder />} />
-          <Route path="address" element={<Address />} />
         </>
       );
     }

@@ -1,61 +1,33 @@
-import { Box, Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import Hero from "../../assets/hero.png";
+import { Box, Image } from "@chakra-ui/react";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import CSS untuk Carousel
+import Banner_1 from "../../assets/banners/banner_1.png";
+import Banner_2 from "../../assets/banners/banner_2.png";
+import Banner_3 from "../../assets/banners/banner_3.png";
 
 const HeroBanner = () => {
   return (
-    <Box w={"100%"} py={"40px"} px={{  base:"60px", lg:"100px"}}>
-      <Flex
-        direction={{ base: "column-reverse", lg: "row" }}
-        alignItems={"center"}
-        justifyContent={"center"}
+    <Box w={"100%"} py={{ base: "40px", lg: "60px"}} px={{ base: "20px", lg: "100px" }}>
+      <Carousel
+        showArrows={true}
+        showThumbs={false}
+        infiniteLoop={true}
+        autoPlay={true}
+        interval={5000}
+        stopOnHover={false}
+        showStatus={false} // Menyembunyikan status carousel (opsional)
       >
-        <Box
-          w={{ base: "100%", lg: "50%" }}
-          display={"flex"}
-          justifyContent={"flex-start"}
-          alignItems={"center"}
-        >
-          <Box>
-            <Heading fontSize={"4xl"} mb={2}>
-              Shop Locally, Eat Healthily,
-            </Heading>
-            <Heading fontSize={"4xl"} mb={8}>
-              and Support Your Community
-            </Heading>
-            <Text fontSize={"lg"} color={"#6e6e6e"}>
-              Every meal starts with the right ingredients. Find them in{" "}
-              <span style={{ color: "#59981A", fontWeight: "bold" }}>
-                GrocerEasy
-              </span>
-              , your trusted partner for quality groceries.
-            </Text>
-            <Button
-              as={"a"}
-              href={"/shop"}
-              display={"flex"}
-              justifyContent={"center"}
-              w={{ base: "100%", lg: "50%" }}
-              mt={8}
-              rounded={"lg"}
-              color={"white"}
-              bgColor={"#37630A"}
-              _hover={{ bgColor: "#457811" }}
-              _active={{ bgColor: "#2D5406" }}
-            >
-              Shop Now
-            </Button>
-          </Box>
+        <Box>
+          <Image src={Banner_1} alt="Banner 1" />
         </Box>
-        <Box
-          w={{ base: "100%", lg: "50%" }}
-          display={{ base: "none", lg: "flex" }}
-          justifyContent={"flex-end"}
-          alignItems={"center"}
-        >
-          <Image src={Hero} h={"400px"} />
+        <Box>
+          <Image src={Banner_2} alt="Banner 2" />
         </Box>
-      </Flex>
+        <Box>
+          <Image src={Banner_3} alt="Banner 3" />
+        </Box>
+      </Carousel>
     </Box>
   );
 };

@@ -13,10 +13,10 @@ export default function ButtonSignIn() {
         display={"inline-flex"}
         fontSize={"sm"}
         fontWeight={700}
-        color={"#37630A"}
+        color={"brand.main"}
         bg={"white"}
         border={"1px"}
-        borderColor={"#37630A"}
+        borderColor={"brand.main"}
         rounded={"lg"}
         _hover={{ bgColor: "#457811", color: "white" }}
         onClick={() => toLogin()}

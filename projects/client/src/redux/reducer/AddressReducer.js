@@ -25,7 +25,7 @@ export const AddressReducer = createSlice({
   },
 });
 
-export const addAddress = (fullAddress, id, latitude, longitude, toast, onClose) => {
+export const addAddress = (fullAddress, id, latitude, longitude, city_id, toast, onClose) => {
   return async () => {
     try {
       await axios.post(`${URL_API}/address`, {
@@ -33,6 +33,7 @@ export const addAddress = (fullAddress, id, latitude, longitude, toast, onClose)
         address: fullAddress,
         longitude,
         latitude,
+        city_id: city_id,
       });
       toast({
         title: "Address Added",
@@ -43,6 +44,7 @@ export const addAddress = (fullAddress, id, latitude, longitude, toast, onClose)
       });
       onClose();
     } catch (error) {
+      console.log(error);
       toast({
         title: "Error",
         description: error?.response?.data?.message,
@@ -120,7 +122,6 @@ export const editAddress = (address_id, id, fullAddress, latitude, longitude, to
 export const setPrimaryAddress = (id, toast) => {
   return async (dispatch) => {
     try {
-      console.log(id);
       const { data } = await axios.patch(`${URL_API}/address/default/${id}`);
       toast({
         title: "Success",
@@ -148,7 +149,7 @@ export const getDefaultAddress = () => {
       const { data } = await axios.get(`${URL_API}/address/default`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      await dispatch(setUserLocation(data.data.latitude, data.data.longitude));
+      await dispatch(setUserLocation(data.data?.latitude, data.data?.longitude));
       await dispatch(setDefaultAddress(data.data));
     } catch (error) {
       console.log(error);

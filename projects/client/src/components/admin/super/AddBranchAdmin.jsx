@@ -23,7 +23,7 @@ import { useFormik } from "formik";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { createBranchAdmin } from "../../../redux/reducer/AdminReducer";
-import stateData from "../../../data/stateData.json";
+import branchData from "../../../data/branchData.json";
 import { getBranchAdmin } from "../../../redux/reducer/AdminReducer";
 
 const AddBranchAdmin = ({ isOpen, onClose }) => {
@@ -34,21 +34,21 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const toast = useToast();
   const dispatch = useDispatch();
+  const [selectedCityId, setSelectedCityId] = useState(null);
 
   const cityOptions = () => {
-    const sortedStateData = stateData.sort((a, b) => {
-      if (a.province < b.province) return -1;
-      if (a.province > b.province) return 1;
+    const sortedStateData = branchData.sort((a, b) => {
+      if (a.city_name < b.city_name) return -1;
+      if (a.city_name > b.city_name) return 1;
       return 0;
     });
 
-    return sortedStateData.map((state) => (
-      <option key={state.province_id} value={state.province}>
-        {state.province}
+    return sortedStateData.map((city) => (
+      <option key={city.city_id} value={city.city_name}>
+        {city.city_name}
       </option>
     ));
   };
-
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -79,6 +79,9 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
     onSubmit: async (values, { resetForm }) => {
       try {
         setSubmitLoading(true);
+        if (selectedCityId !== null) {
+          values.city_id = selectedCityId; // Add city_id to values
+        }
         await dispatch(createBranchAdmin(values, toast, onClose, resetForm));
         setSubmitLoading(false);
         await dispatch(getBranchAdmin());
@@ -146,7 +149,18 @@ const AddBranchAdmin = ({ isOpen, onClose }) => {
                 name="branch"
                 rounded={"lg"}
                 placeholder="Select Branch"
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const selectedCityName = e.target.value;
+                  const selectedCity = branchData.find(
+                    (city) => city.city_name === selectedCityName
+                  );
+                  if (selectedCity) {
+                    setSelectedCityId(selectedCity.city_id);
+                  } else {
+                    setSelectedCityId(null);
+                  }
+                  formik.handleChange(e);
+                }}
                 onBlur={formik.handleBlur}
                 value={formik.values.branch}
               >

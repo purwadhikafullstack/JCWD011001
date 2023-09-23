@@ -160,10 +160,10 @@ const Navbar = () => {
                       display={"inline-flex"}
                       fontSize={"sm"}
                       fontWeight={700}
-                      color={"#37630A"}
+                      color={"brand.main"}
                       bg={"white"}
                       border={"1px"}
-                      borderColor={"#37630A"}
+                      borderColor={"brand.main"}
                       rounded={"lg"}
                       onClick={() => {
                         navigate("/signin");
@@ -180,7 +180,7 @@ const Navbar = () => {
                       fontSize={"sm"}
                       fontWeight={700}
                       color={"white"}
-                      bg={"#37630A"}
+                      bg={"brand.main"}
                       rounded={"lg"}
                       _hover={{
                         bg: "#457811",

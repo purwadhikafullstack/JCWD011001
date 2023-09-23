@@ -60,7 +60,7 @@ const AdminSignIn = () => {
       h={"100vh"}
     >
       <Center>
-        <Heading fontSize={"5xl"} mb={4} color={"#37630A"}>
+        <Heading fontSize={"5xl"} mb={4} color={"brand.main"}>
           Admin Page
         </Heading>
       </Center>

@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       longitude: DataTypes.STRING,
       latitude: DataTypes.STRING,
       admin_id: DataTypes.INTEGER,
+      city_id: DataTypes.INTEGER,
       isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {

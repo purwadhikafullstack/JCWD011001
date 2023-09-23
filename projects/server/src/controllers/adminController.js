@@ -36,6 +36,10 @@ const adminController = {
         return res.status(404).json({ message: "Admin not found" });
       }
 
+      if (!checkLogin.isactive) {
+        return res.status(401).json({ message: "Admin is not active" });
+      }
+
       const passwordValid = await bcrypt.compare(password, checkLogin.password);
       if (!passwordValid) return res.status(404).json({ message: "Incorrect password" });
 
@@ -58,8 +62,7 @@ const adminController = {
 
   createBranchAdmin: async (req, res) => {
     try {
-
-      const { name, email, branch, password, confirmPassword } = req.body;
+      const { name, email, branch, password, confirmPassword, city_id } = req.body;
       const findAdmin = await Admin.findOne({
         where: { [Sequelize.Op.or]: [{ name }, { email }, {}] },
       });
@@ -69,26 +72,24 @@ const adminController = {
         where: { location: branch, isactive: true },
       });
 
-
-      if(branchAdminExist?.admin_id > 1) 
-      {
-        return res.status(400).json({ message: "Admin in this branch already exists" })
+      if (branchAdminExist?.admin_id > 1) {
+        return res.status(400).json({ message: "Admin in this branch already exists" });
       }
       if (branchAdminExist) {
         try {
           const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(password, salt);
+          const hashPassword = await bcrypt.hash(password, salt);
 
-      const location = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?key=${KEY}&q=${branch}&language=id`
-      );
-
-      const latitude = location.data.results[0].geometry.lat;
-      const longitude = location.data.results[0].geometry.lng;
-          const newBranchAdmin = await Admin.create({ name, email, password: hashPassword, role_id: 2 });
+          const newBranchAdmin = await Admin.create({
+            name,
+            email,
+            password: hashPassword,
+            role_id: 2,
+            isactive: true,
+          });
           branchAdminExist.admin_id = newBranchAdmin.id;
           await branchAdminExist.save();
-          return res.status(200).json({ message: "admin sudah terganti" });
+          return res.status(200).json({ message: "Branch admin is created" });
         } catch (error) {
           return res.status(500).json({ message: error.message });
         }
@@ -116,6 +117,7 @@ const adminController = {
             admin_id: newBranchAdmin.id,
             latitude,
             longitude,
+            city_id: city_id,
             isactive: true,
           },
           { transaction: t }
@@ -133,7 +135,7 @@ const adminController = {
 
   getBranchAdmin: async (req, res) => {
     try {
-      const stores = await Store.findAll({
+      const admins = await Store.findAll({
         include: [
           {
             model: Admin,
@@ -145,9 +147,15 @@ const adminController = {
         where: { isactive: true, admin_id: { [Op.ne]: 1 } },
       });
 
-      return res.status(200).json({ message: "Brandh admins retrieved successfully", data: stores });
+      return res.status(200).json({
+          message: "Branch admins retrieved successfully",
+          data: admins,
+        });
     } catch (error) {
-      return res.status(500).json({ message: "Failed to retrieve branch admins", error: error.message });
+      return res.status(500).json({
+          message: "Failed to retrieve branch admins",
+          error: error.message,
+        });
     }
   },
 
@@ -165,7 +173,15 @@ const adminController = {
     try {
       const { id } = req.params;
       await db.sequelize.transaction(async (t) => {
-        const updateBranchAdmin = await Store.update({ admin_id: 1 }, { where: { admin_id: id }, transaction: t });
+         await Admin.update(
+           { isactive: false },
+           { where: { id }, transaction: t }
+         );
+
+        await Store.update(
+          { admin_id: 1 },
+          { where: { admin_id: id }, transaction: t }
+        );
         return res.status(200).json({ message: "Admin is deleted" });
       });
     } catch (error) {

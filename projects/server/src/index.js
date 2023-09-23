@@ -47,6 +47,7 @@ app.use("/api/category", categoryRouter);
 app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/region", regionRouter);
+app.use("/api/transaction", transactionRouter);
 app.use("/public", express.static(path.resolve(__dirname, "../public")));
 
 app.get("/api", (req, res) => {

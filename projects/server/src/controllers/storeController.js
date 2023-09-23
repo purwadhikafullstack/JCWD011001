@@ -36,7 +36,7 @@ const storeController = {
   cekNearestStore: async (req, res) => {
     try {
       const { lat, lon } = req.query;
-      let nearest = 300;
+      let nearest = 200;
       let data = {};
       const cek = await Store.findAll();
       for (let i = 0; i < cek.length; i++) {

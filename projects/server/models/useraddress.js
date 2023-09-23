@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.STRING,
       longitude: DataTypes.STRING,
       latitude: DataTypes.STRING,
+      city_id: DataTypes.INTEGER,
       isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
       isdefault: { type: DataTypes.BOOLEAN, defaultValue: false },
     },

@@ -4,7 +4,7 @@ const UserAddress = db.Useraddress;
 const addressController = {
   addAddress: async (req, res) => {
     try {
-      const { user_id, address, longitude, latitude } = req.body;
+      const { user_id, address, longitude, latitude, city_id } = req.body;
 
       const existingAddress = await UserAddress.findOne({
         where: { user_id, address, isactive: true },
@@ -20,11 +20,12 @@ const addressController = {
           address,
           longitude,
           latitude,
+          city_id,
         });
         return res.status(200).json({ message: "Successfully added", data: newAddress });
       });
     } catch (error) {
-      return res.status(500).json({ message: "Failed to add address" });
+      return res.status(500).json({ message: "Failed to add address", error: error.message });
     }
   },
 

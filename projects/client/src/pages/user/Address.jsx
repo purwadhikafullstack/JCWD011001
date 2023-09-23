@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Text, useDisclosure, Stack, IconButton, Flex, useToast } from "@chakra-ui/react";
+import { Box, Button, Text, useDisclosure, Stack, IconButton, Flex, useToast, Divider } from "@chakra-ui/react";
 import Navbar from "../../components/landing/Navbar";
 import AddAddressModal from "../../components/user/AddAddressModal";
 import { IoAddOutline, IoTrashOutline, IoCreateOutline, IoStar, IoStarOutline } from "react-icons/io5";
@@ -59,7 +59,8 @@ function Address() {
             Add Address
           </Button>
         </Box>
-        <Box mt={8}>
+        <Divider />
+        <Box mt={4}>
           <Text color={"gray.400"} fontStyle={"italic"}>
             Click star to set address as default
           </Text>

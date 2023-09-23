@@ -10,16 +10,20 @@ import {
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../../redux/reducer/CartReducer";
+import { useNavigate } from "react-router-dom";
 
 export default function Transactions() {
   const { carts, item } = useSelector((state) => state.CartReducer);
   const { totalHarga } = useSelector((state) => state.ProductReducer);
+  const navigate = useNavigate();
   let price = 0;
-  {
-    carts.map((cart) => {
-      price += cart.total_price;
-    });
+
+  const checkout = () => {
+    navigate("/checkout");
   }
+    carts.map((cart) => {
+      return price += cart.total_price;
+    });
   console.log("harga", price);
   const cartLength = item.reduce((total, item) => total + item.quantity, 0);
   const dispatch = useDispatch();
@@ -38,7 +42,7 @@ export default function Transactions() {
               <Divider mt={"20px"} bgColor={"black"} />
               <Text fontWeight={"bold"}>Total price : Rp. {price}</Text>
               <CardFooter mt={"24px"}>
-                <Button w={"200px"} isDisabled={cartLength <= 0}>
+                <Button onClick={() => checkout()} w={"200px"} color={"white"} bg={"brand.main"} _hover={{ bg: "brand.hover" }} _active={{ bg: "brand.active" }} isDisabled={cartLength <= 0}>
                   Checkout
                 </Button>
               </CardFooter>

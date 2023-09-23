@@ -12,9 +12,6 @@ const AdminList = () => {
   const dispatch = useDispatch();
   const adminList = useSelector((state) => state.AdminReducer.admin);
 
-  const [sortColumn, setSortColumn] = useState("Admin Name");
-  const [sortDirection, setSortDirection] = useState("asc");
-
   const onDelete = () => {
     onOpen();
   };
@@ -23,62 +20,31 @@ const AdminList = () => {
     dispatch(getBranchAdmin());
   }, [dispatch]);
 
-  const handleSort = (column) => {
-    if (sortColumn === column) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortColumn(column);
-      setSortDirection("asc");
-    }
-  };
-
-  const renderSortIcon = (column) => {
-    if (sortColumn === column) {
-      return sortDirection === "asc" ? <IoChevronDownOutline /> : <IoChevronUpOutline />;
-    }
-    return null;
-  };
-
-  const sortedAdminList = [...adminList].sort((a, b) => {
-    if (sortColumn === "Admin Name") {
-      return sortDirection === "asc"
-        ? a.Admin.name.localeCompare(b.Admin.name)
-        : b.Admin.name.localeCompare(a.Admin.name);
-    } else if (sortColumn === "Email") {
-      return sortDirection === "asc"
-        ? a.Admin.email.localeCompare(b.Admin.email)
-        : b.Admin.email.localeCompare(a.Admin.email);
-    } else if (sortColumn === "Branch") {
-      return sortDirection === "asc" ? a.location.localeCompare(b.location) : b.location.localeCompare(a.location);
-    }
-    return 0;
-  });
-
   return (
     <Box flex={1}>
       <Table variant="simple" colorScheme="green">
         <Thead>
           <Tr>
-            <Th onClick={() => handleSort("Admin Name")} cursor="pointer">
+            <Th>
               <Flex alignItems={"center"} gap={1}>
-                Admin Name {renderSortIcon("Admin Name")}
+                Admin Name
               </Flex>
             </Th>
-            <Th onClick={() => handleSort("Email")} cursor="pointer">
+            <Th>
               <Flex alignItems={"center"} gap={1}>
-                Email {renderSortIcon("Email")}
+                Email
               </Flex>
             </Th>
-            <Th onClick={() => handleSort("Branch")} cursor="pointer">
+            <Th>
               <Flex alignItems={"center"} gap={1}>
-                Branch {renderSortIcon("Branch")}
+                Branch
               </Flex>
             </Th>
             <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
-          {sortedAdminList.map((item) => (
+          {adminList.map((item) => (
             <Tr key={item.id}>
               <Td>{item.Admin.name}</Td>
               <Td>{item.Admin.email}</Td>

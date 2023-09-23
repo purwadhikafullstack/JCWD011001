@@ -12,6 +12,7 @@ const initialState = {
     name: "",
     birthdate: "",
     email: "",
+    phone: "",
     gender: "",
     profileimg: "",
     refcode: "",
@@ -30,8 +31,8 @@ export const AuthReducer = createSlice({
   reducers: {
     setUser: (state, action) => {
       // console.log("isi", action.payload);
-      const { id, username, name, birthdate, email, gender, profileimg, refcode, refby } = action.payload;
-      state.user = { id, username, name, birthdate, email, gender, profileimg, refcode, refby };
+      const { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby } = action.payload;
+      state.user = { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby };
       state.login = true;
     },
     loginSuccess: (state, action) => {

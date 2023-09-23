@@ -33,12 +33,12 @@ const SuperDashboard = () => {
   return (
     <Box>
       <NavbarAdmin title="Admin Dashboard" />
-      <Flex>
+      <Flex flexDir={{ base: "column", md: "row" }}>
         <Box
           w={{ base: "100%", md: "26%" }}
-          bg={"#37630A"}
+          bg={"brand.main"}
           color="white"
-          minH={"100vh"}
+          minH={{ md: "100vh" }}
           mt={"60px"}
         >
           <VStack spacing="2" align="stretch">
@@ -56,7 +56,7 @@ const SuperDashboard = () => {
             </Link>
           </VStack>
         </Box>
-        <Box w={"full"} mt={"60px"}>
+        <Box w={"full"} mt={{ base: "20px", md: "60px" }}>
           {renderPage()}
         </Box>
       </Flex>

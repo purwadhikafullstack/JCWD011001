@@ -89,8 +89,8 @@ const UserOrderFinishedCard = ({ item, setDetail, setTransactionDetail, setTrans
       <Box>
         {products && (
           <Image
-            src={products[0].Product.product_img}
-            alt={`Image for Order #${item.user_id}${item.id}${products[0].Product.name}`}
+            src={products[0]?.Product.product_img}
+            alt={`Image for Order #${item.user_id}${item.id}${products[0]?.Product.name}`}
           />
         )}
         <Text fontWeight={"bold"}>Harga: Rp.{item.total_price},-</Text>

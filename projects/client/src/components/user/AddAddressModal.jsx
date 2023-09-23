@@ -20,6 +20,7 @@ import { addAddress, getAddress } from "../../redux/reducer/AddressReducer";
 const API_KEY = process.env.REACT_APP_RO_KEY;
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 const KEY = process.env.REACT_APP_KEY;
+
 let fullAddress = "";
 let latitude = "";
 let longitude = "";
@@ -30,7 +31,7 @@ const AddAddressModal = ({ isOpen, onClose }) => {
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState({ id: "", name: "" });
   const [district, setDistrict] = useState("");
   const [selectedProvinceData, setSelectedProvinceData] = useState(null);
   const [streetAddress, setStreetAddress] = useState("");
@@ -65,12 +66,13 @@ const AddAddressModal = ({ isOpen, onClose }) => {
       console.error("Error fetching cities", error);
     }
   };
+
   const saveAddressData = async () => {
     const provinceName = selectedProvinceData
       ? selectedProvinceData.province
       : "";
-    const addressData = `${district}, ${selectedCity}, ${provinceName}`;
-    fullAddress = `${streetAddress}, ${district}, ${selectedCity}, ${provinceName}`;
+    const addressData = `${district}, ${selectedCity.name}, ${provinceName}`;
+    fullAddress = `${streetAddress}, ${district}, ${selectedCity.name}, ${provinceName}`;
 
     try {
       const location = await axios.get(
@@ -88,18 +90,27 @@ const AddAddressModal = ({ isOpen, onClose }) => {
 
   const resetFormValues = () => {
     setSelectedProvince("");
-    setSelectedCity("");
+    setSelectedCity({ id: "", name: "" });
     setDistrict("");
     setStreetAddress("");
     setSelectedProvinceData(null);
   };
 
   const onSubmit = async () => {
-    if (selectedProvince && selectedCity && district && streetAddress) {
+    if (selectedProvince && selectedCity.id && district && streetAddress) {
       setSubmitLoading(true);
+      const city_id = selectedCity.id;
       await saveAddressData();
       await dispatch(
-        addAddress(fullAddress, id, latitude, longitude, toast, onClose)
+        addAddress(
+          fullAddress,
+          id,
+          latitude,
+          longitude,
+          city_id,
+          toast,
+          onClose
+        )
       );
       await dispatch(getAddress(id));
       setSubmitLoading(false);
@@ -119,10 +130,10 @@ const AddAddressModal = ({ isOpen, onClose }) => {
             <Select
               placeholder="Select Province"
               rounded={"lg"}
-              onChange={(e) => {
+              onChange={async (e) => {
                 const selectedValue = e.target.value;
                 setSelectedProvince(selectedValue);
-                setSelectedCity("");
+                setSelectedCity({ id: "", name: "" });
                 setCities([]);
 
                 const selectedProvinceData = provinces.find(
@@ -145,10 +156,17 @@ const AddAddressModal = ({ isOpen, onClose }) => {
             <FormLabel mt={4}>City</FormLabel>
             <Select
               placeholder="Select City"
-              onChange={(e) => {
-                setSelectedCity(e.target.value);
+              onChange={async (e) => {
+                const selectedValue = e.target.value;
+                const selectedCityData = cities.find(
+                  (city) => city.city_name === selectedValue
+                );
+                setSelectedCity({
+                  id: selectedCityData.city_id,
+                  name: selectedValue,
+                });
               }}
-              value={selectedCity}
+              value={selectedCity.name}
               isDisabled={!selectedProvince}
             >
               {cities.map((city) => (
@@ -200,7 +218,12 @@ const AddAddressModal = ({ isOpen, onClose }) => {
             onClick={onSubmit}
             isLoading={submitLoading}
             isDisabled={
-              !(selectedProvince && selectedCity && district && streetAddress)
+              !(
+                selectedProvince &&
+                selectedCity.id &&
+                district &&
+                streetAddress
+              )
             }
             _hover={{ bgColor: "brand.hover" }}
             _active={{ bgColor: "brand.active" }}

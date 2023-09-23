@@ -102,10 +102,10 @@ export const logoutAdmin = (toast) => {
   };
 };
 
-export const createBranchAdmin = (value, toast, onClose, resetForm) => {
+export const createBranchAdmin = (dataToSend, toast, onClose, resetForm) => {
   return async () => {
     try {
-      await axios.post(`${URL_API}/admin/branch-admin`, value);
+      await axios.post(`${URL_API}/admin/branch-admin`, dataToSend);
       toast({
         title: "Success",
         description: "New branch admin has been created",
