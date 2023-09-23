@@ -30,6 +30,7 @@ const fileFilter = (req, file, cb) => {
   const fileType = file.mimetype.split("/")[1];
   if (
     fileType === "png" ||
+    fileType === "jpeg" ||
     fileType === "jpg" ||
     fileType === "gif"
   ) {

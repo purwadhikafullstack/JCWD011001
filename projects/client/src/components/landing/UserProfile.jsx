@@ -39,7 +39,10 @@ export default function UserProfile() {
             <Box mt={"30px"}>
               <Flex justifyContent={"space-between"}>
                 <Text>Birthdate</Text>
-                <Text>{new Date(user.birthdate).toLocaleDateString()}</Text>
+                {user.birthdate
+                  ? new Date(user.birthdate).toLocaleDateString()
+                  : ""}
+                {/* <Text>{new Date(user.birthdate).toLocaleDateString()}</Text> */}
               </Flex>
             </Box>
             <Box bgColor={"blackAlpha.800"}>

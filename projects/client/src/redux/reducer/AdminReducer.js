@@ -11,6 +11,8 @@ const initialState = {
   },
   login: false,
   admin: [],
+  product : [],
+  page: 1,
 };
 
 export const AdminReducer = createSlice({
@@ -36,6 +38,12 @@ export const AdminReducer = createSlice({
     },
     setRoleId: (state, action) => {
       state.branchAdmin.role_id = action.payload;
+    },
+    setProduct: (state, action) => {
+      state.product = [...action.payload];
+    },
+    setPage: (state, action) => {
+      state.page = action.payload;
     },
   },
 });
@@ -155,6 +163,41 @@ export const getBranchAdmin = () => {
   };
 };
 
-export const { setBranchAdmin, setAdmin, loginSuccess, logoutSuccess, setRoleId } = AdminReducer.actions;
+export const getProduct = ({ index = 1, order = "ASC", orderBy = "name", category = "" }) => {
+  return async (dispatch) => {
+    try {
+      let query = `?page=${index}`;
+      if (order) query += `&order=${order}`;
+      if (orderBy) query += `&orderBy=${orderBy}`;
+      if (category) query += `&category=${category}`;
+      const { data } = await axios.get(`${URL_API}/admin/product${query}`);
+      console.log(data);
+      dispatch(setPage(data.totalPage));
+      dispatch(setProduct(data.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const destroyProduct = (product, Swal) => {
+  return async (dispatch) => {
+    console.log("destroy ", product)
+    const productId = product.id
+    console.log("id destroy reducer", productId)
+    try {
+      const result = await axios.delete(`${URL_API}/admin/product/${productId}`)
+      Swal.fire({
+        icon: 'success',
+        title: 'Product Deleted...',
+        text: 'Back in business',
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export const { setBranchAdmin, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } = AdminReducer.actions;
 
 export default AdminReducer.reducer;

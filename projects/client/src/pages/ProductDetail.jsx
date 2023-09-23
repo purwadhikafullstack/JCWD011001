@@ -110,6 +110,15 @@ const ProductDetail = () => {
                 <Text>
                   Stock {stock.Store?.name}: {stock?.quantity}
                 </Text>
+                <Button
+                  variant={"outline"}
+                  colorScheme="teal"
+                  leftIcon={<HiOutlineShoppingCart />}
+                  onClick={() => inCart(product)}
+                  isDisabled={login === false}
+                >
+                  Add Cart
+                </Button>
               </>
             )}
             {!store_id && (

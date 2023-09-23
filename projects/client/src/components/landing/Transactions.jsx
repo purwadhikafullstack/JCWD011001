@@ -28,7 +28,7 @@ export default function Transactions() {
   }, []);
   return (
     <>
-      <Box ml={"24px"} position={"sticky"} top={"20px"}>
+      <Box ml={"24px"} mt={"32px"} position={"sticky"} top={"20px"}>
         <Box>
           <Card>
             <CardBody>

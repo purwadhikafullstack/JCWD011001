@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Box, Button, Center, Divider, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Center,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const ProductListItem = ({ product }) => {
@@ -11,6 +22,7 @@ const ProductListItem = ({ product }) => {
       setIsDiscount(true);
     }
   }, []);
+  
 
   if (product.Product?.name) {
     return (
@@ -27,7 +39,8 @@ const ProductListItem = ({ product }) => {
         }}
         onClick={() => {
           navigate(`/product/${product.Product.id}`);
-        }}>
+        }}
+      >
         <Image
           src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
           w={"90%"}
@@ -55,22 +68,36 @@ const ProductListItem = ({ product }) => {
               />
             )}
           </Flex>
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
+          <Box
+            mt="1"
+            fontWeight="semibold"
+            as="h4"
+            lineHeight="tight"
+            noOfLines={1}
+          >
             {product.Product.name}
           </Box>
           {isDiscount && (
             <>
               <Flex gap={2}>
-                <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
+                <Text
+                  textAlign={"center"}
+                  fontWeight={"bold"}
+                  textDecoration={"line-through"}
+                  color={"#9b9b9b"}
+                >
                   Rp.{product?.Product.price},-
                 </Text>
                 <Text textAlign={"center"} fontWeight={"bold"}>
-                  Rp.{product?.Product.price - product?.Product.admin_discount},-
+                  Rp.{product?.Product.price - product?.Product.admin_discount}
+                  ,-
                 </Text>
               </Flex>
             </>
           )}
-          {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.Product.price},-</Text>}
+          {!isDiscount && (
+            <Text fontWeight={"bold"}>Rp.{product?.Product.price},-</Text>
+          )}
         </Box>
       </Box>
     );
@@ -90,7 +117,8 @@ const ProductListItem = ({ product }) => {
       }}
       onClick={() => {
         navigate(`/product/${product.id}`);
-      }}>
+      }}
+    >
       <Image
         src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
         w={"90%"}
@@ -118,13 +146,24 @@ const ProductListItem = ({ product }) => {
             />
           )}
         </Flex>
-        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
+        <Box
+          mt="1"
+          fontWeight="semibold"
+          as="h4"
+          lineHeight="tight"
+          noOfLines={1}
+        >
           {product.name}
         </Box>
         {isDiscount && (
           <>
             <Flex gap={2}>
-              <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
+              <Text
+                textAlign={"center"}
+                fontWeight={"bold"}
+                textDecoration={"line-through"}
+                color={"#9b9b9b"}
+              >
                 Rp.{product?.price},-
               </Text>
               <Text textAlign={"center"} fontWeight={"bold"}>

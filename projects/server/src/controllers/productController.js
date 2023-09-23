@@ -2,6 +2,8 @@ const { Sequelize } = require("sequelize");
 const db = require("../../models");
 const { check } = require("express-validator");
 const { Product, Category, Store, ProductStore } = db;
+const fs = require("fs").promises
+const path = require("path")
 
 let includeStore = [{ model: Store, attributes: { exclude: ["createdAt", "updatedAt"] }, where: { isactive: true } }];
 const includeCategory = [{ model: Category, attributes: { exclude: ["createdAt", "updatedAt"] } }];
@@ -191,6 +193,100 @@ const productController = {
       res.status(500).json({ message: error.message });
     }
   },
+  createProduct : async (req, res) => {
+    try {
+      const { name, category_id, store_id, price, admin_discount, description } = req.body;
+      if (!req.file) {
+        return res.status(400).json({ message: "Product image is required" });
+      }
+      const productExist = await Product.findOne({ where: { name, isactive: true } });
+  
+      if (productExist) {
+        return res.status(400).json({ message: "Product already exists" });
+      }
+      await db.sequelize.transaction(async (t) => {
+        await Product.create({
+          name,
+          category_id,
+          store_id,
+          price,
+          admin_discount,
+          product_img: req.file.path,
+          isactive: true,
+          description,
+        }, { transaction: t });
+      });
+  
+      return res.status(200).json({ message: "Product added" });
+    } catch (error) {
+      console.error("Error creating product:", error);
+      return res.status(500).json({ message: "Failed to create product", error: error.message });
+    }
+  },
+  updateProduct: async(req, res) => {
+    try {
+      const {id} = req.params
+      let {newName, category_id, price, admin_discount, description} = req.body
+      const findProduct = await Product.findOne({where : {id}})
+      console.log("update", findProduct)
+      if(newName === findProduct.name){
+        return res.status(500).json({message : "Product already exist"})
+      }
+      if(findProduct.product_img){
+        console.log("ada")
+        fs.unlink(path.resolve(__dirname, `../../${findProduct.product_img}`), (err) => {
+          return res.status(500).json({message : err.message})
+        })
+      }
+      console.log("gambar tidak ada")
+      await db.sequelize.transaction(async (t) => {
+        await Product.update(
+          {
+            name : newName,
+            category_id, 
+            price, 
+            admin_discount, 
+            product_img : req.file.path,
+            description,
+          }, { where : {id}}, { transaction : t})
+          return res.status(200).json({message : "Product updated"})
+      })
+    } catch (error) {
+      return res.status(500).json({message : "Failed", error: error.message})
+    }
+  },
+  deleteProduct: async(req, res) => {
+    try {
+      const {id} = req.params
+      const findProduct = await Product.findOne({where : {id}})
+      console.log("delete", findProduct)
+      await db.sequelize.transaction(async (t) => {
+        await Product.update(
+          {
+            isactive : false,
+          }, { where : {id}}, { transaction : t})
+          return res.status(200).json({message : "Product deleted"})
+      })
+    } catch (error) {
+      return res.status(500).json({message : "Failed", error: error.message})
+    }
+  },
+  activeProduct:async (req, res) => {
+    try {
+      const {id} = req.params
+      const findProduct = await Product.findOne({where : {id}})
+      console.log("active ", findProduct)
+      await db.sequelize.transaction(async (t) => {
+        await Product.update(
+          {
+            isactive : true,
+          }, { where : {id}}, { transaction : t})
+          return res.status(200).json({message : "Product active"})
+      })
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  }
 };
 
 module.exports = productController;

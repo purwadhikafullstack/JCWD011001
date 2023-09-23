@@ -118,5 +118,132 @@ export const getProductSearch = ({ category, name, store_id }) => {
   };
 };
 
+export const addProduct = (values, productImg, Swal, toast) => {
+  return async(dispatch) => {
+    console.log("prodcut", values)
+    console.log("prodcut image", productImg)
+    try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("category_id", values.category_id);
+      formData.append("store_id", values.store_id)
+      formData.append("price", values.price);
+      formData.append("admin_discount", values.admin_discount);
+      formData.append("description", values.description);
+      formData.append("product_img", productImg);
+      const data = await axios.post(
+        `${URL_API}/product`, formData,
+        {
+          headers : {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      )
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Product successfully added',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: "Failed",
+        description: error?.response?.data?.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+}
+
+export const updateProduct = (values, productImg, toast, Swal) => {
+  return async() => {
+    const id = values.id
+    try {
+      const formData = new FormData();
+      formData.append("newName", values.newName);
+      formData.append("category_id", values.categoryId);
+      formData.append("price", values.price);
+      formData.append("admin_discount", values.admin_discount);
+      formData.append("description", values.description);
+      formData.append("product_img", productImg);
+      const data = await axios.patch(
+        `${URL_API}/product/${id}`, formData,
+        {
+          headers : {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      )
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Product successfully updated',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 2000);
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: "Failed",
+        description: error?.response?.data?.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+}
+export const deleteProduct = (values, Swal, toast) => {
+  return async () => {
+    try {
+      const id = values.id
+      console.log("delete values", id)
+      const data = await axios.patch(
+        `${URL_API}/product/delete/${id}`,
+        {}
+      )
+      Swal.fire({
+        icon: 'error',
+        title: 'Product disabled...',
+        text: 'Restore the product is stock already exist',
+      })
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: "Failed",
+        description: error?.response?.data?.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+}
+export const restoreProduct = (values, Swal) => {
+  return async () => {
+    try {
+      const id = values.id
+      console.log("id restore", id)
+      const data = await axios.patch(
+        `${URL_API}/product/restore/${id}`, {}
+      )
+      Swal.fire({
+        icon: 'success',
+        title: 'Product restore...',
+        text: 'Back in business',
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
 export const { setProduct, setStore_id, setPage, setProductDetail, setStoreStock } = ProductReducer.actions;
 export default ProductReducer.reducer;

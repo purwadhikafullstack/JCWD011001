@@ -10,6 +10,7 @@ import {
   IconButton,
   Image,
   Spacer,
+  Spinner,
   Stack,
   Text,
   useToast,
@@ -31,6 +32,7 @@ import {
   getCart,
   getItem,
 } from "../../redux/reducer/CartReducer";
+import { useNavigate } from "react-router-dom";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
@@ -39,6 +41,7 @@ export default function Cart() {
   const toast = useToast();
   // const {total_harga}
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const inCart = async (products) => {
     await dispatch(addToCart(products));
@@ -68,7 +71,7 @@ export default function Cart() {
     <>
       <Navbar />
       {login ? (
-        <Box>
+        <Box fontFamily={"montserrat"}>
           <Stack>
             <Box
               ml={"100px"}
@@ -82,67 +85,86 @@ export default function Cart() {
             <Divider colorScheme="blackAlpha"></Divider>
             <Flex>
               <Box>
-                {item.map((products) => {
-                  return (
-                    <Box>
-                      <Card
-                        mt={"8"}
-                        w={"800px"}
-                        ml={"100px"}
-                        boxShadow={"lg"}
-                        key={products.id}
-                      >
-                        <CardBody>
-                          <Box fontWeight={"bold"} mb={"24px"}>
-                            <Text>Click and Play</Text>
-                          </Box>
-                          <Flex>
-                            <Image
-                              src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
-                              w={"20%"}
-                            />
-                            <Box ml={"32px"}>
-                              <Text>{products.name}</Text>
-                              <Text fontWeight={"bold"}>
-                                Rp. {products.price}
-                              </Text>
+                {item.length === 0 ? (
+                  <Box ml={"100px"}>
+                    <Text>You haven't shop today, click the button below</Text>
+                    <Button
+                      bg={"brand.main"}
+                      _hover={{ bg: "brand.hover" }}
+                      color={"white"}
+                      onClick={() => navigate("/")}
+                      width={"800px"}
+                      mt={"32px"}
+                    >
+                      See our products
+                    </Button>
+                  </Box>
+                ) : (
+                  item.map((products) => {
+                    return (
+                      <Box>
+                        <Card
+                          mt={"8"}
+                          w={{
+                            base: "300px",
+                            sm: "400px",
+                            md: "500px",
+                            lg: "800px",
+                          }}
+                          ml={"100px"}
+                          boxShadow={"lg"}
+                          key={products.id}
+                        >
+                          <CardBody>
+                            <Box fontWeight={"bold"} mb={"24px"}>
+                              <Text>Click and Play</Text>
                             </Box>
-                          </Flex>
-                        </CardBody>
-                        <CardFooter>
-                          <Flex justify={"space-between"}>
-                            <Box>
-                              <IconButton
-                                color={"blackAlpha.600"}
-                                variant={""}
-                                icon={<IoTrashOutline size={"md"} />}
-                                onClick={() => destroy(products)}
+                            <Flex>
+                              <Image
+                                src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
+                                w={"20%"}
                               />
-                            </Box>
-                            <Box ml={"600px"}>
-                              <ButtonGroup variant={"none"}>
-                                <IconButton
-                                  color={"red"}
-                                  icon={<AiOutlineMinusCircle />}
-                                  isDisabled={products.quantity === 1}
-                                  onClick={() => outCart(products)}
-                                ></IconButton>
-                                <Text fontSize={"2xl"}>
-                                  {products.quantity}
+                              <Box ml={"32px"}>
+                                <Text>{products.name}</Text>
+                                <Text fontWeight={"bold"}>
+                                  Rp. {products.price}
                                 </Text>
+                              </Box>
+                            </Flex>
+                            <Flex justify={"space-between"}>
+                              <Box>
                                 <IconButton
-                                  color={"green"}
-                                  icon={<AiOutlinePlusCircle />}
-                                  onClick={() => inCart(products)}
-                                ></IconButton>
-                              </ButtonGroup>
-                            </Box>
-                          </Flex>
-                        </CardFooter>
-                      </Card>
-                    </Box>
-                  );
-                })}
+                                  color={"blackAlpha.600"}
+                                  variant={""}
+                                  icon={<IoTrashOutline size={"md"} />}
+                                  onClick={() => destroy(products)}
+                                />
+                              </Box>
+                              <Box ml={{ md: "200px", lg: "400px" }}>
+                                <ButtonGroup variant={"none"}>
+                                  <IconButton
+                                    color={"red"}
+                                    icon={<AiOutlineMinusCircle />}
+                                    isDisabled={products.quantity === 1}
+                                    onClick={() => outCart(products)}
+                                  ></IconButton>
+                                  <Text fontSize={"2xl"}>
+                                    {products.quantity}
+                                  </Text>
+                                  <IconButton
+                                    color={"green"}
+                                    icon={<AiOutlinePlusCircle />}
+                                    onClick={() => inCart(products)}
+                                  ></IconButton>
+                                </ButtonGroup>
+                              </Box>
+                            </Flex>
+                          </CardBody>
+                        </Card>
+                      </Box>
+                    );
+                  })
+                )}
               </Box>
               <Box>
                 <Transactions />

@@ -123,7 +123,7 @@ export const loginAuth = (values, setLoading, toast, navigate) => {
     } catch (error) {
       console.log(error);
       toast({
-        title: "Login Failedd",
+        title: "Login Failed",
         description: error?.response?.data?.message,
         status: "error",
         duration: 3000,

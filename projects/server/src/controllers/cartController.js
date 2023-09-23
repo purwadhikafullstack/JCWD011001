@@ -50,15 +50,11 @@ const cartController = {
     try {
       const { id } = req.user;
       const { total_price, cartId, productId } = req.body;
-      // console.log("cart back product Id", productId);
       const checkCart = await cart.findOne({ where: { user_id: id } });
-      // console.log("cart back remove => ", checkCart);
       const checkProduct = await product.findOne({ where: { id: productId } });
-      // console.log("backend product remove => ", checkProduct);
-      const totalPrice = (checkCart.total_price -= checkProduct.price);
-      // console.log("total_price db remove=> ", totalPrice);
+      const newPrice = checkProduct.price - checkProduct.admin_discount
+      const totalPrice = (checkCart.total_price -= newPrice);
       const checkItem = await items.findOne({ where: { product_id: checkProduct.id } });
-      // console.log("check Item remove ", checkItem);
       await db.sequelize.transaction(async (t) => {
         if (totalPrice !== 0) {
           const result = await cart.update({ total_price: totalPrice }, { where: { user_id: id } }, { transaction: t });

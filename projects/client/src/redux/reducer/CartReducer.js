@@ -181,7 +181,7 @@ export const deleteItemFromCart = (products) => {
           Authorization : `Bearer ${token}`
         }
       })
-      alert("Done")
+      alert("Uhhuy")
       
     } catch (error) {
       console.log(error)
