@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Transactionitem, { foreignKey: "transaction_id" });
       this.hasMany(models.Uservoucher, { foreignKey: "transaction_id" });
       this.belongsTo(models.User, { foreignKey: "user_id" });
+      this.belongsTo(models.Store, { foreignKey: "store_id" });
     }
   }
   Transaction.init(
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       courier: DataTypes.STRING,
       payment_method: DataTypes.ENUM("cash", "transfer", "QR"),
       status: DataTypes.INTEGER,
+      store_id: DataTypes.INTEGER,
     },
     {
       sequelize,

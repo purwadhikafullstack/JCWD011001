@@ -1,16 +1,18 @@
-import { Box, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { Box, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Navbar from "./Navbar";
 import UserOrderOngoing from "./UserOrderOngoing";
 import UserOrderFinished from "./UserOrderFinished";
+import { Pagination } from "../components/Pagination";
+import { useSelector } from "react-redux";
 
 const UserOrder = () => {
+  const { page } = useSelector((state) => state.TransactionReducer);
   const [detail, setDetail] = useState(false);
-
+  const [index, setIndex] = useState(1);
   const handleSetDetail = () => {
     setDetail(false);
   };
-
   return (
     <Box>
       <Navbar />
@@ -29,12 +31,13 @@ const UserOrder = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <UserOrderOngoing setDetail={setDetail} detail={detail} />
+              <UserOrderOngoing setDetail={setDetail} detail={detail} index={index} setIndex={setIndex} />
             </TabPanel>
             <TabPanel>
-              <UserOrderFinished setDetail={setDetail} detail={detail} />
+              <UserOrderFinished setDetail={setDetail} detail={detail} index={index} setIndex={setIndex} />
             </TabPanel>
           </TabPanels>
+          {!detail && page > 1 && <Pagination page={page} index={index} setIndex={setIndex} />}
         </Tabs>
       </Stack>{" "}
     </Box>

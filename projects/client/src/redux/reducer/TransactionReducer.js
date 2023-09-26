@@ -4,7 +4,9 @@ const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const initialState = {
   transaction: [],
+  finishedTransaction: [],
   itemTransaction: [],
+  page: 1,
 };
 
 export const TransactionReducer = createSlice({
@@ -17,31 +19,47 @@ export const TransactionReducer = createSlice({
     setItemTransaction: (state, action) => {
       state.itemTransaction = [...action.payload];
     },
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
   },
 });
 
-export const getTransaction = () => {
+export const getTransaction = ({ index = 1, startDate, endDate, orderBy, order }) => {
   return async (dispatch) => {
+    let query = `?page=${index}`;
+    if (startDate) query += `&startDate=${startDate}`;
+    if (endDate) query += `&endDate=${endDate}`;
+    if (orderBy) query += `&orderBy=${orderBy}`;
+    if (order) query += `&order=${order}`;
     try {
-      const { data } = await axios.get(`${URL_API}/transaction`, {
+      const { data } = await axios.get(`${URL_API}/transaction/${query}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      dispatch(setPage(data.totalPage));
       dispatch(setTransaction(data.data));
-      dispatch(getTransactionItem(data.data[0].id));
+      dispatch(getTransactionItem(data.data[0]?.id));
     } catch (error) {
       console.log(error);
     }
   };
 };
 
-export const getFinshedTransaction = () => {
+export const getFinshedTransaction = ({ index = 1, startDate, endDate, orderBy, order }) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${URL_API}/transaction/done`, {
+      let query = `?page=${index}`;
+      if (startDate) query += `&startDate=${startDate}`;
+      if (endDate) query += `&endDate=${endDate}`;
+      if (orderBy) query += `&orderBy=${orderBy}`;
+      if (order) query += `&order=${order}`;
+
+      const { data } = await axios.get(`${URL_API}/transaction/done/${query}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      dispatch(setPage(data.totalPage));
       dispatch(setTransaction(data.data));
-      dispatch(getTransactionItem(data.data[0].id));
+      dispatch(getTransactionItem(data.data[0]?.id));
     } catch (error) {
       console.log(error);
     }
@@ -62,5 +80,5 @@ export const getTransactionItem = (id) => {
   };
 };
 
-export const { setTransaction, setItemTransaction } = TransactionReducer.actions;
+export const { setTransaction, setItemTransaction, setPage } = TransactionReducer.actions;
 export default TransactionReducer.reducer;

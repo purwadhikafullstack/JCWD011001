@@ -31,6 +31,8 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
     { status: "Finished", color: "Green" },
   ];
 
+  console.log(transactionDetail, transactionProducts)
+
   const RenderStatus = () => {
     if (transactionDetail.status === 6)
       return (
@@ -64,18 +66,18 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
         Order #{`${transactionDetail.user_id}${transactionDetail.id}`}
         <Box borderBottom="2px solid #E2E8F0" mt={4} />
       </CardHeader>
-      <CardBody>
-        {transactionProducts.length > 0 &&
-          transactionProducts.map((item) => (
+      {transactionProducts.length > 0 &&
+        transactionProducts.map((item) => (
+          <CardBody>
             <Box key={item.id}>
               <Flex justify={"space-between"}>
                 <Stack spacing="2">
                   {console.log(item)}
                   <Text fontWeight={"bold"} fontSize={"20px"}>
-                    {item.Product.name}
+                    {item?.Product?.name}
                   </Text>
                   <Text>Rp.{item.price},-</Text>
-                  <Text mt={"45%"}>Quantity {item.quantity}</Text>
+                  <Text mt={"45%"}>Quantity {item?.quantity}</Text>
                 </Stack>
                 <Box w={"50%"} align={"right"} mr={"20%"}>
                   <Image
@@ -89,11 +91,11 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
               </Flex>
               <Box borderBottom="2px solid #E2E8F0" my={4} />
             </Box>
-          ))}
-        <Box width={"100%"}>
-          <Box py="40px">{RenderStatus()}</Box>
-        </Box>
-      </CardBody>
+            <Box width={"100%"}>
+              <Box py="40px">{RenderStatus()}</Box>
+            </Box>
+          </CardBody>
+        ))}
     </Card>
   );
 };
