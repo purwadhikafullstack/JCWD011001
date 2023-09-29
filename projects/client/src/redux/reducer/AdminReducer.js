@@ -5,6 +5,7 @@ const URL_API = process.env.REACT_APP_API_BASE_URL;
 const initialState = {
   branchAdmin: {
     id: null,
+    store_id: null,
     name: "",
     email: "",
     role_id: "",
@@ -57,13 +58,14 @@ export const loginAdmin = (values, setLoading, toast, navigate) => {
         password: values.password,
       });
       const token = respon.data.token;
+      const store_id = respon.data.BranchData.id;
       localStorage.setItem("token", token);
       dispatch(setBranchAdmin(respon.data.Account));
       dispatch(loginSuccess());
       if (respon.data.Account.role_id === 1) {
         navigate("/admin/super");
       } else if (respon.data.Account.role_id === 2) {
-        navigate("/admin/branch");
+        navigate(`/admin/branch/${store_id}`);
       }
       toast({
         title: "Login Success",

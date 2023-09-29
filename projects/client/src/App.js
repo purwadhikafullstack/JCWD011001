@@ -108,7 +108,7 @@ function App() {
     if (role === 2) {
       return (
         <>
-          <Route path="/admin/branch" element={<BranchDashboard />} />
+          <Route path="/admin/branch/:store_id" element={<BranchDashboard />} />
         </>
       );
     }

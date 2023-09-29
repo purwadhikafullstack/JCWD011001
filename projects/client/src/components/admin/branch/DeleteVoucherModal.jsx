@@ -1,16 +1,16 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useToast } from '@chakra-ui/react';
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { deleteCategory, getCategory } from '../../../redux/reducer/CategoryReducer';
+import { deleteVoucher, getAdminVoucher } from '../../../redux/reducer/VoucherReducer';
 
-const DeleteCategoryModal = ({ isOpen, onClose, id }) => {
+const DeleteVoucherModal = ({ isOpen, onClose, id }) => {
     const dispatch = useDispatch();
     const toast = useToast();
 
     const handleDelete = async () => {
-        await dispatch(deleteCategory(id, toast));
+        await dispatch(deleteVoucher(id, toast));
         onClose();
-        await dispatch(getCategory());
+        await dispatch(getAdminVoucher());
     }
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -18,14 +18,14 @@ const DeleteCategoryModal = ({ isOpen, onClose, id }) => {
       <ModalContent>
         <ModalHeader>
           <Text fontSize={"xl"} fontWeight={700}>
-            Delete Category
+            Delete Voucher
           </Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>
-            Once you delete this category, it cannot be undone. Are you sure want
-            to delete this category?
+            Once you delete this voucher, it cannot be undone. Are you sure
+            want to delete this voucher?
           </Text>
         </ModalBody>
 
@@ -55,4 +55,4 @@ const DeleteCategoryModal = ({ isOpen, onClose, id }) => {
   );
 }
 
-export default DeleteCategoryModal
+export default DeleteVoucherModal

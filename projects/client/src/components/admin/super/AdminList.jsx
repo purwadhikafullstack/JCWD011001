@@ -21,7 +21,7 @@ const AdminList = () => {
   }, [dispatch]);
 
   return (
-    <Box flex={1}>
+    <Box w={"full"} minH={"100vh"}>
       <Table variant="simple" colorScheme="green">
         <Thead>
           <Tr>
@@ -67,7 +67,11 @@ const AdminList = () => {
           ))}
         </Tbody>
       </Table>
-      <DeleteAdminModal isOpen={isOpen} onClose={onClose} admin_id={adminToDeleteId} />
+      <DeleteAdminModal
+        isOpen={isOpen}
+        onClose={onClose}
+        admin_id={adminToDeleteId}
+      />
     </Box>
   );
 };

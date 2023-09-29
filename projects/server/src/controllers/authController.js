@@ -3,6 +3,8 @@ const db = require("../../models");
 const User = db.User;
 const Admin = db.Admin;
 const Cart = db.Cart;
+const Voucherdetail = db.Voucherdetail;
+const Uservoucher = db.Uservoucher;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const handlebars = require("handlebars");
@@ -56,12 +58,51 @@ const authController = {
           },
           { transaction: t }
         );
-        await Cart.create({ user_id: newUser.id, total_price: 0 }, { transaction: t });
-        const token = jwt.sign({ id: newUser.id, username: username, email: email }, process.env.JWT_KEY, {
-          expiresIn: "1h",
-        });
+        await Cart.create(
+          { user_id: newUser.id, total_price: 0 },
+          { transaction: t }
+        );
+        if (refcode) {
+          const findRefUser = await User.findOne({ where: { refcode } });
+          if (findRefUser) {
+            const sevenDaysFromNow = new Date();
+            sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+            const newVoucher = await Voucherdetail.create(
+              {
+                name: "Referral Voucher",
+                product_id: null,
+                description: "Get 30% off for all products",
+                nominal: null,
+                percent: 30,
+                type: "discount",
+                expired: sevenDaysFromNow,
+              },
+              { transaction: t }
+            );
+            await Uservoucher.create(
+              {
+                user_id: newUser.id,
+                voucherdetail_id: newVoucher.id,
+                isused: false,
+              },
+              { transaction: t }
+            );
+          } else {
+            return res.status(404).json({ message: "Ref code not found" });
+          }
+        }
+        const token = jwt.sign(
+          { id: newUser.id, username: username, email: email },
+          process.env.JWT_KEY,
+          {
+            expiresIn: "1h",
+          }
+        );
         const redirect = `http://localhost:3000/verification/${token}`;
-        const data = await fs.readFile(path.resolve(__dirname, "../emails/registerEmail.html"), "utf-8");
+        const data = await fs.readFile(
+          path.resolve(__dirname, "../emails/registerEmail.html"),
+          "utf-8"
+        );
         const tempCompile = await handlebars.compile(data);
         const tempResult = tempCompile({ username, email, redirect });
         console.log("ini");

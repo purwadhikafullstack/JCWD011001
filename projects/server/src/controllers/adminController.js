@@ -32,8 +32,13 @@ const adminController = {
       if (email) where.email = email;
 
       const checkLogin = await Admin.findOne({ where });
-      if (!checkLogin) {
-        return res.status(404).json({ message: "Admin not found" });
+
+      const checkBranch = await Store.findOne({
+        where: { admin_id: checkLogin.id },
+        attributes: { exclude: ["admin_id", "longitude", "latitude", "createdAt", "updatedAt", "isactive"] },
+      });
+      if(!checkLogin || !checkBranch) {
+        return res.status(404).json({ message: "Branch admin not found" });
       }
 
       if (!checkLogin.isactive) {
@@ -42,6 +47,8 @@ const adminController = {
 
       const passwordValid = await bcrypt.compare(password, checkLogin.password);
       if (!passwordValid) return res.status(404).json({ message: "Incorrect password" });
+
+      checkLogin.store_id = checkBranch.id;
 
       let payload = {
         id: checkLogin.id,
@@ -54,7 +61,7 @@ const adminController = {
         expiresIn: "24h",
       });
 
-      return res.status(200).json({ message: "Login success", Account: checkLogin, token: token });
+      return res.status(200).json({ message: "Login success", Account: checkLogin, BranchData: checkBranch, token: token });
     } catch (error) {
       return res.status(500).json({ message: "Login failed", error: error.message });
     }

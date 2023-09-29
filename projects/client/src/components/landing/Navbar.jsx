@@ -101,6 +101,7 @@ const Navbar = () => {
               </Link>
             </Flex>
           </Box>
+          <Box></Box>
           <Box w={"50%"} m={"16px 100px"}>
             <Flex justifyContent={"flex-end"} align={"center"} gap={4}>
               <Link to={"/search"}>

@@ -6,6 +6,7 @@ import CategoryReducer from "./reducer/CategoryReducer";
 import AddressReducer from "./reducer/AddressReducer";
 import CartReducer from "./reducer/CartReducer";
 import TransactionReducer from "./reducer/TransactionReducer";
+import VoucherReducer from "./reducer/VoucherReducer";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     CartReducer: CartReducer,
     TransactionReducer: TransactionReducer,
     AddressReducer: AddressReducer,
+    VoucherReducer: VoucherReducer,
   },
 });

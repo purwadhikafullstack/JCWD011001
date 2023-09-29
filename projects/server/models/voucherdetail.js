@@ -20,8 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       nominal: DataTypes.INTEGER,
       percent: DataTypes.INTEGER,
-      type: DataTypes.ENUM("cashback", "discount", "buy1get1"),
+      minimum_payment: DataTypes.INTEGER,
+      type: DataTypes.ENUM("freedelivery", "discount", "buy1get1"),
       expired: DataTypes.DATE,
+      isactive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {
       sequelize,

@@ -33,12 +33,16 @@ const AddCategory = ({ isOpen, onClose }) => {
         "File size is too large",
         (value) => !value || value.size <= 1048576
       )
-      .test(
-        "fileType",
-        "Invalid file format",
-        (value) => !value || /\/(jpg|png|gif)$/i.test(value.type)
-      ),
+      .test("fileType", "Invalid file format", (value) => {
+        if (!value) {
+          return true;
+        }
+        const supportedFormats = ["jpg", "jpeg", "png", "gif"];
+        const fileExtension = value.name.split(".").pop().toLowerCase();
+        return supportedFormats.includes(fileExtension);
+      }),
   });
+
 
   const formik = useFormik({
     initialValues: {
@@ -91,7 +95,7 @@ const AddCategory = ({ isOpen, onClose }) => {
               <FormLabel>Image</FormLabel>
               <Input
                 type="file"
-                accept=".jpg, .png, .gif"
+                accept=".jpg, .jpeg, .png, .gif"
                 name="image"
                 onChange={(e) => {
                   formik.setFieldValue("image", e.currentTarget.files[0]);
