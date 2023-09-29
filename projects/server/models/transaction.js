@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       city_id: DataTypes.INTEGER,
       store_id: DataTypes.INTEGER,
       courier: DataTypes.STRING,
+      transaction_img: DataTypes.STRING,
       payment_method: DataTypes.ENUM("cash", "transfer", "QR"),
       status: DataTypes.INTEGER,
       store_id: DataTypes.INTEGER,

@@ -13,7 +13,7 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [orderBy, setOrderBy] = useState("");
-  const [order, setOrder] = useState("asc");
+  const [order, setOrder] = useState("desc");
 
   const handleClearStartDate = () => {
     setStartDate("");
@@ -24,7 +24,7 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
 
   useEffect(() => {
     dispatch(getTransaction({ index, startDate, endDate, orderBy, order }));
-  }, [index, startDate, endDate, orderBy, order]);
+  }, [index, startDate, endDate, orderBy, order, detail]);
 
   console.log(order);
 
@@ -56,7 +56,12 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
             <option value={"id"}>Invoice ID</option>
             <option value={"status"}>Status</option>
           </Select>
-          <Button colorScheme="green" onClick={(e) => setOrder(order === "asc" ? "desc" : "asc")}>
+          <Button
+            colorScheme="green"
+            onClick={(e) => {
+              setOrder(order === "asc" ? "desc" : "asc");
+              setIndex(1);
+            }}>
             {order === "asc" ? "ASC" : "DESC"}
           </Button>
         </Flex>
@@ -105,7 +110,12 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
             <option value={"id"}>Invoice ID</option>
             <option value={"status"}>Status</option>
           </Select>
-          <Button colorScheme="green" onClick={(e) => setOrder(order === "asc" ? "desc" : "asc")}>
+          <Button
+            colorScheme="green"
+            onClick={(e) => {
+              setOrder(order === "asc" ? "desc" : "asc");
+              setIndex(1);
+            }}>
             {order === "asc" ? "ASC" : "DESC"}
           </Button>
         </Flex>
@@ -128,7 +138,11 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
   }
   return (
     <Box>
-      <UserOrderOngoingCardDetails transactionDetail={transactionDetail} transactionProducts={transactionProducts} />
+      <UserOrderOngoingCardDetails
+        transactionDetail={transactionDetail}
+        transactionProducts={transactionProducts}
+        setDetail={setDetail}
+      />
     </Box>
   );
 };

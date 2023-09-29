@@ -66,6 +66,8 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
     getProduct();
   }, []);
 
+  console.log(products);
+
   return (
     <Flex
       w={"100%"}

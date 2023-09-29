@@ -80,5 +80,31 @@ export const getTransactionItem = (id) => {
   };
 };
 
+export const uploadTransactionImage = (id, file, toast, navigate) => {
+  return async (dispatch) => {
+    try {
+      const formData = new FormData();
+      formData.append("transaction_img", file);
+      formData.append("id_transaction", id);
+
+      const { data } = await axios.patch(`${URL_API}/transaction/upload/`, formData, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      toast({
+        title: "Success",
+        description: "Transaction image uploaded",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setTimeout(() => {
+        navigate(`/User-Order`);
+      }, 300);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const { setTransaction, setItemTransaction, setPage } = TransactionReducer.actions;
 export default TransactionReducer.reducer;

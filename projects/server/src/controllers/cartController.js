@@ -1,7 +1,17 @@
+const { default: axios } = require("axios");
 const db = require("../../models");
 const product = db.Product;
 const cart = db.Cart;
 const items = db.Cartitem;
+const APIRO = `https://api.rajaongkir.com/starter/cost`;
+
+const includeProduct = [
+  {
+    model: product,
+    attributes: { exclude: ["createdAt", "updatedAt"] },
+    where: { isactive: true },
+  },
+];
 
 const cartController = {
   addCartItem: async (req, res) => {
@@ -52,7 +62,7 @@ const cartController = {
       const { total_price, cartId, productId } = req.body;
       const checkCart = await cart.findOne({ where: { user_id: id } });
       const checkProduct = await product.findOne({ where: { id: productId } });
-      const newPrice = checkProduct.price - checkProduct.admin_discount
+      const newPrice = checkProduct.price - checkProduct.admin_discount;
       const totalPrice = (checkCart.total_price -= newPrice);
       const checkItem = await items.findOne({ where: { product_id: checkProduct.id } });
       await db.sequelize.transaction(async (t) => {
@@ -114,6 +124,7 @@ const cartController = {
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
+        include: [...includeProduct],
         where: { cart_id: findCart.id },
       });
       console.log("item", findCartsItems);
@@ -132,6 +143,25 @@ const cartController = {
       return res.status(200).json({ message: "Success", data: findCart });
     } catch (error) {
       return res.status(500).json({ error: error.message });
+    }
+  },
+  getRajaOngkir: async (req, res) => {
+    const { storeCityId, city_id, totalWeight, deliveryDetail } = req.body;
+    try {
+      console.log(storeCityId);
+      const { data } = await axios.post(
+        `${APIRO}`,
+        {
+          origin: storeCityId,
+          destination: city_id,
+          weight: totalWeight,
+          courier: deliveryDetail,
+        },
+        { headers: { key: `94a44550ce043c478e36c13b4a63e3de` } }
+      );
+      res.status(200).json({ data });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   },
 };

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.Cart, { foreignKey: "cart_id" });
       this.belongsTo(models.Product, { foreignKey: "product_id" });
+      this.belongsTo(models.Store, { foreignKey: "store_id" });
     }
   }
   Cartitem.init(
@@ -20,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       quantity: DataTypes.INTEGER,
       price: DataTypes.INTEGER,
       cart_id: DataTypes.INTEGER,
+      store_id: DataTypes.INTEGER,
     },
     {
       sequelize,

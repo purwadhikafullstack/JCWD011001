@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const initialState = {
@@ -47,17 +47,17 @@ export const CartReducer = createSlice({
         }
       }
     },
-    deleteItemCart : (state, action) => {
-      console.log("dele", action.payload)
-      const {id} = action.payload
-      console.log("isi del",id)
+    deleteItemCart: (state, action) => {
+      console.log("dele", action.payload);
+      const { id } = action.payload;
+      console.log("isi del", id);
       const existCart = state.cart.findIndex((item) => item.id === id);
       if (existCart !== -1) {
-        console.log("sampe")
+        console.log("sampe");
         state.totalHarga -= action.payload.harga_produk * state.cart[existCart].quantity;
         state.cart.splice(existCart, 1);
       }
-    }
+    },
   },
 });
 export const getItem = () => {
@@ -96,12 +96,12 @@ export const getCart = () => {
 export const addCart = (products, Swal) => {
   return async (dispatch) => {
     const dataProduct = products.Product || products;
-    const discount = dataProduct.price - products.admin_discount
-    console.log("harga baru setelah diskon ", discount)
+    const discount = dataProduct.price - products.admin_discount;
+    console.log("harga baru setelah diskon ", discount);
     const total_price = discount;
     const productId = dataProduct.product_id || dataProduct.id;
     console.log("id", productId);
-    console.log("total", total_price)
+    console.log("total", total_price);
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(
@@ -114,12 +114,12 @@ export const addCart = (products, Swal) => {
         }
       );
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Product successfully added to cart',
+        position: "top-end",
+        icon: "success",
+        title: "Product successfully added to cart",
         showConfirmButton: false,
-        timer: 1500
-      })
+        timer: 1500,
+      });
       // Swal.fire("Success!", "Product successfully added to cart", "success");
     } catch (error) {
       console.log(error);
@@ -129,9 +129,9 @@ export const addCart = (products, Swal) => {
 
 export const deleteItem = (products) => {
   return async (dispatch) => {
-    console.log("del ", products)
-    console.log("del ", products.id)
-    console.log("del id ", products.product_id)
+    console.log("del ", products);
+    console.log("del ", products.id);
+    console.log("del id ", products.product_id);
     const token = localStorage.getItem("token");
     const total_price = products.price;
     try {
@@ -152,14 +152,14 @@ export const deleteItem = (products) => {
 
 export const deleteItemFromCart = (products) => {
   return async (dispatch) => {
-    console.log("delete from",products)
-    const dataProduct = products.Product || products
-    console.log("data delete", dataProduct)
-    const total_price = dataProduct.price
-    console.log("price delete", total_price)
-    const productId = dataProduct.product_id || dataProduct.id
-    console.log("id delete", productId)
-    const token = localStorage.getItem("token")
+    console.log("delete from", products);
+    const dataProduct = products.Product || products;
+    console.log("data delete", dataProduct);
+    const total_price = dataProduct.price;
+    console.log("price delete", total_price);
+    const productId = dataProduct.product_id || dataProduct.id;
+    console.log("id delete", productId);
+    const token = localStorage.getItem("token");
     // Swal.fire({
     //   title: 'Do you want to save the changes?',
     //   showDenyButton: true,
@@ -175,19 +175,17 @@ export const deleteItemFromCart = (products) => {
     //   }
     // })
     try {
-      const result = await axios.delete(`${URL_API}/cart/item/delete/${productId}`, 
-      {
-        headers : {
-          Authorization : `Bearer ${token}`
-        }
-      })
-      alert("Uhhuy")
-      
+      const result = await axios.delete(`${URL_API}/cart/item/delete/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Uhhuy");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-}
+  };
+};
 
 export const { addToCart, deleteFromCart, setItem, setCarts, deleteItemCart } = CartReducer.actions;
 export default CartReducer.reducer;

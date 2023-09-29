@@ -9,6 +9,7 @@ const initialState = {
   page: 1,
   productDetail: null,
   storeStock: [],
+  storeCityId: null,
 };
 
 export const ProductReducer = createSlice({
@@ -22,9 +23,11 @@ export const ProductReducer = createSlice({
       if (!action.payload) {
         state.store_id = null;
         state.store = null;
+        state.storeCityId = null;
       } else {
         state.store_id = action.payload.id;
         state.store = action.payload.name;
+        state.storeCityId = action.payload.city_id;
       }
     },
     setPage: (state, action) => {

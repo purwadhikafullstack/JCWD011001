@@ -19,7 +19,7 @@ import {
 import React, { useEffect, useState } from "react";
 import UserOrderOngoingCardDetailOrder from "./UserOrderOngoingCardDetailStatus";
 
-const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts }) => {
+const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, setDetail }) => {
   const orderStatusArray = [
     { status: "Awaiting Payment", color: "red" },
     { status: "Waiting for Payment Confirmation", color: "orange" },
@@ -58,7 +58,11 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts })
             Next Step {activeStep + 2}: <b>{nextStep}</b>
           </Text>
         </Flex>
-        <UserOrderOngoingCardDetailOrder status={transactionDetail.status} />
+        <UserOrderOngoingCardDetailOrder
+          status={transactionDetail.status}
+          id={transactionDetail.id}
+          setDetail={setDetail}
+        />
       </Stack>
     );
   };

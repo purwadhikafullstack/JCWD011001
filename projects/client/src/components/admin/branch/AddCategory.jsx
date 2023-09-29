@@ -60,8 +60,7 @@ const AddCategory = ({ isOpen, onClose }) => {
     },
   });
 
-  const isButtonDisabled =
-    !formik.isValid || formik.isSubmitting || !formik.dirty;
+  const isButtonDisabled = !formik.isValid || formik.isSubmitting || !formik.dirty;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -88,10 +87,7 @@ const AddCategory = ({ isOpen, onClose }) => {
               <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
             </FormControl>
 
-            <FormControl
-              mt={4}
-              isInvalid={formik.errors.image && formik.touched.image}
-            >
+            <FormControl mt={4} isInvalid={formik.errors.image && formik.touched.image}>
               <FormLabel>Image</FormLabel>
               <Input
                 type="file"
@@ -119,8 +115,7 @@ const AddCategory = ({ isOpen, onClose }) => {
               loadingText="Adding..."
               _hover={{ bgColor: "brand.hover" }}
               _active={{ bgColor: "brand.active" }}
-              isDisabled={isButtonDisabled}
-            >
+              isDisabled={isButtonDisabled}>
               Add Category
             </Button>
           </ModalFooter>

@@ -1,15 +1,6 @@
 const { Sequelize, Op } = require("sequelize");
 const db = require("../../models");
-const {
-  Transaction,
-  Product,
-  ProductStore,
-  Transactionitem,
-  Cart,
-  Cartitem,
-  Voucherdetail,
-  Uservoucher,
-} = db;
+const { Transaction, Product, ProductStore, Transactionitem, Cart, Cartitem, Voucherdetail, Uservoucher } = db;
 
 const createFreeShippingVoucher = async (userId) => {
   try {
@@ -21,10 +12,7 @@ const createFreeShippingVoucher = async (userId) => {
         },
       },
     });
-    if (
-      successfulTransactionsCount % 5 === 0 &&
-      successfulTransactionsCount > 0
-    ) {
+    if (successfulTransactionsCount % 5 === 0 && successfulTransactionsCount > 0) {
       const existingVoucher = await Uservoucher.findOne({
         where: {
           user_id: userId,
@@ -100,14 +88,12 @@ const transactionController = {
       });
       res.status(200).json({ message: "Get Transaction Success", totalPage, data: transaction });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Get Transaction Failed", error: error.message });
+      res.status(500).json({ message: "Get Transaction Failed", error: error.message });
     }
   },
   getFinishedTransaction: async (req, res) => {
     try {
-      const { page = 1, limit = 3, order = "ASC", orderBy = "name", startDate, endDate } = req.query;
+      const { page = 1, limit = 3, order = "ASC", orderBy = "id", startDate, endDate } = req.query;
 
       let filter = {};
       if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
@@ -137,9 +123,7 @@ const transactionController = {
       });
       res.status(200).json({ message: "Get Transaction Success", totalPage, data: transaction });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Get Transaction Failed", error: error.message });
+      res.status(500).json({ message: "Get Transaction Failed", error: error.message });
     }
   },
 
@@ -152,9 +136,7 @@ const transactionController = {
       });
       res.status(200).json({ message: "Get Transaction Success", data: item });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Get Transaction Item Failed", error: error.message });
+      res.status(500).json({ message: "Get Transaction Item Failed", error: error.message });
     }
   },
   checkout: async (req, res) => {
@@ -219,10 +201,10 @@ const transactionController = {
             product_id: cartItem.product_id,
             store_id: store_id,
           },
-        })
+        });
 
         await productStore.update({
-          quantity: productStore.quantity - cartItem.quantity
+          quantity: productStore.quantity - cartItem.quantity,
         });
         await productStore.save();
 
@@ -237,10 +219,7 @@ const transactionController = {
         });
       }
 
-      await Uservoucher.update(
-        { isused: true, transaction_id: newTransaction.id },
-        { where: { id: voucherIds } }
-      );
+      await Uservoucher.update({ isused: true, transaction_id: newTransaction.id }, { where: { id: voucherIds } });
 
       if (total_price >= 100000) {
         const sevenDaysFromNow = new Date();
@@ -267,6 +246,27 @@ const transactionController = {
       await cart.save();
 
       return res.status(200).json({ message: "Checkout successful", transaction: newTransaction });
+    } catch (error) {
+      return res.status(500).json({ message: "Failed", error: error.message });
+    }
+  },
+  uploadProduct: async (req, res) => {
+    const { id } = req.user;
+    console.log(1);
+    try {
+      const { id_transaction } = req.body;
+      console.log(id_transaction);
+      const findTransaction = await Transaction.findOne({ where: { id: id_transaction, user_id: id, status: 0 } });
+      if (!findTransaction) return res.status(404).json({ message: "Transaction not found" });
+      const image = req.file.path;
+      await db.sequelize.transaction(async (t) => {
+        const data = await Transaction.update(
+          { transaction_img: image, status: 1 },
+          { where: { id: id_transaction } },
+          { transaction: t }
+        );
+        return res.status(200).json({ message: "Success", data });
+      });
     } catch (error) {
       return res.status(500).json({ message: "Failed", error: error.message });
     }

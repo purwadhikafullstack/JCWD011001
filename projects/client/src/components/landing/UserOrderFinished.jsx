@@ -14,8 +14,8 @@ const UserOrderFinished = ({ setDetail, detail, index, setIndex }) => {
   const [transactionProducts, setTransactionProducts] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [orderBy, setOrderBy] = useState("");
-  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("id");
+  const [order, setOrder] = useState("desc");
 
   const handleClearStartDate = () => {
     setStartDate("");
@@ -26,7 +26,7 @@ const UserOrderFinished = ({ setDetail, detail, index, setIndex }) => {
 
   useEffect(() => {
     dispatch(getFinshedTransaction({ index, endDate, startDate, orderBy, order }));
-  }, [index, endDate, startDate, orderBy, order]);
+  }, [index, endDate, startDate, orderBy, order, detail]);
 
   if (transaction.length === 0) {
     return (
@@ -52,11 +52,16 @@ const UserOrderFinished = ({ setDetail, detail, index, setIndex }) => {
               </Button>
             )}
           </Flex>
-          <Select placeholder="Select Order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
+          <Select value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
             <option value={"id"}>Invoice ID</option>
             <option value={"status"}>Status</option>
           </Select>
-          <Button colorScheme="green" onClick={(e) => setOrder(order === "asc" ? "desc" : "asc")}>
+          <Button
+            colorScheme="green"
+            onClick={(e) => {
+              setOrder(order === "asc" ? "desc" : "asc");
+              setIndex(1);
+            }}>
             {order === "asc" ? "ASC" : "DESC"}
           </Button>
         </Flex>
@@ -105,7 +110,12 @@ const UserOrderFinished = ({ setDetail, detail, index, setIndex }) => {
             <option value={"id"}>Invoice ID</option>
             <option value={"status"}>Status</option>
           </Select>
-          <Button colorScheme="green" onClick={(e) => setOrder(order === "asc" ? "desc" : "asc")}>
+          <Button
+            colorScheme="green"
+            onClick={(e) => {
+              setOrder(order === "asc" ? "desc" : "asc");
+              setIndex(1);
+            }}>
             {order === "asc" ? "ASC" : "DESC"}
           </Button>
         </Flex>

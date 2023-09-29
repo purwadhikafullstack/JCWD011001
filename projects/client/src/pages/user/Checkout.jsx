@@ -20,6 +20,8 @@ import { getCart, getItem } from "../../redux/reducer/CartReducer";
 import PlainFooter from "../../components/user/PlainFooter";
 import axios from "axios";
 import { getDefaultAddress } from "../../redux/reducer/AddressReducer";
+import DeliveryDetail from "../../components/components/DeliveryDetail";
+import ItemCart from "../../components/components/ItemCart";
 import TransactionVoucher from "../../components/user/TransactionVoucher";
 import { useNavigate } from "react-router-dom";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
@@ -37,12 +39,15 @@ const Checkout = () => {
   } = useDisclosure();
   const { defaultAddress } = useSelector((state) => state.AddressReducer);
   const { carts, item } = useSelector((state) => state.CartReducer);
-  const { store_id } = useSelector((state) => state.ProductReducer);
-  const { voucherToUse, deliveryVoucherToUse } = useSelector((state) => state.VoucherReducer);
+const { store_id, storeCityId } = useSelector((state) => state.ProductReducer);
+const [deliveryDetail, setDeliveryDetail] = useState("");
+const { voucherToUse, deliveryVoucherToUse } = useSelector((state) => state.VoucherReducer);
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
   const [voucher_discount, setVoucherDiscount] = useState(0);
   const [delivery_discount, setDeliveryDiscount] = useState(0);
   const nameExist = user.name ? user.name : user.username;
+  const [totalWeight, setTotalWeight] = useState(0);
+  const [deliveryPrice, setDeliveryprice] = useState(0);
   let product_price = 0;
   let delivery_price = 4000;
 
@@ -69,7 +74,7 @@ const Checkout = () => {
         {
           name: nameExist,
           total_price,
-          delivery_price,
+          delivery_price: deliveryPrice,
           address: defaultAddress.address,
           city_id: defaultAddress.city_id,
           store_id: store_id,
@@ -77,7 +82,7 @@ const Checkout = () => {
           voucher_id: voucherToUse?.id,
           delivery_voucher_id: deliveryVoucherToUse?.id,
           total_discount: vouchers_discount,
-          courier: "JNE",
+          courier: deliveryDetail,
         },
         {
           headers: {
@@ -108,6 +113,10 @@ const Checkout = () => {
     }
   }, [dispatch, modalClosedTrigger]);
 
+  console.log("default", defaultAddress);
+  console.log("store_id", store_id);
+  console.log("city", storeCityId);
+  console.log("weight", totalWeight);
   return (
     <Box>
       <Box>
@@ -160,26 +169,31 @@ const Checkout = () => {
                 <Divider my={2} />
                 <Text fontWeight={"medium"}>{nameExist}</Text>
                 <Text my={2}>{user.phone}</Text>
-                <Text>
-                  {defaultAddress ? (
-                    defaultAddress.address
-                  ) : (
-                    <Spinner size="sm" />
-                  )}
-                </Text>
-                <Text
-                  mt={2}
-                  fontSize={"sm"}
-                  fontStyle={"italic"}
-                  color={"gray.500"}
-                >
+                <Text>{defaultAddress ? defaultAddress.address : <Spinner size="sm" />}</Text>
+                <Text mt={2} fontSize={"sm"} fontStyle={"italic"} color={"gray.500"}>
                   *your order will be delivered to your default address
                 </Text>
                 <Divider my={4} />
                 <Text fontWeight={"bold"} mb={2} color={"brand.main"}>
-                  Delivery Options
+                  Courier Option:
                 </Text>
-                <Select placeholder="Select delivery option"></Select>
+                <Select placeholder="Select delivery option" onChange={(e) => setDeliveryDetail(e.target.value)}>
+                  <option value={"jne"}>JNE</option>
+                  <option value={"tiki"}>TIKI</option>
+                  <option value={"pos"}>POS</option>
+                </Select>
+                {deliveryDetail === null ? (
+                  <div className="spinner"></div>
+                ) : deliveryDetail ? (
+                  <DeliveryDetail
+                    deliveryDetail={deliveryDetail}
+                    storeCityId={storeCityId}
+                    city_id={defaultAddress.city_id}
+                    weight={totalWeight}
+                    products={item}
+                    setDeliveryprice={setDeliveryprice}
+                  />
+                ) : null}
               </Box>
               <Divider my={4} />
               <Text fontWeight={"bold"} mb={2} color={"brand.main"}>
@@ -188,33 +202,34 @@ const Checkout = () => {
               <Box>
                 {item.map((products) => {
                   return (
-                    <Box>
-                      <Card
-                        mt={"4"}
-                        w={"full"}
-                        boxShadow={"lg"}
-                        key={products.id}
-                      >
-                        <CardBody>
-                          <Box fontWeight={"bold"} mb={"24px"}>
-                            <Text>Click and Play</Text>
-                          </Box>
-                          <Flex>
-                            <Image
-                              src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
-                              w={"20%"}
-                            />
-                            <Box ml={"32px"}>
-                              <Text>{products.name}</Text>
-                              <Text fontWeight={"bold"}>
-                                Rp. {products.price}
-                              </Text>
-                            </Box>
-                          </Flex>
-                        </CardBody>
-                      </Card>
-                    </Box>
+                    <ItemCart
+                      products={products}
+                      key={products.id}
+                      setTotalWeight={setTotalWeight}
+                      totalWeight={totalWeight}
+                    />
                   );
+                  // return (
+                  //   <Box>
+                  //     <Card mt={"4"} w={"full"} boxShadow={"lg"} key={products.id}>
+                  //       <CardBody>
+                  //         <Box fontWeight={"bold"} mb={"24px"}>
+                  //           <Text>Click and Play</Text>
+                  //         </Box>
+                  //         <Flex>
+                  //           <Image
+                  //             src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
+                  //             w={"20%"}
+                  //           />
+                  //           <Box ml={"32px"}>
+                  //             <Text>{products.name}</Text>
+                  //             <Text fontWeight={"bold"}>Rp. {products.price}</Text>
+                  //           </Box>
+                  //         </Flex>
+                  //       </CardBody>
+                  //     </Card>
+                  //   </Box>
+                  // );
                 })}
               </Box>
             </Box>
@@ -226,8 +241,7 @@ const Checkout = () => {
               rounded={"lg"}
               border={"1px"}
               borderColor={"gray.200"}
-              boxShadow={"lg"}
-            >
+              boxShadow={"lg"}>
               <Box w={"full"} p={4}>
                 <Button
                   onClick={onOpenVoucher}
@@ -252,10 +266,10 @@ const Checkout = () => {
                   <Text>Product price:</Text>
                   <Text> Rp.{product_price}</Text>
                 </Flex>
-                {delivery_price > 0 && (
+                {deliveryPrice > 0 && (
                   <Flex justifyContent={"space-between"} alignItems={"center"}>
-                    <Text>Delivery fee:</Text>
-                    <Text> Rp.{delivery_price}</Text>
+                    <Text>Shipping fee:</Text>
+                    <Text> Rp.{deliveryPrice}</Text>
                   </Flex>
                 )}
                 {voucher_discount > 0 && (
@@ -282,8 +296,7 @@ const Checkout = () => {
                   bg={"brand.main"}
                   _hover={{ bg: "brand.hover" }}
                   _active={{ bg: "brand.active" }}
-                  mt={8}
-                >
+                  mt={8}>
                   Checkout
                 </Button>
               </Box>
