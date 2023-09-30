@@ -58,6 +58,36 @@ const genderValidator = [
 const birthdateValidator = [
   body("newBirthdate").notEmpty().withMessage("Birthday is required"),
 ];
+
+const forgotPasswordValidator = [
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format"),
+];
+
+const resetPasswordValidator = [
+  body("newPassword")
+    .notEmpty()
+    .withMessage("Password is required")
+    .matches(
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/
+    )
+    .withMessage(
+      "Password must contain 8 character, one uppercase, one number, and one special case character"
+    ),
+  body("confirmPassword")
+    .notEmpty()
+    .withMessage("Confirm password is required")
+    .custom((value, { req }) => {
+      if (value !== req.body.newPassword) {
+        throw new Error("Password must match");
+      }
+      return true;
+    }),
+];
+
 const createBranchAdmin = [
   body("name").notEmpty().withMessage("Name is required"),
   body("email")
@@ -100,6 +130,8 @@ module.exports = {
   changePasswordValidator,
   birthdateValidator,
   genderValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
   createBranchAdmin,
   validateRegist,
 };

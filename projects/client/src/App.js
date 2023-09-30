@@ -29,6 +29,7 @@ import Category from "./pages/Category";
 import Checkout from "./pages/user/Checkout";
 import UserOrder from "./components/landing/UserOrder";
 import UserOrderOngoingCardDetails from "./components/landing/UserOrderOngoingCardDetails";
+import ResetPassword from "./pages/user/ResetPassword";
 
 function App() {
   const role = useSelector((state) => state.AdminReducer.branchAdmin.role_id);
@@ -95,6 +96,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminSignIn />} />
           <Route path="/verification/:token" element={<Verify />} />
+          <Route path="reset-password/:token" element={<ResetPassword />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/*" element={<Product />} />
           <Route path="/category/*" element={<Category />} />

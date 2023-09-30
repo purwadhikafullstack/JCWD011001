@@ -29,7 +29,7 @@ export default function ForgetPassword() {
         color={"#bc6c25"}
         fontSize={{ sm: "12px", md: "16px", lg: "16px" }}
       >
-        Forget Password ?
+        Forgot Password ?
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -62,12 +62,6 @@ export default function ForgetPassword() {
               </FormControl>
 
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
-                </Button>
-                <Button variant="ghost" type="submit">
-                  Get Link
-                </Button>
               </ModalFooter>
             </form>
           </ModalBody>

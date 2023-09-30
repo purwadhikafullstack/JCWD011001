@@ -11,6 +11,7 @@ import {
   InputRightElement,
   Spinner,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { BsPersonCircle } from "react-icons/bs";
@@ -21,9 +22,9 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Navbar from "../components/landing/Navbar";
-import ForgetPassword from "../components/landing/ForgetPassword";
 import { loginAuth } from "../redux/reducer/AuthReducer";
 import { useNavigate } from "react-router-dom";
+import ForgotPassword from "../components/user/ForgotPassword";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -43,6 +44,7 @@ export default function Signin() {
   const toast = useToast();
   const dispath = useDispatch();
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const showPassword = () => {
     setShow(!show);
@@ -157,7 +159,22 @@ export default function Signin() {
                   <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
                 )}
               </FormControl>
-              <ForgetPassword />
+              <Box
+                w={"100%"}
+                display={"flex"}
+                justifyContent={"flex-end"}
+                mt={"20px"}
+              >
+                <Button
+                onClick={onOpen}
+                  variant={"link"}
+                  color={"#bc6c25"}
+                  fontSize={{ sm: "12px", md: "16px", lg: "16px" }}
+                  _hover={{ textDecoration: "underline" }}
+                >
+                  Forgot Password?
+                </Button>
+              </Box>
               <Button
                 type="submit"
                 bgColor="#5a9819"
@@ -171,6 +188,7 @@ export default function Signin() {
             </Box>
           </form>
         </Box>
+        <ForgotPassword isOpen={isOpen} onClose={onClose} />
       </Box>
     </>
   );
