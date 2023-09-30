@@ -2,7 +2,6 @@ import {
   Avatar,
   Box,
   Button,
-  ButtonGroup,
   Flex,
   Image,
   Menu,
@@ -18,7 +17,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo_main.png";
-import { HiOutlineSearch, HiOutlineShoppingCart } from "react-icons/hi";
+import { HiOutlineShoppingCart } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { getItem } from "../../redux/reducer/CartReducer";
 import { logoutAuth } from "../../redux/reducer/AuthReducer";
@@ -104,9 +103,6 @@ const Navbar = () => {
           <Box></Box>
           <Box w={"50%"} m={"16px 100px"}>
             <Flex justifyContent={"flex-end"} align={"center"} gap={4}>
-              <Link to={"/search"}>
-                <HiOutlineSearch fontSize={24} cursor={"pointer"} color={"gray.800"} />
-              </Link>
               <Link to={"/cart"} ml={4}>
                 <Flex alignItems={"center"} position="relative">
                   <HiOutlineShoppingCart fontSize={24} cursor={"pointer"} color={"gray.800"} />
@@ -137,9 +133,6 @@ const Navbar = () => {
                       </Link>
                       <Link to={"/address"}>
                         <MenuItem>Manage Address</MenuItem>
-                      </Link>
-                      <Link to={"/change-password"}>
-                        <MenuItem>Change Password</MenuItem>
                       </Link>
                       <Link to={"/User-Order"}>
                         <MenuItem>Order List</MenuItem>

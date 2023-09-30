@@ -54,7 +54,7 @@ const profileController = {
             return res.status(500).json({message : "Failed", error : error.message})
         }
     },
-    patchChangePassword : async (req, res) => { 
+    patchChangePassword : async (req, res) => {
         try {
             const {id} = req.user
             const {currentPassword, newPassword, confirmPassword} = req.body

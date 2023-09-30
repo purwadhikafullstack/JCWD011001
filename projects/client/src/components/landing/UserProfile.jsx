@@ -50,7 +50,7 @@ export default function UserProfile() {
             </Box>
             <Box mt={"20px"}>
               <Flex justifyContent={"space-between"}>
-                <Text>Password</Text>
+                <Text>Change Password</Text>
                 <ButtonChangePassword />
               </Flex>
             </Box>

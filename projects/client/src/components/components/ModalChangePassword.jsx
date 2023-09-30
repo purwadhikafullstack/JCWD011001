@@ -1,10 +1,7 @@
 import {
-  Box,
   Button,
-  Center,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Input,
   InputGroup,
   InputRightElement,
@@ -18,63 +15,54 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-// import Navbar from "../Components/navbar/Navbar";
-import React from "react";
-// import { ArrowForwardIcon } from "@chakra-ui/icons";
+import React, { useState } from "react";
 import axios from "axios";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { RiEye2Line, RiEyeCloseFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import PasswordShow from "./PasswordShow";
+import PasswordHide from "./PasswordHide";
+import CloseButton from "./CloseButton";
+import ChangeButton from "./ChangeButton";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const ChangeSchema = Yup.object().shape({
-  currentPassword: Yup.string().required("currentPassword is required"),
-  password: Yup.string()
-    .required("password is required")
+  currentPassword: Yup.string().required("Current Password is required"),
+  newPassword: Yup.string()
+    .required("Password is required")
     .matches(
-      /^.*(?=.{6,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-      "Password must contain at least  characters, one uppercase, one number and one special case character"
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
     ),
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
-    .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    .oneOf([Yup.ref("newPassword"), null], "Password must match"),
 });
 
-const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function ModalChangePassword({ isOpen, onClose }) {
-  const navigate = useNavigate();
-  function toHome() {
-    navigate("/");
-  }
-
-  const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
   const toast = useToast();
+  const [show, setShow] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleClick = () => setShow(!show);
+  const handleClickNewPassword = () => setShowNewPassword(!showNewPassword);
+  const handleClickConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
+
   const changePassword = async (values) => {
     const token = localStorage.getItem("token");
-    console.log("token", token);
-    const { currentPassword, password, confirmPassword } = values;
     try {
-      const respon = await axios.patch(
-        `${URL_API}/auth/password`,
-        {
-          currentPassword: currentPassword,
-          password: password,
-          confirmPassword: confirmPassword,
-        },
+      await axios.patch(
+        `${URL_API}/auth/password`, values,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(respon);
       onClose();
       await Swal.fire("Success!", "Your password has been change", "success");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     } catch (error) {
       console.log(error);
       toast({
@@ -89,7 +77,7 @@ export default function ModalChangePassword({ isOpen, onClose }) {
   const formik = useFormik({
     initialValues: {
       currentPassword: "",
-      password: "",
+      newPassword: "",
       confirmPassword: "",
     },
     validationSchema: ChangeSchema,
@@ -109,6 +97,7 @@ export default function ModalChangePassword({ isOpen, onClose }) {
             <Stack>
               <form onSubmit={formik.handleSubmit}>
                 <FormControl
+                  isRequired
                   isInvalid={
                     formik.touched.currentPassword &&
                     formik.errors.currentPassword
@@ -121,35 +110,18 @@ export default function ModalChangePassword({ isOpen, onClose }) {
                       name="currentPassword"
                       variant={"flushed"}
                       borderColor={"black"}
-                      type={show ? "text" : "currentPassword"}
+                      type={show ? "text" : "password"}
                       value={formik.values.currentPassword}
                       onChange={formik.handleChange}
-                    ></Input>
+                      onBlur={formik.handleBlur}
+                    />
                     <InputRightElement>
                       <Button
                         size={"md"}
                         onClick={handleClick}
                         variant={"unstyled"}
                       >
-                        {show ? (
-                          <RiEye2Line
-                            size={{
-                              base: "8px",
-                              sm: "12px",
-                              md: "16px",
-                              lg: "24px",
-                            }}
-                          />
-                        ) : (
-                          <RiEyeCloseFill
-                            size={{
-                              base: "8px",
-                              sm: "12px",
-                              md: "16px",
-                              lg: "40px",
-                            }}
-                          />
-                        )}
+                        {show ? <PasswordShow /> : <PasswordHide />}
                       </Button>
                     </InputRightElement>
                   </InputGroup>
@@ -161,54 +133,41 @@ export default function ModalChangePassword({ isOpen, onClose }) {
                     )}
                 </FormControl>
                 <FormControl
-                  isInvalid={formik.touched.password && formik.errors.password}
+                  isRequired
+                  isInvalid={
+                    formik.touched.newPassword && formik.errors.newPassword
+                  }
                 >
                   <InputGroup mt={"20px"}>
                     <Input
                       placeholder="New Password"
-                      id="password"
-                      name="password"
+                      id="newPassword"
+                      name="newPassword"
                       borderColor={"black"}
                       variant={"flushed"}
-                      type={show ? "text" : "password"}
-                      value={formik.values.password}
+                      type={showNewPassword ? "text" : "password"}
+                      value={formik.values.newPassword}
                       onChange={formik.handleChange}
-                    ></Input>
+                      onBlur={formik.handleBlur}
+                    />
                     <InputRightElement>
                       <Button
                         size={"md"}
-                        onClick={handleClick}
+                        onClick={handleClickNewPassword}
                         variant={"unstyled"}
                       >
-                        {show ? (
-                          <RiEye2Line
-                            size={{
-                              base: "8px",
-                              sm: "12px",
-                              md: "16px",
-                              lg: "24px",
-                            }}
-                          />
-                        ) : (
-                          <RiEyeCloseFill
-                            size={{
-                              base: "8px",
-                              sm: "12px",
-                              md: "16px",
-                              lg: "40px",
-                            }}
-                          />
-                        )}
+                        {showNewPassword ? <PasswordShow /> : <PasswordHide />}
                       </Button>
                     </InputRightElement>
                   </InputGroup>
-                  {formik.touched.password && formik.errors.password && (
+                  {formik.touched.newPassword && formik.errors.newPassword && (
                     <FormErrorMessage>
-                      {formik.errors.password}
+                      {formik.errors.newPassword}
                     </FormErrorMessage>
                   )}
                 </FormControl>
                 <FormControl
+                  isRequired
                   isInvalid={
                     formik.touched.confirmPassword &&
                     formik.errors.confirmPassword
@@ -216,39 +175,26 @@ export default function ModalChangePassword({ isOpen, onClose }) {
                 >
                   <InputGroup mt={"20px"}>
                     <Input
-                      placeholder="Confirm Password"
+                      placeholder="Confirm New Password"
                       id="confirmPassword"
                       name="confirmPassword"
                       borderColor={"black"}
                       variant={"flushed"}
-                      type={show ? "text" : "confirmPassword"}
+                      type={showConfirmPassword ? "text" : "password"}
                       value={formik.values.confirmPassword}
                       onChange={formik.handleChange}
-                    ></Input>
+                      onBlur={formik.handleBlur}
+                    />
                     <InputRightElement>
                       <Button
                         size={"md"}
-                        onClick={handleClick}
+                        onClick={handleClickConfirmPassword}
                         variant={"unstyled"}
                       >
-                        {show ? (
-                          <RiEye2Line
-                            size={{
-                              base: "8px",
-                              sm: "12px",
-                              md: "16px",
-                              lg: "24px",
-                            }}
-                          />
+                        {showConfirmPassword ? (
+                          <PasswordShow />
                         ) : (
-                          <RiEyeCloseFill
-                            size={{
-                              base: "8px",
-                              sm: "12px",
-                              md: "16px",
-                              lg: "40px",
-                            }}
-                          />
+                          <PasswordHide />
                         )}
                       </Button>
                     </InputRightElement>
@@ -261,25 +207,8 @@ export default function ModalChangePassword({ isOpen, onClose }) {
                     )}
                 </FormControl>
                 <ModalFooter>
-                  <Button
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    onClick={onClose}
-                    colorScheme="red"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    ml={"20px"}
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    type="submit"
-                    colorScheme="yellow"
-                  >
-                    Change
-                  </Button>
+                  <CloseButton onClose={onClose} />
+                  <ChangeButton />
                 </ModalFooter>
               </form>
             </Stack>

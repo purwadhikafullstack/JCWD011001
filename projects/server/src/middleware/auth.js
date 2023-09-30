@@ -69,7 +69,7 @@ const verifyPassword = async (req, res, next) => {
     const {currentPassword, newPassword, confirmPassword} = req.body
     const account = await user.findOne({where : {id}})
     const checkPassword = await bcrypt.compare(currentPassword, account.password)
-    
+
     if(!checkPassword) return res.status(500).json({message : "Incorrect Password"})
     if(currentPassword === newPassword)
             return res.status(500).json({
