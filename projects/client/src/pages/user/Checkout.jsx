@@ -53,13 +53,11 @@ const Checkout = () => {
   const [totalWeight, setTotalWeight] = useState(0);
   const [deliveryPrice, setDeliveryprice] = useState(0);
   let product_price = 0;
-  let delivery_price = 4000;
-  let voucher_discount = 2000;
-  product_price = carts.total_price;
+  product_price = carts?.total_price || 0;
 
   const vouchers_discount = voucher_discount + delivery_discount;
   // const total_discount = vouchers_discount;
-  let total_price = product_price + delivery_price - vouchers_discount;
+  let total_price = product_price + deliveryPrice - vouchers_discount;
 
   if (total_price < 0) {
     total_price = 0;
@@ -116,6 +114,7 @@ const Checkout = () => {
   console.log("store_id", store_id);
   console.log("city", storeCityId);
   console.log("weight", totalWeight);
+  console.log("data pir", item);
   return (
     <Box>
       <Box>
@@ -213,37 +212,38 @@ const Checkout = () => {
                 Product{"("}s{")"} you purchased
               </Text>
               <Box>
-                {item.map((products) => {
-                  return (
-                    <ItemCart
-                      products={products}
-                      key={products.id}
-                      setTotalWeight={setTotalWeight}
-                      totalWeight={totalWeight}
-                    />
-                  );
-                  // return (
-                  //   <Box>
-                  //     <Card mt={"4"} w={"full"} boxShadow={"lg"} key={products.id}>
-                  //       <CardBody>
-                  //         <Box fontWeight={"bold"} mb={"24px"}>
-                  //           <Text>Click and Play</Text>
-                  //         </Box>
-                  //         <Flex>
-                  //           <Image
-                  //             src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
-                  //             w={"20%"}
-                  //           />
-                  //           <Box ml={"32px"}>
-                  //             <Text>{products.name}</Text>
-                  //             <Text fontWeight={"bold"}>Rp. {products.price}</Text>
-                  //           </Box>
-                  //         </Flex>
-                  //       </CardBody>
-                  //     </Card>
-                  //   </Box>
-                  // );
-                })}
+                {item &&
+                  item.map((products) => {
+                    return (
+                      <ItemCart
+                        products={products}
+                        key={products.id}
+                        setTotalWeight={setTotalWeight}
+                        totalWeight={totalWeight}
+                      />
+                    );
+                    // return (
+                    //   <Box>
+                    //     <Card mt={"4"} w={"full"} boxShadow={"lg"} key={products.id}>
+                    //       <CardBody>
+                    //         <Box fontWeight={"bold"} mb={"24px"}>
+                    //           <Text>Click and Play</Text>
+                    //         </Box>
+                    //         <Flex>
+                    //           <Image
+                    //             src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
+                    //             w={"20%"}
+                    //           />
+                    //           <Box ml={"32px"}>
+                    //             <Text>{products.name}</Text>
+                    //             <Text fontWeight={"bold"}>Rp. {products.price}</Text>
+                    //           </Box>
+                    //         </Flex>
+                    //       </CardBody>
+                    //     </Card>
+                    //   </Box>
+                    // );
+                  })}
               </Box>
             </Box>
             <Box
@@ -323,7 +323,7 @@ const Checkout = () => {
       <ConfirmBackToCart isOpen={isOpen} onClose={onClose} />
       <TransactionVoucher
         product_price={product_price}
-        delivery_price={delivery_price}
+        delivery_price={deliveryPrice}
         setVoucherDiscount={setVoucherDiscount}
         setDeliveryDiscount={setDeliveryDiscount}
         setModalClosedTrigger={setModalClosedTrigger}

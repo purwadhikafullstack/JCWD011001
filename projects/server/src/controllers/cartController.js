@@ -154,7 +154,8 @@ const cartController = {
   getRajaOngkir: async (req, res) => {
     const { storeCityId, city_id, totalWeight, deliveryDetail } = req.body;
     try {
-      console.log(storeCityId);
+      console.log("dataaa => ", storeCityId, city_id, totalWeight, deliveryDetail);
+      console.log("waiittt")
       const { data } = await axios.post(
         `${APIRO}`,
         {
@@ -165,6 +166,7 @@ const cartController = {
         },
         { headers: { key: `94a44550ce043c478e36c13b4a63e3de` } }
       );
+      console.log("masuk ongkir", data)
       res.status(200).json({ data });
     } catch (error) {
       res.status(500).json({ error: error.message });
