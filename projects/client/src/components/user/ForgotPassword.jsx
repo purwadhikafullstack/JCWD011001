@@ -15,7 +15,7 @@ const ForgotPassword = ({ isOpen, onClose }) => {
 
     const forgotPasswordRequest = async (values, formik) => {
         try {
-          await axios.put(`${URL_API}/auth/forgot`, values);
+          await axios.put(`${URL_API}/profile/forgot`, values);
           toast({
             title: "Request accepted. Check your email to reset your password",
             status: "success",

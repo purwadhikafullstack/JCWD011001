@@ -39,7 +39,7 @@ const ResetPassword = () => {
     try {
       const url = window.location.href.split("/");
       const token = url[url.length - 1];
-      await axios.patch(`${URL_API}/auth/reset`, values, {
+      await axios.patch(`${URL_API}/profile/reset`, values, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

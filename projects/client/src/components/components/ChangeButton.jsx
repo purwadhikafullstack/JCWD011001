@@ -9,7 +9,10 @@ const ChangeButton = () => {
       w={"150px"}
       borderRadius={"50px"}
       type="submit"
-      colorScheme="yellow"
+      color={"white"}
+      bg={"brand.main"}
+      _hover={{ bg: "brand.hover" }}
+      _active={{ bg: "brand.active" }}
     >
       Change
     </Button>

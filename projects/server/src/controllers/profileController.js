@@ -131,6 +131,30 @@ const profileController = {
         } catch (error) {
             return res.status(500).json({ message: "Failed to reset your password", error: error.message });
         }
+    },
+
+    changeProfilePicture: async (req, res) => {
+        try {
+            const { id } = req.user;
+            const oldAvatar = await user.findOne({ where: { id } });
+
+            if (oldAvatar.profileimg) {
+              fs.unlink(oldAvatar.profileimg, (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+              });
+            }
+
+            await db.sequelize.transaction(async (t) => {
+              await user.update(
+                { profileimg: req.file.path },
+                { where: { id } },
+                { transaction: t }
+              );
+              res.status(200).json({ message: "Avatar changed successfully" });
+            });
+        } catch (error) {
+            res.status(500).json({ message: "Failed to change avatar", error: error.message });
+        }
     }
 }
 

@@ -8,7 +8,16 @@ const CloseButton = ({ onClose }) => {
       w={"150px"}
       borderRadius={"50px"}
       onClick={onClose}
-      colorScheme="red"
+      color={"brand.main"}
+      bg={"white"}
+      border={"1px"}
+      borderColor={"brand.main"}
+      _hover={{
+        bg: "gray.100",
+      }}
+      _active={{
+        bg: "gray.200",
+      }}
     >
       Close
     </Button>
