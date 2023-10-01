@@ -7,7 +7,7 @@ const initialState = {
   cart: [],
   item: [],
   totalHarga: 0,
-  carts: [],
+  carts: null,
 };
 
 export const CartReducer = createSlice({
@@ -18,10 +18,11 @@ export const CartReducer = createSlice({
       state.item = [...action.payload];
     },
     setCarts: (state, action) => {
-      state.carts = [...action.payload];
+      state.carts = action.payload
     },
     addToCart: (state, action) => {
       const { id } = action.payload;
+      console.log("masuk", action.payload)
       const existCartItemIndex = state.cart.findIndex((item) => item.id === id);
 
       if (existCartItemIndex !== -1) {
@@ -53,18 +54,26 @@ export const CartReducer = createSlice({
       console.log("isi del", id);
       const existCart = state.cart.findIndex((item) => item.id === id);
       if (existCart !== -1) {
-        console.log("sampe");
-        state.totalHarga -= action.payload.harga_produk * state.cart[existCart].quantity;
+        console.log("sampe")
+        state.totalHarga -= action.payload.price * state.cart[existCart].quantity;
         state.cart.splice(existCart, 1);
       }
     },
+    // deleteItemCart: (state, action) => {
+    //   const { id } = action.payload;
+    //   const existCart = state.cart.findIndex((item) => item.id === id);
+    //   state.totalHarga -=
+    //     action.payload.price * state.cart[existCart].quantity;
+    //   state.cart.splice(existCart, 1);
+    // },
   },
 });
-export const getItem = () => {
+export const getItem = (store_id) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
+    console.log("cart store_id", store_id)
     try {
-      const fetchData = await axios.get(`${URL_API}/cart/item`, {
+      const fetchData = await axios.get(`${URL_API}/cart/item/${store_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -85,7 +94,8 @@ export const getCart = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("total price", response);
+      console.log("get cart", response);
+      console.log("get cart", response.data.data.total_price);
       dispatch(setCarts(response.data?.data));
     } catch (error) {
       console.log(error);
@@ -93,20 +103,24 @@ export const getCart = () => {
   };
 };
 
-export const addCart = (products, Swal) => {
+export const addCart = (products,store_id, Swal) => {
   return async (dispatch) => {
+    console.log("masuk ", products)
     const dataProduct = products.Product || products;
-    const discount = dataProduct.price - products.admin_discount;
-    console.log("harga baru setelah diskon ", discount);
+    console.log("data ", dataProduct)
+    console.log("precs", products.price)
+    const discount = products.price - products.admin_discount
+    console.log("harga baru setelah diskon ", discount)
     const total_price = discount;
     const productId = dataProduct.product_id || dataProduct.id;
     console.log("id", productId);
-    console.log("total", total_price);
+    console.log("total", total_price)
+    console.log("store reducer ", store_id)
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(
         `${URL_API}/cart/`,
-        { productId, total_price },
+        { productId, total_price, store_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,9 +132,28 @@ export const addCart = (products, Swal) => {
         icon: "success",
         title: "Product successfully added to cart",
         showConfirmButton: false,
-        timer: 1500,
-      });
-      // Swal.fire("Success!", "Product successfully added to cart", "success");
+        timer: 1500
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const addQuantity = (products,store_id, Swal) => {
+  return async (dispatch) => {
+    const productId = products.product_id
+    const total_price = products.price
+    const token = localStorage.getItem("token");
+    try {
+      const result = await axios.patch(
+        `${URL_API}/cart/`,
+        { productId, total_price, store_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     } catch (error) {
       console.log(error);
     }
@@ -152,35 +185,22 @@ export const deleteItem = (products) => {
 
 export const deleteItemFromCart = (products) => {
   return async (dispatch) => {
-    console.log("delete from", products);
-    const dataProduct = products.Product || products;
-    console.log("data delete", dataProduct);
-    const total_price = dataProduct.price;
-    console.log("price delete", total_price);
-    const productId = dataProduct.product_id || dataProduct.id;
-    console.log("id delete", productId);
-    const token = localStorage.getItem("token");
-    // Swal.fire({
-    //   title: 'Do you want to save the changes?',
-    //   showDenyButton: true,
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Save',
-    //   denyButtonText: `Don't save`,
-    // }).then((result) => {
-    //   /* Read more about isConfirmed, isDenied below */
-    //   if (result.isConfirmed) {
-    //     Swal.fire('Saved!', '', 'success')
-    //   } else if (result.isDenied) {
-    //     Swal.fire('Changes are not saved', '', 'info')
-    //   }
-    // })
+    console.log("delete from",products)
+    const dataProduct = products.Product || products
+    const item = products.product_id;
+    console.log("item", item)
+    console.log("data delete", dataProduct)
+    const total_price = dataProduct.price
+    const productId = dataProduct.product_id || item
+    console.log("id delete", productId)
+    const token = localStorage.getItem("token")
     try {
-      const result = await axios.delete(`${URL_API}/cart/item/delete/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      alert("Uhhuy");
+      const result = await axios.delete(`${URL_API}/cart/item/delete/${productId}`, 
+      {
+        headers : {
+          Authorization : `Bearer ${token}`
+        }
+      })
     } catch (error) {
       console.log(error);
     }

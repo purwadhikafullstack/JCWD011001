@@ -43,7 +43,11 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
           {orderStatusArray.map((step, index) => (
             <Step label={step.status} key={index}>
               <StepIndicator>
-                <StepStatus complete={<StepIcon />} incomplete={<StepNumber />} active={<StepNumber />} />
+                <StepStatus
+                  complete={<StepIcon />}
+                  incomplete={<StepNumber />}
+                  active={<StepNumber />}
+                />
               </StepIndicator>
 
               <StepSeparator _horizontal={{ ml: "0" }} />
@@ -60,6 +64,7 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
         </Flex>
         <UserOrderOngoingCardDetailOrder
           status={transactionDetail.status}
+          transactionProducts={transactionProducts}
           id={transactionDetail.id}
           setDetail={setDetail}
         />
@@ -79,7 +84,7 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
             <Box key={item.id}>
               <Flex justify={"space-between"}>
                 <Stack spacing="2">
-                  {console.log(item)}
+                  {console.log("inikah ?", item)}
                   <Text fontWeight={"bold"} fontSize={"20px"}>
                     {item.Product.name}
                   </Text>

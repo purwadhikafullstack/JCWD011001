@@ -6,6 +6,8 @@ import {
   IoPricetagsOutline,
   IoListOutline,
   IoBarChartOutline,
+  IoGridOutline,
+  IoBagCheckOutline,
 } from "react-icons/io5";
 import MenuDashboard from "../../components/admin/MenuDashboard";
 import UserTransaction from "../../components/admin/branch/UserTransaction";
@@ -14,6 +16,8 @@ import DiscountManagement from "../../components/admin/branch/DiscountManagement
 import CategoryManagement from "../../components/admin/branch/CategoryManagement";
 import BranchSalesReport from "../../components/admin/branch/BranchSalesReport";
 import NavbarAdmin from "../../components/admin/NavbarAdmin";
+import StockManagement from "../../components/admin/branch/StockManagement";
+import OrderUser from "../../components/admin/branch/OrderUser";
 
 const BranchDashboard = () => {
   const [activePage, setActivePage] = useState("transaction");
@@ -29,6 +33,10 @@ const BranchDashboard = () => {
         return <CategoryManagement />;
       case "reports":
         return <BranchSalesReport />;
+      case "stock":
+        return <StockManagement />;
+      case "orders":
+        return <OrderUser />;
       default:
         return null;
     }
@@ -73,6 +81,16 @@ const BranchDashboard = () => {
               onClick={() => setActivePage("reports")}
               icon={IoBarChartOutline}
               name="Sales Report"
+            />
+            <MenuDashboard
+              onClick={() => setActivePage("stock")}
+              icon={IoGridOutline}
+              name="Stock Management"
+            />
+            <MenuDashboard
+              onClick={() => setActivePage("orders")}
+              icon={IoBagCheckOutline}
+              name="User Order"
             />
           </Stack>
         </Box>

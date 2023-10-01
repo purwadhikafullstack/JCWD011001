@@ -28,7 +28,6 @@ import Swal from "sweetalert2";
 const addProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   category_id: Yup.string().required("Category is required"),
-  store_id: Yup.string().required("Store is required"),
   price: Yup.number().required("Price must be number is required"),
   description: Yup.string().required("Description is required"),
   product_img: Yup.mixed()
@@ -64,9 +63,8 @@ export default function ModalAddProduct({ isOpen, onClose }) {
     initialValues: {
       name: "",
       category_id: "",
-      store_id: "",
       price: "",
-      admin_discount: "",
+      admin_discount: 0,
       description: "",
       product_img: null,
     },
@@ -124,17 +122,6 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       );
                     })}
                   </Select>
-                  <Select
-                    {...formik.getFieldProps("store_id")}
-                    id="store_id"
-                    name="store_id"
-                    mt={5}
-                    placeholder="Select Store"
-                  >
-                    {store.map((store) => {
-                      return <option value={store.id}>{store.name}</option>;
-                    })}
-                  </Select>
                   <FormControl
                     isInvalid={
                       formik.touched.product_img && formik.errors.product_img
@@ -170,7 +157,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                     <Input
                       id="price"
                       name="price"
-                      type="number"
+                      type="text"
                       value={formik.values.price}
                       onChange={formik.handleChange}
                       placeholder="Price"
@@ -194,7 +181,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       placeholder="Discount (optional)"
                       id="admin_discount"
                       name="admin_discount"
-                      type="number"
+                      type="text"
                       value={formik.values.admin_discount}
                       onChange={formik.handleChange}
                       mt={5}

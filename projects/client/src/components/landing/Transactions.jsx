@@ -14,22 +14,33 @@ import { useNavigate } from "react-router-dom";
 
 export default function Transactions() {
   const { carts, item } = useSelector((state) => state.CartReducer);
-  const { totalHarga } = useSelector((state) => state.ProductReducer);
+  const { store_id } = useSelector((state) => state.ProductReducer);
   const navigate = useNavigate();
-  let price = 0;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, [store_id, item]);
 
   const checkout = () => {
     navigate("/checkout");
-  }
-    carts.map((cart) => {
-      return price += cart.total_price;
-    });
-  console.log("harga", price);
+  };
+
   const cartLength = item.reduce((total, item) => total + item.quantity, 0);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCart());
-  }, []);
+
+  // Check if carts.total_price is null, display loading or a message
+  if (carts === null) {
+    return (
+      <div>
+        Loading...
+        {/* You can also display a loading spinner or any other UI element */}
+      </div>
+    );
+  }
+
+  // Calculate the price only when carts.total_price is available
+  let price = carts.total_price;
+
   return (
     <>
       <Box ml={"24px"} mt={"32px"} position={"sticky"} top={"20px"}>
@@ -42,7 +53,15 @@ export default function Transactions() {
               <Divider mt={"20px"} bgColor={"black"} />
               <Text fontWeight={"bold"}>Total price : Rp. {price}</Text>
               <CardFooter mt={"24px"}>
-                <Button onClick={() => checkout()} w={"200px"} color={"white"} bg={"brand.main"} _hover={{ bg: "brand.hover" }} _active={{ bg: "brand.active" }} isDisabled={cartLength <= 0}>
+                <Button
+                  onClick={() => checkout()}
+                  w={"200px"}
+                  color={"white"}
+                  bg={"brand.main"}
+                  _hover={{ bg: "brand.hover" }}
+                  _active={{ bg: "brand.active" }}
+                  // isDisabled={cartLength <= 0}
+                >
                   Checkout
                 </Button>
               </CardFooter>

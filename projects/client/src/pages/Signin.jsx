@@ -70,7 +70,7 @@ export default function Signin() {
             base: "50px auto",
             sm: "50px auto",
             md: "80px auto",
-            lg: "20px auto",
+            lg: "80px auto",
           }}
           borderRadius={"20px"}
           w={{ sm: "400px", md: "600px", lg: "800px" }}

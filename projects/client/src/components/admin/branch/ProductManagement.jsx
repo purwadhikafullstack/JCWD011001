@@ -11,6 +11,9 @@ import {
   Heading,
   IconButton,
   Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   Stack,
   Text,
@@ -32,6 +35,7 @@ import { RxCross1 } from "react-icons/rx";
 import { FaCheck, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { destroyProduct } from "../../../redux/reducer/AdminReducer";
+import { BiSearchAlt } from "react-icons/bi";
 
 const ProductManagement = () => {
   const PUBLIC_URL = "http://localhost:8000";
@@ -43,6 +47,8 @@ const ProductManagement = () => {
   const [orderByPrice, setOrderByPrice] = useState(false);
   const [orderBy, setOrderBy] = useState("name");
   const [category, setCategory] = useState("");
+  const [name, setName] = useState("");
+  const [sortLabelText, setSortLabelText] = useState("Sort by price");
 
   const [isLargerThanMD] = useMediaQuery("(min-width: 48em)");
   const handleNext = () => {
@@ -60,7 +66,7 @@ const ProductManagement = () => {
   const fetchData = async () => {
     const orderByParam = orderByPrice ? "price" : orderBy; // Use 'price' if orderByPrice is true, otherwise use orderBy
     const respon = await axios.get(
-      `http://localhost:8000/api/admin/product?limit=5&page=${page}&order=${order}&orderBy=${orderByParam}&category=${category}`
+      `http://localhost:8000/api/admin/product?name=${name}&limit=5&page=${page}&order=${order}&orderBy=${orderByParam}&category=${category}`
     );
     console.log("isi", respon.data);
     console.log("total", respon.data.totalPage);
@@ -69,15 +75,19 @@ const ProductManagement = () => {
   };
 
   useEffect(() => {
-    // dispatch(getProduct({}));
     fetchData();
     if (modalClosedTrigger) {
       fetchData();
-      setModalClosedTrigger(false); // Reset the trigger
+      setModalClosedTrigger(false);
     }
     // fetchData();
-  }, [page, order, orderBy, orderByPrice, category, modalClosedTrigger]);
+  }, [page, order, orderBy, orderByPrice, category, modalClosedTrigger, name]);
 
+  const handleSearch = () => {
+    const name = document.getElementById("search").value;
+    setName(name);
+    // if (name) dispatch(getProductSearch({ name, store_id }));
+  };
   const handleOrderBy = () => {
     setOrderBy("name");
     setOrderByPrice(false);
@@ -86,14 +96,30 @@ const ProductManagement = () => {
 
   const handleOrderByPrice = () => {
     setOrderByPrice(!orderByPrice);
+    if (orderByPrice) {
+      setSortLabelText("Sort by price"); // Change the label text when sorting by price
+    } else {
+      setSortLabelText("Sort by name"); // Change the label text when sorting by name
+    }
   };
   const restore = async (item) => {
     await dispatch(restoreProduct(item, Swal));
     await fetchData();
   };
   const handleDeleteProduct = async (item) => {
-    console.log("destroy client", item);
-    await dispatch(destroyProduct(item, Swal));
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+    if (result.isConfirmed) {
+      await dispatch(destroyProduct(item, Swal));
+      Swal.fire("Deleted!", "The product has been removed.", "success");
+    }
     await fetchData();
   };
   const deactive = async (item) => {
@@ -116,46 +142,47 @@ const ProductManagement = () => {
             Product Management
           </Text>
           <ButtonAddProduct setModalClosedTrigger={setModalClosedTrigger} />
-          <Select
-            pos={"absolute"}
-            right={10}
-            w={"300px"}
-            placeholder="Sort By"
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-          >
-            <option value={"ASC"}>A-Z</option>
-            <option value={"DESC"}>Z-A</option>
-          </Select>
-          <Select
-            pos={"absolute"}
-            right={350}
-            w={"300px"}
-            placeholder="Category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value={"1"}>Vegetables</option>
-            <option value={"2"}>Fruit</option>
-            <option value={"3"}>Beverage</option>
-          </Select>
-          <ButtonGroup mt={"12px"}>
-            <Button
+          <Flex justify={"space-around"} ml={"48px"}>
+            <Select
+              placeholder="Sort By"
+              value={order}
+              onChange={(e) => setOrder(e.target.value)}
+            >
+              <option value={"ASC"}>A-Z</option>
+              <option value={"DESC"}>Z-A</option>
+            </Select>
+            <Select
               ml={"48px"}
-              variant={"ghost"}
-              _hover={{ bg: "brand.hover", color: "white" }}
-              onClick={() => handleOrderBy()}
+              placeholder="Category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             >
-              Sort by name
-            </Button>
-            <Button
-              variant={"ghost"}
-              _hover={{ bg: "brand.hover", color: "white" }}
-              onClick={() => handleOrderByPrice()}
-            >
-              Sort by price
-            </Button>
-          </ButtonGroup>
+              <option value={"1"}>Vegetables</option>
+              <option value={"2"}>Fruit</option>
+              <option value={"3"}>Beverage</option>
+            </Select>
+            <InputGroup ml={"48px"}>
+              <InputLeftElement>
+                <BiSearchAlt color="#37630A" />
+              </InputLeftElement>
+              <Input
+                id="search"
+                w={"300px"}
+                onChange={handleSearch}
+                placeholder={"Search Product"}
+              />
+            </InputGroup>
+          </Flex>
+          <Button
+            mt={5}
+            ml={"48px"}
+            variant={"ghost"}
+            _hover={{ bg: "brand.hover", color: "white" }}
+            onClick={() => handleOrderByPrice()}
+          >
+            {sortLabelText}
+          </Button>
+
           <Divider mt={"10px"} />
           {product.map((item) => {
             const active = item.isactive;

@@ -9,6 +9,6 @@ router.post("/auth", loginValidator, validateRegist, authController.signIn)
 router.get("/keep", verifyToken, authController.keepLogin)
 router.patch("/verify", verifyToken, authController.verifyAccount)
 router.get("/admin", authController.getAdmin)
-// router.get("/", authCont)
+router.patch("/transaction/:transaction_id",verifyToken, authController.cancelTransaction)
 
 module.exports = router;

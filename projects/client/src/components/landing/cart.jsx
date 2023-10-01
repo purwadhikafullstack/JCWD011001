@@ -20,10 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import Transactions from "./Transactions";
-import axios from "axios";
+import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import {
   addCart,
+  addQuantity,
   addToCart,
   deleteFromCart,
   deleteItem,
@@ -33,40 +34,66 @@ import {
   getItem,
 } from "../../redux/reducer/CartReducer";
 import { useNavigate } from "react-router-dom";
+import { FaShopify } from "react-icons/fa";
+import ProductReducer from "../../redux/reducer/ProductReducer";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
+  const PUBLIC_URL = "http://localhost:8000";
   const { login } = useSelector((state) => state.AuthReducer);
-  const { cart, carts, item } = useSelector((state) => state.CartReducer);
-  const toast = useToast();
-  // const {total_harga}
+  const { item } = useSelector((state) => state.CartReducer);
+  const { store_id } = useSelector((state) => state.ProductReducer);
+  console.log("streoe id", store_id);
+  const getImage = (image) => {
+    return `${PUBLIC_URL}/${image}`;
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const inCart = async (products) => {
+    console.log("in", products);
     await dispatch(addToCart(products));
-    await dispatch(addCart(products));
-    await dispatch(getItem());
+    await dispatch(addQuantity(products));
+    await dispatch(getItem(store_id));
     await dispatch(getCart());
   };
 
   const outCart = async (products) => {
     await dispatch(deleteFromCart(products));
     await dispatch(deleteItem(products));
-    await dispatch(getItem());
+    await dispatch(getItem(store_id));
     await dispatch(getCart());
   };
 
   const destroy = async (products) => {
+    console.log("delete", products);
     await dispatch(deleteItemCart(products));
-    await dispatch(deleteItemFromCart(products));
-    await dispatch(getItem());
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this item from your cart?",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonColor: "#d33",
+      icon: "warning",
+      dangerMode: true,
+    });
+    if (result.isConfirmed) {
+      await dispatch(deleteItemFromCart(products));
+      await dispatch(deleteItemCart(products));
+      Swal.fire(
+        "Deleted!",
+        "The item has been removed from the cart.",
+        "success"
+      );
+    }
+    await dispatch(getItem(store_id));
     await dispatch(getCart());
   };
 
   useEffect(() => {
-    dispatch(getItem());
-  }, []);
+    dispatch(getItem(store_id));
+    dispatch(getCart());
+  }, [store_id]);
   return (
     <>
       <Navbar />
@@ -89,12 +116,15 @@ export default function Cart() {
                   <Box ml={"100px"}>
                     <Text>You haven't shop today, click the button below</Text>
                     <Button
-                      bg={"brand.main"}
-                      _hover={{ bg: "brand.hover" }}
-                      color={"white"}
+                      // bg={"brand.main"}
+                      _hover={{ bg: "brand.hover", color: "white" }}
+                      color={"black"}
                       onClick={() => navigate("/")}
                       width={"800px"}
                       mt={"32px"}
+                      variant={""}
+                      borderRadius={"10px"}
+                      rightIcon={<FaShopify />}
                     >
                       See our products
                     </Button>
@@ -102,7 +132,7 @@ export default function Cart() {
                 ) : (
                   item.map((products) => {
                     return (
-                      <Box>
+                      <Box key={products.id}>
                         <Card
                           mt={"8"}
                           w={{
@@ -117,11 +147,11 @@ export default function Cart() {
                         >
                           <CardBody>
                             <Box fontWeight={"bold"} mb={"24px"}>
-                              <Text>Click and Play</Text>
+                              <Text>{products.Store?.name}</Text>
                             </Box>
                             <Flex>
                               <Image
-                                src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
+                                src={getImage(products.Product?.product_img)}
                                 w={"20%"}
                               />
                               <Box ml={"32px"}>

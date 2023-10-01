@@ -89,7 +89,6 @@ export default function UserProfile() {
                 {user.birthdate
                   ? new Date(user.birthdate).toLocaleDateString()
                   : ""}
-                {/* <Text>{new Date(user.birthdate).toLocaleDateString()}</Text> */}
               </Flex>
             </Box>
             <Box bgColor={"blackAlpha.800"}>

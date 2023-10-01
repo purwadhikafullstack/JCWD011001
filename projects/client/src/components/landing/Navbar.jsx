@@ -26,9 +26,9 @@ import { logoutAuth } from "../../redux/reducer/AuthReducer";
 import getImage from "../getImage/getImage";
 
 const Navbar = () => {
-  const { item, carts } = useSelector((state) => state.CartReducer);
+  const { item, cart } = useSelector((state) => state.CartReducer);
   const cartItem = item.reduce((total, item) => total + item.quantity, 0);
-  const cartItems = carts.reduce((total, item) => total + item.quantity, 0);
+  const items = cart.reduce((total, item) => total + item.quantity, 0);
 
   const login = localStorage.getItem("token");
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -129,12 +129,12 @@ const Navbar = () => {
                     bg="red"
                     color="white"
                     borderRadius="100%"
-                    width={`${cartItem.toString().length * 10 + 8}px`}
+                    width={`${(cartItem || 0).toString().length * 10 + 8}px`}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Text fontSize={"xs"}>{cartItem || cartItems || 0}</Text>
+                    <Text fontSize={"xs"}>{cartItem || 0}</Text>
                   </Box>
                 </Flex>
               </Link>

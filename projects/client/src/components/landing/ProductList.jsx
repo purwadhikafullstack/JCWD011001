@@ -1,15 +1,30 @@
-import { Box, Button, Card, CardBody, CardFooter, Center, Flex, Heading, Spinner, Text, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Center,
+  Flex,
+  Heading,
+  Spinner,
+  Text,
+  Stack,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductListItem from "./ProductListItem";
 import { Pagination } from "../components/Pagination";
-import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer";
+import {
+  getProduct,
+  getStoreProduct,
+} from "../../redux/reducer/ProductReducer";
 import SearchProducts from "../components/SearchProducts";
 import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 
 const ProductList = () => {
   const products = useSelector((state) => state.ProductReducer.product);
-  const { store } = useSelector((state) => state.ProductReducer);
+  const { store, store_id } = useSelector((state) => state.ProductReducer);
   const [orderBy, setOrderBy] = useState("name");
   const [order, setOrder] = useState("ASC");
   const { location, lon, lat } = useSelector((state) => state.AuthReducer);
@@ -19,8 +34,9 @@ const ProductList = () => {
 
   useEffect(() => {
     if (!location) dispatch(getProduct({ index, orderBy, order }));
-    if (location) dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
-  }, [index, lon, lat, store, location, orderBy, order]);
+    if (location)
+      dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
+  }, [index, lon, lat, store, store_id, location, orderBy, order]);
 
   const handleOrderBy = () => {
     setOrderBy(orderBy === "name" ? "price" : "name");
@@ -29,13 +45,16 @@ const ProductList = () => {
     setOrder(order === "ASC" ? "DESC" : "ASC");
   };
 
-  console.log(store);
+  console.log("store productlist", store);
+  console.log("store productlist id ", store_id);
 
   if (products.length < 1) {
     return (
       <Box w={"100%"} py={"40px"} px={{ base: "60px", lg: "100px" }}>
         <Stack mb={10}>
-          <Heading as={"h2"}>Anda Sedang Melihat {store ? store : "Produk Terbaru Kami"}</Heading>
+          <Heading as={"h2"}>
+            Anda Sedang Melihat {store ? store : "Produk Terbaru Kami"}
+          </Heading>
           <Flex gap={2} justify={"space-between"} mx={"20"}>
             <SearchProducts />
             <Box>

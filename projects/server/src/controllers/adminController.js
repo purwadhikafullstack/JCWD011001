@@ -1,8 +1,12 @@
 const db = require("../../models");
-const { Sequelize, Op } = require("sequelize");
+const { Sequelize, Op, where } = require("sequelize");
 const Admin = db.Admin;
 const Store = db.Store;
-const { Product, Category, ProductStore } = db;
+const productStore = db.ProductStore
+const stockHistory = db.Storestockhistory
+const trans = db.Transaction;
+const user = db.User;
+const { Product, Category } = db;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const KEY = process.env.KEY;
@@ -196,19 +200,21 @@ const adminController = {
     }
   },
 
-  fetchProduct: async (req, res) => {
+ fetchProduct : async (req, res) => {
     try {
       const {
         page = 1,
         limit = 5,
         order = 'ASC',
         orderBy = 'name',
-        category = '',
+        category = '', // This should correspond to a valid category ID
+        name = '',
         minPrice = 0,
         maxPrice = Infinity,
       } = req.query;
   
-      const pagination = setPagination(limit, page);
+      const findName = { name: { [Op.like]: `%${name || ""}%` } };
+      const pagination = { offset: (page - 1) * limit, limit: +limit };
       const totalProduct = await Product.count();
       const totalPage = Math.ceil(totalProduct / +limit);
       const where = {};
@@ -228,20 +234,17 @@ const adminController = {
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'category_id'],
         },
-        include: includeCategory,
+        include: [{ model: Category, as: 'Category' }], // Make sure this is set up correctly
         ...pagination,
-        where,
-        order: [
-          // [Sequelize.literal(`CASE WHEN Product.isactive = true THEN 0 ELSE 1 END`), order],
-          [orderByColumn, order],
-        ],
+        where: { ...findName, ...where },
+        order: [[orderByColumn, order]],
       });
-      
+  
       res.status(200).json({ page, totalProduct, totalPage, limit, data: products });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }, 
+  },
   deleteProduct : async (req, res) => {
     try {
       const {productId} = req.params
@@ -255,7 +258,138 @@ const adminController = {
     } catch (error) {
       return res.status(500).json({message : error.message})
     }
+  },
+  updateStock: async (req, res) => {
+    try {
+      const { productId, quantity } = req.body;
+      const store = await Store.findOne({ where: { admin_id: req.user.id } });
+      if (!store) {
+        return res.status(404).json({ message: "Store not found for the user." });
+      }
+      const existingProductStore = await productStore.findOne({
+        where: { product_id: productId, store_id: store.id },
+      });
+      console.log("existing product", existingProductStore)
+      const existingStoresHistory = await stockHistory.findOne({
+        where: { product_id: productId, store_id: store.id },
+      });
+      console.log("update sampai sini", existingStoresHistory)
+      if (existingProductStore) {
+        existingProductStore.quantity = quantity;
+        existingStoresHistory.quantity = quantity
+        await existingProductStore.save();
+        await existingStoresHistory.save()
+        return res.status(200).json({ message: "Update Success" });
+      } else {
+        await productStore.create({
+          product_id: productId,
+          store_id: store.id,
+          quantity: quantity,
+          isactive: true,
+        });
+        await stockHistory.create({
+          product_id: productId,
+          store_id: store.id,
+          quantity: quantity,
+          isactive: true,
+        })
+        return res.status(200).json({ message: "Create Success" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+  deActiveProductBranch : async (req, res) => {
+    try {
+      const {id} = req.params
+      const findProduct = await productStore.findOne({where : {id}})
+      console.log("deActive product branch", findProduct)
+      await db.sequelize.transaction(async(t) => {
+        await productStore.update({
+          isactive : false
+        }, {where : {id}}, {transaction : t})
+      })
+      return res.status(200).json({message : "Success"})
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  },
+  enableProductBranch:async(req,res) => {
+    try {
+      const {id} = req.params;
+      const findProduct = await productStore.findOne({where : {id}})
+      console.log("enable,", findProduct)
+      await db.sequelize.transaction(async(t) => {
+        await productStore.update({
+          isactive : true
+        }, {where : {id}}, {transaction : t})
+      })
+      return res.status(200).json({message : "Enable Success"})
+    } catch (error) {
+      
+    }
+
+
+  },
+  getStockBranch: async(req,res) => {
+    try {
+      const store = await Store.findOne({ where: { admin_id: req.user.id } });
+      if (!store) {
+        return res.status(404).json({ message: "Store not found for the user." });
+      }
+      console.log("store get ", store)
+      console.log("admin store get", store.admin_id);
+      const findBranch = await productStore.findAll({
+        where : {
+          store_id : store.id
+        },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'category_id'],
+        },
+        include: [
+          {
+            model: Product,
+            attributes: ['name', 'product_img', 'price', 'admin_discount']
+          },
+        ],
+      })
+      return res.status(200).json({message : "Success", data : findBranch})
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  },
+  getUsers : async(req, res) => {
+    try {
+      const {id} = req.params
+      const checkUser = await user.findAll({
+        attributes : {
+          exclude : ['createdAt', 'updatedAt']
+        }
+      })
+      console.log("checkUser ", checkUser)
+      return res.status(200).json({message : "Success", data : checkUser})
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  },
+  getUserTransaction : async(req, res) => {
+    try {
+      const {user_id} = req.params
+      const checkTrans = await trans.findOne({where : {user_id : user_id, status : 0}})
+      console.log("checkUser ", checkTrans)
+      return res.status(200).json({message : "Success", data : checkTrans})
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  },
+  cancelUserTransaction : async (req, res) => {
+    try {
+      // const 
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
   }
+
     
   
 
