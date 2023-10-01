@@ -179,8 +179,8 @@ export const setUserLocation = (latitude, longitude) => {
 export const userCancel = (item) => {
   return async(dispatch) => {
     console.log("user cancel reducer masuk ", item)
-    console.log("id ts", item.transaction_id || item.id);
-    const transaction_id = item.transaction_id || item.id
+    console.log("id ts", item);
+    const transaction_id = item
     const token = localStorage.getItem("token")
     try { 
       const response = await axios.patch(`${URL_API}/auth/transaction/${transaction_id}`,
@@ -190,7 +190,6 @@ export const userCancel = (item) => {
           Authorization : `Bearer ${token}`
         }
       })
-      alert("DONE")
       setTimeout(() => {
         window.location.reload()
       }, 1000);

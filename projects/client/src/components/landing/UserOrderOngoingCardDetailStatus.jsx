@@ -25,6 +25,7 @@ import {
 } from "../../redux/reducer/TransactionReducer";
 import { useNavigate } from "react-router-dom";
 import { userCancel } from "../../redux/reducer/AuthReducer";
+import Swal from "sweetalert2";
 
 const UserOrderOngoingCardDetailOrder = ({
   status,
@@ -38,6 +39,7 @@ const UserOrderOngoingCardDetailOrder = ({
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+  console.log("idnya", id);
   function previewImage() {
     const [file] = document.getElementById("upload-payment").files;
 
@@ -74,10 +76,23 @@ const UserOrderOngoingCardDetailOrder = ({
     if (confirmed) console.log("masuk ke confirm order");
   };
 
-  const handleCancel = (item) => {
+  const handleCancel = async (item) => {
     // setConfirmed(false);
-    console.log("cancel", item.transaction_id);
-    dispatch(userCancel(item));
+    console.log("cancel", item);
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel order!",
+    });
+    if (result.isConfirmed) {
+      await dispatch(userCancel(item));
+      Swal.fire("Cancel!", "The product has been canceled.", "success");
+    }
   };
 
   const handleUpload = () => {
@@ -132,20 +147,9 @@ const UserOrderOngoingCardDetailOrder = ({
           id="upload-payment"
           onChange={handleUpload}
         />
-        {transactionProducts.map((item) => {
-          console.log("ts_id", item.transaction_id);
-          return (
-            <Box key={item.id}>
-              <Button
-                mt={4}
-                colorScheme="red"
-                onClick={() => handleCancel(item)}
-              >
-                Cancel
-              </Button>
-            </Box>
-          );
-        })}
+        <Button mt={4} colorScheme="red" onClick={() => handleCancel(id)}>
+          Cancel
+        </Button>
       </Flex>
     );
   }
