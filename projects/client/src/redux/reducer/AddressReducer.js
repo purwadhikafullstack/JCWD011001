@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setUserLocation } from "./AuthReducer";
+import { getStore_id } from "./ProductReducer";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const initialState = {
@@ -131,6 +132,8 @@ export const setPrimaryAddress = (id, toast) => {
         isClosable: true,
       });
       await dispatch(setUserLocation(data.data.latitude, data.data.longitude));
+      await dispatch(setDefaultAddress(data.data));
+      await dispatch(getStore_id({ lat: data.data?.latitude, lon: data.data?.longitude }));
     } catch (error) {
       toast({
         title: "Failed",
@@ -151,6 +154,7 @@ export const getDefaultAddress = () => {
       });
       await dispatch(setUserLocation(data.data?.latitude, data.data?.longitude));
       await dispatch(setDefaultAddress(data.data));
+      await dispatch(getStore_id({ lat: data.data?.latitude, lon: data.data?.longitude }));
     } catch (error) {
       console.log(error);
     }

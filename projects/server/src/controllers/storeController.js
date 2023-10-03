@@ -1,4 +1,4 @@
-const { Sequelize, Op } = require("sequelize");
+const { Sequelize, Op, where } = require("sequelize");
 const db = require("../../models");
 const Store = db.Store;
 
@@ -26,7 +26,7 @@ const storeController = {
   cekStore: async (req, res) => {
     try {
       const { location } = req.query;
-      const data = await Store.findOne({ where: { location: { [Op.like]: `%${location}%` } } });
+      const data = await Store.findOne({ where: { isactive: 1, location: { [Op.like]: `%${location}%` } } });
       if (data) return res.status(200).json({ data });
       return res.status(404).json({ message: "Store not found" });
     } catch (error) {
@@ -38,7 +38,7 @@ const storeController = {
       const { lat, lon } = req.query;
       let nearest = 200;
       let data = {};
-      const cek = await Store.findAll();
+      const cek = await Store.findAll({ where: { isactive: 1 } });
       for (let i = 0; i < cek.length; i++) {
         const distance = storeDistance(lat, lon, parseFloat(cek[i].latitude), parseFloat(cek[i].longitude));
         if (nearest >= distance) {
@@ -52,18 +52,28 @@ const storeController = {
       return res.status(500).json({ message: error.message });
     }
   },
-  getStore : async(req, res) => {
+  getStore: async (req, res) => {
     try {
       const data = await Store.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
-      })
-      return res.status(200).json({message : "Success", data : data})
+      });
+      return res.status(200).json({ message: "Success", data: data });
     } catch (error) {
-      return res.status(500).json({message : error.message})
+      return res.status(500).json({ message: error.message });
     }
-  }
+  },
+  getStoreStockHistory: async (req, res) => {
+    try {
+      const { product_id, store_id } = req.query;
+      const data = await db.Storestockhistory.findAll({ where: { product_id, store_id } });
+      console.log(data);
+      return res.status(200).json({ message: "Success", data: data });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = storeController;
