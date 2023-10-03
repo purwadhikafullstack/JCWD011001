@@ -27,6 +27,7 @@ import getImage from "../getImage/getImage";
 
 const Navbar = () => {
   const { item, cart } = useSelector((state) => state.CartReducer);
+  const { store_id } = useSelector((state) => state.ProductReducer);
   const cartItem = item.reduce((total, item) => total + item.quantity, 0);
   const items = cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -43,8 +44,8 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    dispatch(getItem());
-  }, []);
+    dispatch(getItem(store_id));
+  }, [store_id]);
 
   const [isLargerThanMD] = useMediaQuery("(min-width: 768px)");
   return (

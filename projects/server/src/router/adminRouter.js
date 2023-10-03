@@ -12,11 +12,12 @@ router.patch("/branch-admin/:id", adminController.deleteBranchAdmin);
 router.get("/product", adminController.fetchProduct)
 router.delete("/product/:productId", adminController.deleteProduct)
 router.patch("/stock",verifyToken, adminController.updateStock)
+router.post("/branch/stock", verifyToken, adminController.branchStock)
 router.get("/product/branch",verifyToken, adminController.getStockBranch)
 router.patch("/delete/:id", adminController.deActiveProductBranch)
 router.patch("/enable/:id", adminController.enableProductBranch)
-router.get("/branch/transaction", adminController.getUsers)
+router.get("/branch/user", adminController.getUsers)
 router.get("/branch/user/transaction/:user_id", adminController.getUserTransaction)
-router.patch("/branch/cancel")
-
+router.patch("/branch/cancel/:transaction_id", adminController.cancelUserTransaction)
+router.get("/branch/transaction", adminController.getAllTransaction)
 module.exports = router;

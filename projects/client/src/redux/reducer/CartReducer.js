@@ -139,10 +139,12 @@ export const addCart = (products,store_id, Swal) => {
     }
   };
 };
-export const addQuantity = (products,store_id, Swal) => {
+export const addQuantity = (products, Swal) => {
   return async (dispatch) => {
     const productId = products.product_id
     const total_price = products.price
+    const store_id = products.store_id
+    console.log("quantity add", products.store_id)
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(

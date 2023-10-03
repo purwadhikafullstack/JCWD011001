@@ -77,11 +77,11 @@ export default function ModalUpdateStock({ isOpen, onClose, id }) {
                       name="productId"
                     >
                       {product.map((item) => {
-                        return (
+                        return item.isactive ? (
                           <option key={item.id} value={item.id}>
                             {item.name}
                           </option>
-                        );
+                        ) : null;
                       })}
                     </Select>
                   </FormControl>

@@ -43,9 +43,19 @@ export default function Transactions() {
 
   return (
     <>
-      <Box ml={"24px"} mt={"32px"} position={"sticky"} top={"20px"}>
+      <Box
+        ml={{ base: "100px", lg: "24px" }}
+        mt={"32px"}
+        position={"sticky"}
+        top={"20px"}
+      >
         <Box>
-          <Card>
+          <Card
+            w={{
+              base: "300px",
+              lg: "280px",
+            }}
+          >
             <CardBody>
               <Text fontWeight={"bold"}>Shopping Summary</Text>
               <Divider />

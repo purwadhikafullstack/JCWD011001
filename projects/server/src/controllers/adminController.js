@@ -6,6 +6,7 @@ const productStore = db.ProductStore
 const stockHistory = db.Storestockhistory
 const trans = db.Transaction;
 const user = db.User;
+const cart = db.Cart;
 const { Product, Category } = db;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -299,6 +300,53 @@ const adminController = {
       return res.status(500).json({ message: error.message });
     }
   },
+  branchStock : async(req, res) => {
+    try {
+      const {productId, quantity} = req.body
+      const findStore = await Store.findOne({where : {admin_id : req.user.id}})
+      console.log("dapat adminnya", findStore)
+      console.log("dapat adminnya", findStore.id)
+      const existingProductStore = await productStore.findOne({
+        where: { product_id: productId, store_id: findStore.id },
+      });
+      console.log("existing product", existingProductStore)
+      const existingStoresHistory = await stockHistory.findOne({
+        where: { product_id: productId, store_id: findStore.id },
+      });
+      console.log("update sampai sini", existingStoresHistory)
+      if (existingProductStore) {
+        existingProductStore.quantity = quantity;
+        await existingProductStore.save();
+        await db.sequelize.transaction(async (t) => {
+          await stockHistory.create({
+            product_id : productId,
+            store_id : findStore.id,
+            quantity : quantity,
+            isactive : true,
+          }, {transaction : t})
+        })
+        return res.status(200).json({ message: "Update Success" });
+      } else {
+        await db.sequelize.transaction(async(t) => {
+          await productStore.create({
+            product_id : productId,
+            store_id : findStore.id,
+            quantity : quantity,
+            isactive : true,
+          }, {transaction : t})
+          await stockHistory.create({
+            product_id : productId,
+            store_id : findStore.id,
+            quantity : quantity,
+            isactive : true,
+          }, {transaction : t})
+        })
+        return res.status(200).json({message : "Sucess"})
+      }
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  },
   deActiveProductBranch : async (req, res) => {
     try {
       const {id} = req.params
@@ -377,14 +425,38 @@ const adminController = {
       const {user_id} = req.params
       const checkTrans = await trans.findOne({where : {user_id : user_id, status : 0}})
       console.log("checkUser ", checkTrans)
+      // const transAll = await trans.findAll()
+      // console.log("all", transAll)
       return res.status(200).json({message : "Success", data : checkTrans})
+    } catch (error) {
+      return res.status(500).json({message : error.message})
+    }
+  },
+  getAllTransaction : async(req, res) => {
+    try {
+      const transAll = await trans.findAll({
+        include: [
+          {
+            model: user,
+          },
+        ],
+      })
+      console.log("all", transAll)
+      return res.status(200).json({message : "Succeswes", data : transAll})
     } catch (error) {
       return res.status(500).json({message : error.message})
     }
   },
   cancelUserTransaction : async (req, res) => {
     try {
-      // const 
+      const {transaction_id} = req.params
+      const findTransaction = await trans.findOne({where : {user_id : transaction_id}})
+      console.log("dapatt dong", findTransaction)
+      await db.sequelize.transaction(async(t) => {
+        const result = await trans.update({status : 5},{where : {id : transaction_id}}, {transaction :t})
+        const responsCart = await cart.update({total_price : 0}, {where : {user_id: transaction_id}}, {transaction: t})
+      })
+      return res.status(200).json({message : "Success"})
     } catch (error) {
       return res.status(500).json({message : error.message})
     }

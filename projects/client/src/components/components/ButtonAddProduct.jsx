@@ -19,8 +19,8 @@ export default function ButtonAddProduct({ setModalClosedTrigger }) {
           onClick={onOpen}
           rightIcon={<BsBagPlus />}
           pos={"absolute"}
-          right={10}
-          top={90}
+          right={{ base: "40px", lg: 10 }}
+          top={{ base: 230, lg: 90 }}
         >
           Add Product
         </Button>

@@ -69,7 +69,7 @@ export default function StockManagement() {
   return (
     <>
       <Box fontFamily={"montserrat"}>
-        <Box ml={"48px"}>
+        <Box ml={{ base: "32px", lg: "48px" }}>
           <Text mt={"24px"} fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>
             Stock Management
           </Text>
@@ -82,7 +82,7 @@ export default function StockManagement() {
               <Box key={item.id}>
                 <Card
                   key={item.id}
-                  w={{ md: "600px", lg: "800px" }}
+                  w={{ base: "680px", lg: "800px" }}
                   mt={"20px"}
                   boxShadow={"lg"}
                   border={"2px"}

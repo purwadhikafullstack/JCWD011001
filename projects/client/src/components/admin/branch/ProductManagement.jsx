@@ -135,25 +135,25 @@ const ProductManagement = () => {
       <Stack>
         <Box fontFamily={"montserrat"}>
           <Text
-            ml={"48px"}
-            mt={"24px"}
+            ml={{ base: "24px", lg: "48px" }}
+            mt={{ base: "8px", lg: "24px" }}
             fontSize={{ sm: "24px", md: "32px", lg: "48px" }}
           >
             Product Management
           </Text>
           <ButtonAddProduct setModalClosedTrigger={setModalClosedTrigger} />
-          <Flex justify={"space-around"} ml={"48px"}>
+          <Flex justify={"space-around"} ml={{ base: "12px", lg: "48px" }}>
             <Select
               placeholder="Sort By"
               value={order}
               onChange={(e) => setOrder(e.target.value)}
             >
-              <option value={"ASC"}>A-Z</option>
-              <option value={"DESC"}>Z-A</option>
+              <option value={"ASC"}>A-Z / (Low Price) - (High Price)</option>
+              <option value={"DESC"}>Z-A / (High Price) - (Low Price)</option>
             </Select>
             <Select
-              ml={"48px"}
-              placeholder="Category"
+              ml={{ base: "12px", lg: "48px" }}
+              placeholder="All Category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
@@ -161,13 +161,13 @@ const ProductManagement = () => {
               <option value={"2"}>Fruit</option>
               <option value={"3"}>Beverage</option>
             </Select>
-            <InputGroup ml={"48px"}>
+            <InputGroup ml={{ base: "12px", lg: "48px" }}>
               <InputLeftElement>
                 <BiSearchAlt color="#37630A" />
               </InputLeftElement>
               <Input
                 id="search"
-                w={"300px"}
+                w={{ base: "200px", lg: "300px" }}
                 onChange={handleSearch}
                 placeholder={"Search Product"}
               />
@@ -175,7 +175,7 @@ const ProductManagement = () => {
           </Flex>
           <Button
             mt={5}
-            ml={"48px"}
+            ml={{ base: "12px", lg: "48px" }}
             variant={"ghost"}
             _hover={{ bg: "brand.hover", color: "white" }}
             onClick={() => handleOrderByPrice()}
@@ -188,12 +188,12 @@ const ProductManagement = () => {
             const active = item.isactive;
             const newPrice = item.price - item.admin_discount;
             return (
-              <Box>
+              <Box key={item.id}>
                 <Card
                   key={item.id}
-                  ml={"48px"}
-                  // w={{ md: "600px", lg: "800px" }}
-                  w={isLargerThanMD ? "800px" : "400px"}
+                  ml={{ base: "32px", lg: "48px" }}
+                  // w={isLargerThanMD ? "800px" : "400px"}
+                  w={{ base: "680px", lg: "800px" }}
                   mt={"20px"}
                   boxShadow={"lg"}
                   border={"2px"}
@@ -297,7 +297,7 @@ const ProductManagement = () => {
               </Box>
             );
           })}
-          <Box ml={"10em"} mt={"20px"}>
+          <Box ml={{ base: "8em", lg: "10em" }} mt={"20px"}>
             <Button
               variant={"ghost"}
               _hover={{ bg: "brand.hover", color: "white" }}

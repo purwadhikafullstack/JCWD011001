@@ -118,7 +118,9 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                   >
                     {category.map((category) => {
                       return (
-                        <option value={category.id}>{category.name}</option>
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
                       );
                     })}
                   </Select>

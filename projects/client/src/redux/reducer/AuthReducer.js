@@ -181,6 +181,7 @@ export const userCancel = (item) => {
     console.log("user cancel reducer masuk ", item)
     console.log("id ts", item);
     const transaction_id = item
+    console.log("inimi", transaction_id)
     const token = localStorage.getItem("token")
     try { 
       const response = await axios.patch(`${URL_API}/auth/transaction/${transaction_id}`,

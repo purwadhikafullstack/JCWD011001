@@ -215,7 +215,7 @@ export const stockUpdate = (values, Swal) => {
     const token = localStorage.getItem("token")
     console.log("update reducer ", values)
     try {
-      await axios.patch(`${URL_API}/admin/stock`, {
+      await axios.post(`${URL_API}/admin/branch/stock`, {
         productId : values.productId,
         quantity : values.quantity
       }, {
@@ -283,6 +283,19 @@ export const enableProduct = (values, Swal, toast) => {
         duration: 3000,
         isClosable: true,
       });
+    }
+  }
+}
+export const branchUserCancel = (item) => {
+  return async(dispatch) => {
+    console.log("user cancel reducer masuk ", item)
+    console.log("id dari branch", item.id)
+    const transaction_id = item.id
+    console.log("inimi", transaction_id)
+    try { 
+      const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`)
+    } catch (error) {
+      console.log(error)
     }
   }
 }
