@@ -55,16 +55,11 @@ function App() {
   };
 
   useEffect(() => {
-    if (user) {
-      dispatch(getDefaultAddress());
-    } else {
+    dispatch(getDefaultAddress());
+    if (!user.id) {
       fetchLocation();
     }
   }, [user]);
-
-  useEffect(() => {
-    fetchLocation();
-  }, []);
 
   const defaultRoutes = () => {
     if (role === "" || role === 3) {

@@ -1,7 +1,18 @@
-import { Box, Heading, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
-import React from "react";
+import { Box, Heading, Table, Thead, Tbody, Tr, Th, Td, Text, Tooltip, Flex, Button, Input } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 
 const StockManagementHistoryDetail = ({ history }) => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const handleClearStartDate = () => {
+    setStartDate("");
+  };
+  const handleClearEndDate = () => {
+    setEndDate("");
+  };
+
   const changeDate = (createdAt) => {
     const monthNames = [
       "January",
@@ -32,25 +43,50 @@ const StockManagementHistoryDetail = ({ history }) => {
 
   return (
     <Box borderWidth="1px" borderRadius="lg" p="4" boxShadow="lg" mt={4}>
-      <Heading as="h2" size="lg" mb="4">
-        Stock History
-      </Heading>
+      <Flex justifyContent={"space-between"}>
+        <Heading as="h2" size="lg" mb="4">
+          Stock History
+        </Heading>
+        <Flex gap={4} alignItems={"center"}>
+          <Flex align="center">
+            <Tooltip label="Start Date" aria-label="Start Date">
+              <Input type="date" mb={4} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            </Tooltip>
+
+            {startDate && (
+              <Button ml={2} colorScheme="red" size="sm" onClick={handleClearStartDate}>
+                Clear
+              </Button>
+            )}
+          </Flex>
+          <Text mb={4}>to</Text>
+          <Flex align="center">
+            <Tooltip label="End Date" aria-label="End Date">
+              <Input type="date" mb={4} id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            </Tooltip>
+            {endDate && (
+              <Button ml={2} colorScheme="red" size="sm" onClick={handleClearEndDate}>
+                Clear
+              </Button>
+            )}
+          </Flex>
+        </Flex>
+      </Flex>
+
       <Table variant="simple">
         <Thead>
           <Tr>
+            <Th>No</Th>
             <Th>Date</Th>
             <Th>Quantity</Th>
-            <Th>History</Th>
           </Tr>
         </Thead>
         <Tbody>
           {history.map((item, index) => (
             <Tr key={index}>
+              <Td>{index + 1}</Td>
               <Td>{changeDate(item.createdAt)}</Td>
               <Td>{item.quantity}</Td>
-              <Td>
-                {index + 1 < history.length ? (item.quantity < history[index + 1].quantity ? "Bought" : "Added") : ""}
-              </Td>
             </Tr>
           ))}
         </Tbody>

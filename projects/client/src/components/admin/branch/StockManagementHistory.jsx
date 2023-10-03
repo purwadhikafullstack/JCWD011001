@@ -21,15 +21,12 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
     const { data } = await axios.get(`${URL_API}/store/stock/?store_id=${store_id}&product_id=${product_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setData(data.data);
+    await setData(data.data);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  console.log(itemDetail);
-  console.log(data);
 
   return (
     <Box ml={"48px"} mt={"24px"}>
@@ -43,11 +40,10 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
         boxShadow="lg"
         width="100%"
         mt={"48px"}
-        mx="auto" // Center the box horizontally
-        display="flex" // Use flex display to center children
-        justifyContent="center" // Center horizontally
-        alignItems="center" // Center vertically
-      >
+        mx="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center">
         <Flex alignItems="center">
           <Image
             src={getImage(itemDetail.Product.product_img) || "/default-image.jpg"}
@@ -71,7 +67,7 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
           </Box>
         </Flex>
       </Box>
-      {data && <StockManagementHistoryDetail history={data} />}
+      {data && <StockManagementHistoryDetail history={data} setData={setData} />}
     </Box>
   );
 };
