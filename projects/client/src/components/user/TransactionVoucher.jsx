@@ -29,7 +29,7 @@ import {
   setVoucherToUse,
 } from "../../redux/reducer/VoucherReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { getItem } from "../../redux/reducer/CartReducer";
+import { getCart, getItem } from "../../redux/reducer/CartReducer";
 
 const TransactionVoucher = ({
   product_price,
@@ -46,6 +46,9 @@ const TransactionVoucher = ({
   const deliveryVoucher = useSelector(
     (state) => state.VoucherReducer.deliveryVoucher
   );
+  const { store_id } = useSelector(
+    (state) => state.ProductReducer
+  );
   const item = useSelector((state) => state.CartReducer.item);
   const [selectedVoucherData, setSelectedVoucherData] = useState(null);
   const [selectedDeliveryVoucher, setSelectedDeliveryVoucher] = useState([]);
@@ -54,8 +57,7 @@ const TransactionVoucher = ({
     dispatch(getAdminVoucher());
     dispatch(getUserVoucher());
     dispatch(getDeliveryVoucher());
-    dispatch(getItem());
-  }, [dispatch]);
+  }, []);
 
   const userVoucherData = () => {
     return userVoucher.map((voucher) => (
@@ -121,6 +123,17 @@ const TransactionVoucher = ({
             product.product_id === selectedVoucherData.Voucherdetail.product_id
         );
 
+        if (!isProductExist) {
+          toast({
+            title: "Failed",
+            description: "There is no match product in your cart",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          return;
+        }
+
         if (selectedVoucherData?.Voucherdetail?.type === "discount") {
           setVoucherDiscount(
             selectedVoucherData.Voucherdetail.nominal
@@ -137,7 +150,7 @@ const TransactionVoucher = ({
         }
 
         if (selectedVoucherData?.Voucherdetail?.type === "buy1get1") {
-          if (isProductExist.quantity < 2) {
+          if (isProductExist && isProductExist.quantity < 2) {
             toast({
               title: "Failed",
               description: `Add more ${isProductExist.name} to your cart`,
@@ -150,17 +163,6 @@ const TransactionVoucher = ({
           setVoucherDiscount(isProductExist.price);
           setModalClosedTrigger(true);
           onClose();
-          return;
-        }
-
-        if (!isProductExist) {
-          toast({
-            title: "Failed",
-            description: "There is no match product in your cart",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
           return;
         }
       }

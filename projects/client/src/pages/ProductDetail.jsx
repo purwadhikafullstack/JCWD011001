@@ -41,7 +41,7 @@ const ProductDetail = () => {
   const getProductStock = async (id) => {
     try {
       const { data } = await axios.get(`${URL_API}/product/stock?id=${id}`);
-      setStock(data.data);
+      await setStock(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -51,12 +51,12 @@ const ProductDetail = () => {
     try {
       let apiUrl = `${URL_API}/product/detail?id=${id}`;
       if (store_id) apiUrl += `&store_id=${store_id}`;
-      getProductStock(id);
+      await getProductStock(id);
       const { data } = await axios.get(apiUrl);
       const productData = data.data?.Product || data.data;
       await setProduct(productData);
-      if (productData.admin_discount > 0) setIsDiscount(true);
-      if (data.data.quantity) setStock(data.data);
+      if (productData.admin_discount > 0) await setIsDiscount(true);
+      if (data.data.quantity) await setStock(data.data);
     } catch (error) {
       console.log(error);
     }

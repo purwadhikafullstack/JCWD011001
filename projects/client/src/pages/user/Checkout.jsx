@@ -8,8 +8,6 @@ import {
   Select,
   Spinner,
   Button,
-  Card,
-  CardBody,
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -56,7 +54,6 @@ const Checkout = () => {
   product_price = carts?.total_price || 0;
 
   const vouchers_discount = voucher_discount + delivery_discount;
-  // const total_discount = vouchers_discount;
   let total_price = product_price + deliveryPrice - vouchers_discount;
 
   if (total_price < 0) {
@@ -102,51 +99,51 @@ const Checkout = () => {
 
   useEffect(() => {
     dispatch(getDefaultAddress(user.id));
-    dispatch(getItem(store_id));
-    dispatch(getCart());
-    if (modalClosedTrigger) {
-      dispatch(getCart());
-      setModalClosedTrigger(false);
+    if (store_id) {
+      dispatch(getItem(store_id));
     }
-  }, [dispatch, modalClosedTrigger, store_id]);
+    // if (modalClosedTrigger) {
+    //   dispatch(getCart());
+    //   setModalClosedTrigger(false);
+    // }
+  }, [store_id]);
 
-  console.log("default", defaultAddress);
-  console.log("store_id", store_id);
-  console.log("city", storeCityId);
-  console.log("weight", totalWeight);
-  console.log("data pir", item);
+  useEffect(() => {
+    dispatch(getCart());
+  }, [item]);
+
   return (
     <Box>
-      <Box>
-        <Flex
-          bg={"white"}
-          color={"#1c1c1c"}
-          minH={"60px"}
-          borderBottom={1}
-          borderStyle={"solid"}
-          borderColor={"#D7F0AA"}
-          align={"center"}
-        >
-          <Box w={"full"} my={"16px"} mx={{ base: "16px", md: "100px" }}>
-            <Flex
-              justifyContent={{ base: "center", md: "flex-start" }}
-              align={"center"}
-            >
-              <div style={{ width: "184px" }}>
-                <Image
-                  onClick={onOpen}
-                  src={Logo}
-                  h={"28px"}
-                  cursor={"pointer"}
-                  _hover={{
-                    filter: "brightness(70%)",
-                    transition: "300ms",
-                  }}
-                />
-              </div>
-            </Flex>
-          </Box>
-        </Flex>
+      <Box
+        py={"16px"}
+        px={{ base: "28px", md: "56px", lg: "100px" }}
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        bg={"white"}
+        color={"#1c1c1c"}
+        minH={"60px"}
+        borderBottom={1}
+        borderStyle={"solid"}
+        borderColor={"#D7F0AA"}
+      >
+        <Box>
+          <Flex
+            justifyContent={{ base: "center", md: "flex-start" }}
+            align={"center"}
+          >
+            <Image
+              onClick={onOpen}
+              src={Logo}
+              h={"28px"}
+              cursor={"pointer"}
+              _hover={{
+                filter: "brightness(70%)",
+                transition: "300ms",
+              }}
+            />
+          </Flex>
+        </Box>
       </Box>
       <Box
         w={"full"}
@@ -212,38 +209,16 @@ const Checkout = () => {
                 Product{"("}s{")"} you purchased
               </Text>
               <Box>
-                {item &&
-                  item.map((products) => {
-                    return (
-                      <ItemCart
-                        products={products}
-                        key={products.id}
-                        setTotalWeight={setTotalWeight}
-                        totalWeight={totalWeight}
-                      />
-                    );
-                    // return (
-                    //   <Box>
-                    //     <Card mt={"4"} w={"full"} boxShadow={"lg"} key={products.id}>
-                    //       <CardBody>
-                    //         <Box fontWeight={"bold"} mb={"24px"}>
-                    //           <Text>Click and Play</Text>
-                    //         </Box>
-                    //         <Flex>
-                    //           <Image
-                    //             src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
-                    //             w={"20%"}
-                    //           />
-                    //           <Box ml={"32px"}>
-                    //             <Text>{products.name}</Text>
-                    //             <Text fontWeight={"bold"}>Rp. {products.price}</Text>
-                    //           </Box>
-                    //         </Flex>
-                    //       </CardBody>
-                    //     </Card>
-                    //   </Box>
-                    // );
-                  })}
+                {item.map((products) => {
+                  return (
+                    <ItemCart
+                      products={products}
+                      key={products.id}
+                      setTotalWeight={setTotalWeight}
+                      totalWeight={totalWeight}
+                    />
+                  );
+                })}
               </Box>
             </Box>
             <Box

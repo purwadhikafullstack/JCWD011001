@@ -104,6 +104,7 @@ const voucherController = {
   getUserVoucher: async (req, res) => {
     try {
       const { id } = req.user;
+      const currentDate = new Date();
       const vouchers = await Uservoucher.findAll({
         where: {
           isused: false,
@@ -120,6 +121,9 @@ const voucherController = {
               isactive: true,
               type: {
                 [Op.notLike]: "freedelivery",
+              },
+              expired_date: {
+                [Op.gte]: currentDate,
               },
             },
           },

@@ -78,7 +78,8 @@ export const getItem = (store_id) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      dispatch(setItem(fetchData.data?.data));
+      await dispatch(setItem(fetchData.data?.data));
+      console.log("item di reducer", fetchData.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -95,8 +96,7 @@ export const getCart = () => {
         },
       });
       console.log("get cart", response);
-      console.log("get cart", response.data.data.total_price);
-      dispatch(setCarts(response.data?.data));
+      await dispatch(setCarts(response.data?.data));
     } catch (error) {
       console.log(error);
     }
