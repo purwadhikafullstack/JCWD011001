@@ -54,7 +54,6 @@ export const CartReducer = createSlice({
       console.log("isi del", id);
       const existCart = state.cart.findIndex((item) => item.id === id);
       if (existCart !== -1) {
-        console.log("sampe")
         state.totalHarga -= action.payload.price * state.cart[existCart].quantity;
         state.cart.splice(existCart, 1);
       }
@@ -71,7 +70,6 @@ export const CartReducer = createSlice({
 export const getItem = (store_id) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
-    console.log("cart store_id", store_id)
     try {
       const fetchData = await axios.get(`${URL_API}/cart/item/${store_id}`, {
         headers: {
@@ -79,7 +77,6 @@ export const getItem = (store_id) => {
         },
       });
       await dispatch(setItem(fetchData.data?.data));
-      console.log("item di reducer", fetchData.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -95,7 +92,6 @@ export const getCart = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("get cart", response);
       await dispatch(setCarts(response.data?.data));
     } catch (error) {
       console.log(error);
@@ -105,7 +101,6 @@ export const getCart = () => {
 
 export const addCart = (products,store_id, Swal) => {
   return async (dispatch) => {
-    console.log("masuk ", products)
     const dataProduct = products.Product || products;
     console.log("data ", dataProduct)
     console.log("precs", products.price)

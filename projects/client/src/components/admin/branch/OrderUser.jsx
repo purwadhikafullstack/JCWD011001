@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  IconButton,
   Select,
   Spinner,
   Table,
@@ -18,24 +19,20 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userCancel } from "../../../redux/reducer/AuthReducer";
-import { branchUserCancel } from "../../../redux/reducer/AdminReducer";
+import {
+  branchSendOrder,
+  branchUserCancel,
+  branchUserConfirm,
+} from "../../../redux/reducer/AdminReducer";
 import Swal from "sweetalert2";
+import { AiOutlineCheck } from "react-icons/ai";
+import { BsFillSendCheckFill } from "react-icons/bs";
 
 const OrderUser = () => {
   const [render, setRender] = useState(false);
   const [allTransaction, setAllTransaction] = useState([]);
   const dispatch = useDispatch();
 
-  // const getUser = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8000/api/admin/branch/user`
-  //     );
-  //     setUser(response.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const getAllTransaction = async () => {
     try {
       const response = await axios.get(
@@ -55,6 +52,26 @@ const OrderUser = () => {
   // const handleButtonClick = () => {
   //   getAllTransaction();
   // };
+  const buttonConfirm = async (item) => {
+    console.log("confirm awal ", item);
+    // dispatch(userCancel(item));
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, confirm order!",
+    });
+    if (result.isConfirmed) {
+      dispatch(branchUserConfirm(item));
+      console.log("confirm ", item);
+      Swal.fire("Cancel!", "Order Confirm.", "success");
+      setRender(true);
+      getAllTransaction();
+    }
+  };
   const handleCancel = async (item) => {
     console.log("cancel", item);
     // dispatch(userCancel(item));
@@ -74,7 +91,25 @@ const OrderUser = () => {
       getAllTransaction();
     }
   };
-
+  const buttonSend = async (item) => {
+    console.log("send ", item);
+    // dispatch(userCancel(item));
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, send order!",
+    });
+    if (result.isConfirmed) {
+      dispatch(branchSendOrder(item));
+      Swal.fire("Cancel!", "Order Confirm.", "success");
+      setRender(true);
+      getAllTransaction();
+    }
+  };
   return (
     <Box
       fontFamily={"montserrat"}
@@ -122,23 +157,86 @@ const OrderUser = () => {
                 </Td>
 
                 <Td fontSize={"12px"}>{item.total_price}</Td>
-                <Td>{item.courier}</Td>
+                <Td textTransform={"uppercase"}>{item.courier}</Td>
                 <Td textColor={item.status === 5 ? "red" : "green"}>
                   {item.status === 0
-                    ? "Waiting"
+                    ? "Waiting Payment"
                     : item.status === 5
                     ? "Canceled"
+                    : item.status === 1
+                    ? "Admin Confirmation"
+                    : item.status === 2
+                    ? "Order Process"
+                    : item.status === 3
+                    ? "Order Shipped"
+                    : item.status === 4
+                    ? "Order Arrived"
+                    : item.status === 6
+                    ? "Order Confirm"
                     : null}
                 </Td>
                 <Td>
                   {item.status === 0 ? (
-                    <Button
-                      variant={""}
-                      _hover={{ bg: "red", color: "white" }}
-                      onClick={() => handleCancel(item)}
-                    >
-                      Cancel
-                    </Button>
+                    <Box>
+                      <Button
+                        variant={""}
+                        _hover={{ bg: "red", color: "white" }}
+                        onClick={() => handleCancel(item)}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
+                  ) : item.status === 2 ? (
+                    <Box>
+                      <Button
+                        variant={""}
+                        _hover={{ bg: "red", color: "white" }}
+                        onClick={() => handleCancel(item)}
+                      >
+                        Cancel
+                      </Button>
+                      <IconButton
+                        onClick={() => buttonSend(item)}
+                        variant={""}
+                        borderRadius={"30px"}
+                        _hover={{ bg: "brand.hover", color: "white" }}
+                        icon={<BsFillSendCheckFill />}
+                      />
+                    </Box>
+                  ) : item.status === 1 ? (
+                    <Box>
+                      <Button
+                        variant={""}
+                        _hover={{ bg: "red", color: "white" }}
+                        onClick={() => handleCancel(item)}
+                      >
+                        Cancel
+                      </Button>
+                      <IconButton
+                        onClick={() => buttonConfirm(item)}
+                        variant={""}
+                        borderRadius={"30px"}
+                        _hover={{ bg: "brand.hover", color: "white" }}
+                        icon={<AiOutlineCheck />}
+                      />
+                    </Box>
+                  ) : item.status === 3 ? (
+                    <Box>
+                      <Text>AMAN</Text>
+                      {/* <Button
+                        variant={""}
+                        _hover={{ bg: "red", color: "white" }}
+                        onClick={() => handleCancel(item)}
+                      >
+                        Cancel
+                      </Button>
+                      <IconButton
+                        variant={""}
+                        borderRadius={"30px"}
+                        _hover={{ bg: "brand.hover", color: "white" }}
+                        icon={<AiOutlineCheck />}
+                      /> */}
+                    </Box>
                   ) : (
                     ""
                   )}

@@ -42,7 +42,7 @@ const editProductSchema = Yup.object().shape({
   //     (value) => !value || /\/(jpg|png|gif)$/i.test(value.type)
   //   ),
 });
-export default function ModalEditProduct({ isOpen, onClose, id }) {
+export default function ModalEditProduct({ isOpen, onClose, id, item }) {
   const { category } = useSelector((state) => state.CategoryReducer);
   const dispatch = useDispatch();
   const toast = useToast();
@@ -53,20 +53,19 @@ export default function ModalEditProduct({ isOpen, onClose, id }) {
   const formik = useFormik({
     initialValues: {
       id: id,
-      newName: "",
+      newName: item.name || "",
       categoryId: "",
-      price: "",
-      admin_discount: "",
-      description: "",
-      product_img: null,
+      price: item.price || "",
+      admin_discount: item.admin_discount || "",
+      description: item.description || "",
     },
     validationSchema: editProductSchema,
     onSubmit: (values) => {
-      const productImg = document.getElementById("product_img").files[0];
-      const formData = new FormData();
-      formData.append("product_img", productImg);
-      console.log(values, productImg);
-      dispatch(updateProduct(values, productImg, toast, Swal));
+      // const productImg = document.getElementById("product_img").files[0];
+      // const formData = new FormData();
+      // formData.append("product_img", productImg);
+      console.log("vvalues", values);
+      dispatch(updateProduct(values, toast, Swal));
       onClose();
       formik.resetForm();
     },
@@ -110,7 +109,7 @@ export default function ModalEditProduct({ isOpen, onClose, id }) {
                     <Select
                       {...formik.getFieldProps("categoryId")}
                       mt={5}
-                      placeholder="Select category"
+                      placeholder={"Select Category"}
                       id="categoryId"
                       name="categoryId"
                     >
@@ -122,6 +121,12 @@ export default function ModalEditProduct({ isOpen, onClose, id }) {
                         );
                       })}
                     </Select>
+                      {formik.touched.categoryId &&
+                        formik.errors.categoryId && (
+                          <FormErrorMessage>
+                            {formik.errors.categoryId}
+                          </FormErrorMessage>
+                        )}
                   </FormControl>
                   <FormControl
                     isInvalid={formik.touched.price && formik.errors.price}
@@ -190,7 +195,7 @@ export default function ModalEditProduct({ isOpen, onClose, id }) {
                         )}
                     </Center>
                   </FormControl>
-                  <FormControl
+                  {/* <FormControl
                     isInvalid={
                       formik.touched.product_img && formik.errors.product_img
                     }
@@ -212,7 +217,7 @@ export default function ModalEditProduct({ isOpen, onClose, id }) {
                           </FormErrorMessage>
                         )}
                     </Center>
-                  </FormControl>
+                  </FormControl> */}
                   <Input
                     type="hidden"
                     id="id"

@@ -10,5 +10,6 @@ router.get("/keep", verifyToken, authController.keepLogin)
 router.patch("/verify", verifyToken, authController.verifyAccount)
 router.get("/admin", authController.getAdmin)
 router.patch("/transaction/:transaction_id",verifyToken, authController.cancelTransaction)
+router.patch("/transaction/confirm/:transaction_id", authController.confirmOrder)
 
 module.exports = router;

@@ -20,7 +20,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
-const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }) => {
+const UserOrderFinishedCardDetails = ({
+  transactionDetail,
+  transactionProducts,
+}) => {
   const orderStatusArray = [
     { status: "Awaiting Payment", color: "red" },
     { status: "Waiting for Payment Confirmation", color: "orange" },
@@ -31,12 +34,17 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
     { status: "Finished", color: "Green" },
   ];
 
-  console.log(transactionDetail, transactionProducts)
+  console.log(transactionDetail, transactionProducts);
 
   const RenderStatus = () => {
     if (transactionDetail.status === 6)
       return (
-        <Flex direction="column" alignItems="center" justifyContent="center" h="100%">
+        <Flex
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          h="100%"
+        >
           <Icon as={AiOutlineCheckCircle} boxSize={12} color="green.400" />
           <Text fontSize="xl" fontWeight="bold" mt={4}>
             Order Finished
@@ -48,7 +56,12 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
       );
 
     return (
-      <Flex direction="column" alignItems="center" justifyContent="center" h="100%">
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        h="100%"
+      >
         <Icon as={AiOutlineCloseCircle} boxSize={12} color="red.400" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           Order Cancelled

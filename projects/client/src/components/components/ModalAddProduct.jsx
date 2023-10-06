@@ -42,6 +42,7 @@ const addProductSchema = Yup.object().shape({
       "Invalid file format",
       (value) => !value || /\/(jpg|png|gif)$/i.test(value.type)
     ),
+  weigth: Yup.number().required("Weight is Required"),
 });
 export default function ModalAddProduct({ isOpen, onClose }) {
   const [store, setStore] = useState([]);
@@ -67,6 +68,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
       admin_discount: 0,
       description: "",
       product_img: null,
+      weigth: "",
     },
     validationSchema: addProductSchema,
     onSubmit: (values) => {
@@ -109,21 +111,33 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       )}
                     </Center>
                   </FormControl>
-                  <Select
-                    {...formik.getFieldProps("category_id")}
-                    id="category_id"
-                    name="category_id"
-                    mt={5}
-                    placeholder="Select Category"
+                  <FormControl
+                    isInvalid={
+                      formik.touched.category_id && formik.errors.category_id
+                    }
                   >
-                    {category.map((category) => {
-                      return (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                    <Select
+                      {...formik.getFieldProps("category_id")}
+                      id="category_id"
+                      name="category_id"
+                      mt={5}
+                      placeholder="Select Category"
+                    >
+                      {category.map((category) => {
+                        return (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        );
+                      })}
+                      {formik.touched.category_id &&
+                        formik.errors.category_id && (
+                          <FormErrorMessage>
+                            {formik.errors.category_id}
+                          </FormErrorMessage>
+                        )}
+                    </Select>
+                  </FormControl>
                   <FormControl
                     isInvalid={
                       formik.touched.product_img && formik.errors.product_img
@@ -183,6 +197,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       placeholder="Discount (optional)"
                       id="admin_discount"
                       name="admin_discount"
+                      aria-label="Admin"
                       type="text"
                       value={formik.values.admin_discount}
                       onChange={formik.handleChange}
@@ -218,6 +233,26 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                             {formik.errors.description}
                           </FormErrorMessage>
                         )}
+                    </Center>
+                  </FormControl>
+                  <FormControl
+                    isInvalid={formik.touched.weigth && formik.errors.weigth}
+                  >
+                    <Input
+                      id="weigth"
+                      name="weigth"
+                      type="text"
+                      value={formik.values.weigth}
+                      onChange={formik.handleChange}
+                      placeholder="Weight"
+                      mt={5}
+                    ></Input>
+                    <Center>
+                      {formik.touched.weigth && formik.errors.weigth && (
+                        <FormErrorMessage>
+                          {formik.errors.weigth}
+                        </FormErrorMessage>
+                      )}
                     </Center>
                   </FormControl>
                   <ModalFooter>

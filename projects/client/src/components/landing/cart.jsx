@@ -36,6 +36,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { FaShopify } from "react-icons/fa";
 import ProductReducer from "../../redux/reducer/ProductReducer";
+import axios from "axios";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
@@ -43,9 +44,33 @@ export default function Cart() {
   const { login } = useSelector((state) => state.AuthReducer);
   const { item } = useSelector((state) => state.CartReducer);
   const { store_id } = useSelector((state) => state.ProductReducer);
-  console.log("streoe id", store_id);
+  const [sold, setSold] = useState([]);
+  const [idProduct, setIdProduct] = useState(0);
+  const [branchProduct, setBranchProduct] = useState([]);
+  const [asli, setAsli] = useState(false);
+  console.log("asli", asli);
+  // item.map((haha) => {
+  //   console.log("haha", haha.Product?.id);
+  //   setIdProduct(haha.Product.id);
+  //   // return haha.Product?.id || 0; // Return the id or 0 if it's not available
+  // });
   const getImage = (image) => {
     return `${PUBLIC_URL}/${image}`;
+  };
+  const getItemDetails = async (id) => {
+    // const id = item.Product?.id;
+    console.log("id");
+    try {
+      console.log("get di item detais", id);
+      const response = await axios.get(`${URL_API}/product/item/detail/${id}`);
+      console.log("data get item", response);
+      console.log("data get item productBranc", response.data.ProductBranch);
+      setBranchProduct(response.data.ProductBranch);
+      console.log("data get item", response.data.Item);
+      setSold(response.data.Item);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const navigate = useNavigate();
@@ -57,6 +82,7 @@ export default function Cart() {
     console.log("store depan ", products.store_id);
     await dispatch(getItem(store_id));
     await dispatch(getCart());
+    await getItemDetails(products.Product?.id);
   };
 
   const outCart = async (products) => {
@@ -64,6 +90,7 @@ export default function Cart() {
     await dispatch(deleteItem(products));
     await dispatch(getItem(store_id));
     await dispatch(getCart());
+    await getItemDetails(products.Product?.id);
   };
 
   const destroy = async (products) => {
@@ -90,11 +117,27 @@ export default function Cart() {
     await dispatch(getItem(store_id));
     await dispatch(getCart());
   };
+  const dapat = async () => {
+    if (item && item.length > 0) {
+      await item.forEach((items) => {
+        if (items.Product) {
+          console.log("haha", items.Product.id);
+          getItemDetails(items.Product.id);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     dispatch(getItem(store_id));
+    // dapat();
     dispatch(getCart());
   }, [store_id]);
+  console.log("Item in useEffect:", item);
+
+  useEffect(() => {
+    dapat();
+  }, [item]);
   return (
     <>
       <Navbar />
@@ -184,6 +227,10 @@ export default function Cart() {
                                     color={"green"}
                                     icon={<AiOutlinePlusCircle />}
                                     onClick={() => inCart(products)}
+                                    isDisabled={
+                                      products.quantity >=
+                                      branchProduct.quantity
+                                    }
                                   ></IconButton>
                                 </ButtonGroup>
                               </Box>

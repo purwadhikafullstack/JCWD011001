@@ -181,22 +181,25 @@ export const userCancel = (item) => {
   return async (dispatch) => {
     console.log("user cancel reducer masuk ", item);
     console.log("id ts", item);
-    const transaction_id = item;
-    console.log("inimi", transaction_id);
-    const token = localStorage.getItem("token");
+    const transaction_id = item
+    console.log("inimi", transaction_id)
+    try { 
+      const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`)
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+export const userConfirm = (item) => {
+  return async(dispatch) => {
+    console.log("user confirm reducer masuk", item)
+    const transaction_id = item
+    console.log("cocok ?", transaction_id)
     try {
-      const response = await axios.patch(
-        `${URL_API}/auth/transaction/${transaction_id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      const response = await axios.patch(`${URL_API}/auth/transaction/confirm/${transaction_id}`)
     } catch (error) {
       console.log(error);
     }

@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  AvatarBadge,
   Box,
   Button,
   ButtonGroup,
@@ -16,7 +18,16 @@ import {
   InputLeftElement,
   Select,
   Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
   Text,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -29,16 +40,19 @@ import {
   updateProduct,
 } from "../../../redux/reducer/ProductReducer";
 import ButtonAddProduct from "../../components/ButtonAddProduct";
-import { IoTrashOutline } from "react-icons/io5";
+import { IoPencil, IoTrashOutline } from "react-icons/io5";
 import ButtonEditProduct from "../../components/ButtonEditProduct";
 import { RxCross1 } from "react-icons/rx";
 import { FaCheck, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { destroyProduct } from "../../../redux/reducer/AdminReducer";
 import { BiSearchAlt } from "react-icons/bi";
+import ChangeProductPicture from "../../components/ChangeProductPicture";
+import ButtonChangeProductPicture from "../../components/ButtonChangeProductPicture";
+import ProductPicture from "./ProductPicture";
+import ButtonViewProductPicture from "../../components/ButtonViewProductPicture";
 
 const ProductManagement = () => {
-  const PUBLIC_URL = "http://localhost:8000";
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
   const [product, setProduct] = useState([]);
   const [page, setPage] = useState(1);
@@ -66,10 +80,10 @@ const ProductManagement = () => {
   const fetchData = async () => {
     const orderByParam = orderByPrice ? "price" : orderBy; // Use 'price' if orderByPrice is true, otherwise use orderBy
     const respon = await axios.get(
-      `http://localhost:8000/api/admin/product?name=${name}&limit=5&page=${page}&order=${order}&orderBy=${orderByParam}&category=${category}`
+      `http://localhost:8000/api/admin/product?name=${name}&limit=10&page=${page}&order=${order}&orderBy=${orderByParam}&category=${category}`
     );
-    console.log("isi", respon.data);
-    console.log("total", respon.data.totalPage);
+    // console.log("isi", respon.data);
+    // console.log("total", respon.data.totalPage);
     setProduct(respon.data.data);
     setTotalPage(respon.data.totalPage);
   };
@@ -127,9 +141,6 @@ const ProductManagement = () => {
     await fetchData();
   };
 
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   return (
     <Box>
       <Stack>
@@ -184,119 +195,102 @@ const ProductManagement = () => {
           </Button>
 
           <Divider mt={"10px"} />
-          {product.map((item) => {
-            const active = item.isactive;
-            const newPrice = item.price - item.admin_discount;
-            return (
-              <Box key={item.id}>
-                <Card
-                  key={item.id}
-                  ml={{ base: "32px", lg: "48px" }}
-                  // w={isLargerThanMD ? "800px" : "400px"}
-                  w={{ base: "680px", lg: "800px" }}
-                  mt={"20px"}
-                  boxShadow={"lg"}
-                  border={"2px"}
-                  borderColor={item.isactive ? "gray.100" : "red"} // Add conditional styling
-                >
-                  <CardBody>
-                    <Flex>
-                      <Image
-                        src={getImage(item.product_img)}
-                        alt="sayur"
-                        w={"200px"}
-                        h={"200px"}
-                        borderRadius="lg"
-                      />
-                      <Stack mt="6" spacing="3">
-                        <Heading
-                          color={item.isactive ? "green" : "red"}
-                          textDecoration={item.isactive ? "" : "line-through"}
-                        >
-                          {item.Category?.name}
-                        </Heading>
-                        <Text>{item.name}</Text>
-                        <Flex gap={2} fontSize={"12px"}>
-                          <Text
-                            textDecoration={item.isactive ? "" : "line-through"}
-                            fontWeight={"bold"}
-                          >
-                            Rp. {item.price}
-                          </Text>
-                          <Text
-                            textAlign={"center"}
-                            fontWeight={"bold"}
-                            textDecoration={"line-through"}
-                            color={"#9b9b9b"}
-                          >
-                            {item.admin_discount > 0
-                              ? `Rp. ${item.admin_discount}`
-                              : ""}
-                          </Text>
-                        </Flex>
 
-                        <Text
-                          textDecoration={item.isactive ? "" : "line-through"}
-                          fontSize="2xl"
-                        >
-                          Rp.{newPrice}
-                        </Text>
-                        <Text>{item.description}</Text>
-                      </Stack>
-                      <Box right={10} top={50} position={"absolute"}>
-                        <Stack>
+          <TableContainer mt={"10px"}>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th>Name</Th>
+                  <Th>Price</Th>
+                  <Th>Admin Discount</Th>
+                  <Th>Weight</Th>
+                  <Th>Product IMG</Th>
+                  <Th>Status</Th>
+                  <Th>Action</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {product.map(
+                  (item) => (
+                    <Tr key={item.id}>
+                      <Td>{item.Category?.name}</Td>
+                      <Td>{item.name}</Td>
+                      <Td>{item.price}</Td>
+                      <Td>{item.admin_discount}</Td>
+                      <Td>{item.weight} Kg</Td>
+                      <Td>
+                        <Flex>
+                          <ButtonChangeProductPicture
+                            item={item}
+                            setModalClosedTrigger={setModalClosedTrigger}
+                          />
+                          <ButtonViewProductPicture item={item} />
+                        </Flex>
+                      </Td>
+                      <Td textColor={item.isactive ? "black" : "red"}>
+                        {item.isactive ? "Enable" : "Disable"}
+                      </Td>
+                      <Td>
+                        <Flex>
                           <ButtonEditProduct
                             setModalClosedTrigger={setModalClosedTrigger}
                             id={item.id}
+                            item={item}
                           />
                           {item.isactive ? (
-                            <IconButton
-                              color={"red"}
-                              mt={"12px"}
-                              variant={""}
-                              icon={
-                                <RxCross1
-                                  size={"md"}
-                                  onClick={() => deactive(item)}
-                                />
-                              }
-                            />
+                            <Button variant={""} onClick={() => deactive(item)}>
+                              Disable
+                            </Button>
                           ) : (
+                            // <IconButton
+                            //   color={"red"}
+                            //   mt={"12px"}
+                            //   variant={""}
+                            //   icon={
+                            //     <RxCross1
+                            //       size={"sm"}
+                            //       onClick={() => deactive(item)}
+                            //     />
+                            //   }
+                            // />
                             <Box>
-                              <Stack>
+                              <Flex>
                                 <IconButton
                                   color={"green"}
                                   variant={""}
-                                  mt={"12px"}
+                                  // mt={"10px"}
                                   icon={
                                     <FaCheck
-                                      size={"md"}
+                                      // size={"sm"}
                                       onClick={() => restore(item)}
                                     />
                                   }
                                 />
                                 <IconButton
-                                  mt={"24px"}
+                                  // mt={"22px"}
                                   color={"red"}
                                   variant={""}
                                   icon={
                                     <FaTrashCan
-                                      size={"md"}
                                       onClick={() => handleDeleteProduct(item)}
                                     />
                                   }
                                 />
-                              </Stack>
+                              </Flex>
                             </Box>
                           )}
-                        </Stack>
-                      </Box>
-                    </Flex>
-                  </CardBody>
-                </Card>
-              </Box>
-            );
-          })}
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  )
+                  // const active = item.isactive;
+                  // const newPrice = item.price - item.admin_discount;
+                )}
+              </Tbody>
+              <Tfoot></Tfoot>
+            </Table>
+          </TableContainer>
           <Box ml={{ base: "8em", lg: "10em" }} mt={"20px"}>
             <Button
               variant={"ghost"}

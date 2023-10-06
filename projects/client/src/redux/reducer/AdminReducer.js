@@ -299,6 +299,32 @@ export const branchUserCancel = (item) => {
     }
   }
 }
+export const branchUserConfirm = (item) => {
+  return async(dispatch) => {
+    console.log("user confirm reducer masuk ", item)
+    console.log("id dari branch", item.id)
+    const transaction_id = item.id
+    console.log("inimi", transaction_id)
+    try { 
+      const response = await axios.patch(`${URL_API}/admin/branch/confirm/${transaction_id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+export const branchSendOrder = (item) => {
+  return async(dispatch) => {
+    console.log("user send reducer masuk ", item)
+    console.log("id dari branch", item.id)
+    const transaction_id = item.id
+    console.log("inimi", transaction_id)
+    try { 
+      const response = await axios.patch(`${URL_API}/admin/branch/send/${transaction_id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 
 
 

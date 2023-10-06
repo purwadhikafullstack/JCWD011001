@@ -11,7 +11,7 @@ router.get("/branch-admin", adminController.getBranchAdmin);
 router.patch("/branch-admin/:id", adminController.deleteBranchAdmin);
 router.get("/product", adminController.fetchProduct)
 router.delete("/product/:productId", adminController.deleteProduct)
-router.patch("/stock",verifyToken, adminController.updateStock)
+// router.patch("/stock",verifyToken, adminController.updateStock)
 router.post("/branch/stock", verifyToken, adminController.branchStock)
 router.get("/product/branch",verifyToken, adminController.getStockBranch)
 router.patch("/delete/:id", adminController.deActiveProductBranch)
@@ -20,4 +20,6 @@ router.get("/branch/user", adminController.getUsers)
 router.get("/branch/user/transaction/:user_id", adminController.getUserTransaction)
 router.patch("/branch/cancel/:transaction_id", adminController.cancelUserTransaction)
 router.get("/branch/transaction", adminController.getAllTransaction)
+router.patch("/branch/confirm/:transaction_id", adminController.confirmUserOrder)
+router.patch("/branch/send/:transaction_id", adminController.sendUserOrder)
 module.exports = router;
