@@ -172,16 +172,6 @@ const adminController = {
     }
   },
 
-  // getAdminsById: async (req, res) => {
-  //   try {
-  //     const { id } = req.params.id;
-  //     const admin = await Admin.findOne({ where: { id: id } });
-  //     return res.status(200).json({ message: "Admin retrieved successfully", data: admin });
-  //   } catch (error) {
-  //     return res.status(500).json({ message: "Failed to retrieve admin", error: error.message });
-  //   }
-  // },
-
   deleteBranchAdmin: async (req, res) => {
     try {
       const { id } = req.params;

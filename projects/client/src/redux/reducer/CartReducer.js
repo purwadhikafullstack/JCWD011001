@@ -58,13 +58,6 @@ export const CartReducer = createSlice({
         state.cart.splice(existCart, 1);
       }
     },
-    // deleteItemCart: (state, action) => {
-    //   const { id } = action.payload;
-    //   const existCart = state.cart.findIndex((item) => item.id === id);
-    //   state.totalHarga -=
-    //     action.payload.price * state.cart[existCart].quantity;
-    //   state.cart.splice(existCart, 1);
-    // },
   },
 });
 export const getItem = (store_id) => {
@@ -102,15 +95,9 @@ export const getCart = () => {
 export const addCart = (products,store_id, Swal) => {
   return async (dispatch) => {
     const dataProduct = products.Product || products;
-    console.log("data ", dataProduct)
-    console.log("precs", products.price)
     const discount = products.price - products.admin_discount
-    console.log("harga baru setelah diskon ", discount)
     const total_price = discount;
     const productId = dataProduct.product_id || dataProduct.id;
-    console.log("id", productId);
-    console.log("total", total_price)
-    console.log("store reducer ", store_id)
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(
@@ -139,7 +126,6 @@ export const addQuantity = (products, Swal) => {
     const productId = products.product_id
     const total_price = products.price
     const store_id = products.store_id
-    console.log("quantity add", products.store_id)
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(
@@ -159,9 +145,6 @@ export const addQuantity = (products, Swal) => {
 
 export const deleteItem = (products) => {
   return async (dispatch) => {
-    console.log("del ", products);
-    console.log("del ", products.id);
-    console.log("del id ", products.product_id);
     const token = localStorage.getItem("token");
     const total_price = products.price;
     try {
@@ -182,14 +165,10 @@ export const deleteItem = (products) => {
 
 export const deleteItemFromCart = (products) => {
   return async (dispatch) => {
-    console.log("delete from",products)
     const dataProduct = products.Product || products
     const item = products.product_id;
-    console.log("item", item)
-    console.log("data delete", dataProduct)
     const total_price = dataProduct.price
     const productId = dataProduct.product_id || item
-    console.log("id delete", productId)
     const token = localStorage.getItem("token")
     try {
       const result = await axios.delete(`${URL_API}/cart/item/delete/${productId}`, 

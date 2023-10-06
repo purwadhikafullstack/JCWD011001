@@ -6,8 +6,8 @@ import {
   IoCreateOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import getImage from "../../../utils/getImage";
 import DeleteCategoryModal from "./DeleteCategoryModal";
-import getImage from "../../getImage/getImage";
 import EditCategoryModal from "./EditCategoryModal";
 
 const CategoryList = () => {

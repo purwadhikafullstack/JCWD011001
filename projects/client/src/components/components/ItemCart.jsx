@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text, Card, CardBody } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import getImage from "../getImage/getImage";
+import getImage from "../../utils/getImage";
+
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const ItemCart = ({ products, setTotalWeight, totalWeight }) => {

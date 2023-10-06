@@ -1,5 +1,6 @@
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react'
+import UserOrderList from './UserOrderList';
 
 const Transaction = () => {
   return (
@@ -23,7 +24,7 @@ const Transaction = () => {
         </Box>
       </Box>
       <Box w={"full"}>
-        {/* <AdminList /> */}
+        <UserOrderList />
       </Box>
     </Box>
   );

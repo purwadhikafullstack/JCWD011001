@@ -50,6 +50,7 @@ const Checkout = () => {
   const nameExist = user.name ? user.name : user.username;
   const [totalWeight, setTotalWeight] = useState(0);
   const [deliveryPrice, setDeliveryprice] = useState(0);
+  const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
   let product_price = 0;
   product_price = carts?.total_price || 0;
 
@@ -111,6 +112,14 @@ const Checkout = () => {
   useEffect(() => {
     dispatch(getCart());
   }, [item]);
+
+  useEffect(() => {
+    if (deliveryPrice > 0) {
+      setIsCheckoutDisabled(false);
+    } else {
+      setIsCheckoutDisabled(true);
+    }
+  }, [deliveryPrice]);
 
   return (
     <Box>
@@ -286,9 +295,15 @@ const Checkout = () => {
                   _hover={{ bg: "brand.hover" }}
                   _active={{ bg: "brand.active" }}
                   mt={8}
+                  isDisabled={isCheckoutDisabled}
                 >
                   Checkout
                 </Button>
+                {!deliveryPrice && (
+                  <Text color="red.500" fontSize={"sm"} fontStyle={"italic"} mt={2}>
+                    *Please select a delivery option to proceed.
+                  </Text>
+                )}
               </Box>
             </Box>
           </Flex>

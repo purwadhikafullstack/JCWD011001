@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getBranchAdmin } from "../../../redux/reducer/AdminReducer";
-import { Box, Table, Thead, Tr, Th, Tbody, Td, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
-import { IoChevronDownOutline, IoChevronUpOutline, IoTrashOutline } from "react-icons/io5";
+import {
+  Box,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Flex,
+  IconButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { IoTrashOutline } from "react-icons/io5";
 import DeleteAdminModal from "./DeleteAdminModal";
 
 const AdminList = () => {
@@ -25,21 +36,9 @@ const AdminList = () => {
       <Table variant="simple" colorScheme="green">
         <Thead>
           <Tr>
-            <Th>
-              <Flex alignItems={"center"} gap={1}>
-                Admin Name
-              </Flex>
-            </Th>
-            <Th>
-              <Flex alignItems={"center"} gap={1}>
-                Email
-              </Flex>
-            </Th>
-            <Th>
-              <Flex alignItems={"center"} gap={1}>
-                Branch
-              </Flex>
-            </Th>
+            <Th>Admin Name</Th>
+            <Th>Email</Th>
+            <Th>Branch</Th>
             <Th></Th>
           </Tr>
         </Thead>

@@ -43,7 +43,6 @@ const ProductDetail = () => {
   const getProductStock = async (id) => {
     try {
       const { data } = await axios.get(`${URL_API}/product/stock?id=${id}`);
-      console.log("ini data stock", data.data);
       await setStock(data.data);
     } catch (error) {
       console.log(error);
@@ -51,12 +50,8 @@ const ProductDetail = () => {
   };
   const getItemDetails = async (id) => {
     try {
-      console.log("get di item detais", id);
       const response = await axios.get(`${URL_API}/product/item/detail/${id}`);
-      console.log("data get item", response);
-      console.log("data get item productBranc", response.data.ProductBranch);
       setBranchProduct(response.data.ProductBranch);
-      console.log("data get item", response.data.Item);
       setSold(response.data.Item);
     } catch (error) {
       console.log(error);
@@ -79,9 +74,6 @@ const ProductDetail = () => {
     }
   };
   const inCart = async (products, store_id) => {
-    console.log("product list", products);
-    console.log("product list discount admin", products.admin_discount);
-    console.log("Store_id di kirim", store_id);
     await dispatch(addToCart(products));
     await dispatch(addCart(products, store_id, Swal));
     await dispatch(getItem(store_id));
@@ -92,12 +84,8 @@ const ProductDetail = () => {
     getProductDetail();
   }, [store_id, id]);
 
-  console.log("store_id", store_id);
-
   if (!product) return <Notfound />;
 
-  // console.log("sollddd", sold.quantity);
-  // console.log("pbrwew", branchProduct.quantity);
   return (
     <Box width={"50%"} mx={"auto"} mt={4}>
       <Box mb={4}>

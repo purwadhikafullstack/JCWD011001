@@ -161,7 +161,6 @@ export const getBranchAdmin = () => {
     try {
       const { data } = await axios.get(`${URL_API}/admin/branch-admin`);
       const activeBranchAdmins = data.data.filter((item) => item.isactive === true);
-      console.log(activeBranchAdmins);
       dispatch(setAdmin(activeBranchAdmins));
     } catch (error) {
       console.log(error);

@@ -19,13 +19,12 @@ import ButtonChangeGender from "../components/ButtonChangeGender";
 import ButtonChangeBirthdate from "../components/ButtonChangeBirthdate";
 import { IoPencil } from "react-icons/io5";
 import ChangeProfilePicture from "../user/ChangeProfilePicture";
-import getImage from "../getImage/getImage";
+import getImage from "../../utils/getImage";
 import { useState } from "react";
 
 export default function UserProfile() {
   const { user } = useSelector((state) => state.AuthReducer);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isHovered, setIsHovered] = useState(false);
   return (
     <>
       <Navbar />
@@ -46,23 +45,19 @@ export default function UserProfile() {
                 size={{ base: "xl", md: "2xl" }}
                 name={user.username}
                 src={getImage(user.profileimg)}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
                 style={{
                   boxShadow: "0 0 0 2px white, 0 0 0 4px #59981A",
                 }}
               >
-                {isHovered && (
-                  <AvatarBadge
-                    onClick={onOpen}
-                    as={IconButton}
-                    size="sm"
-                    bottom="5px"
-                    colorScheme="gray"
-                    aria-label="Edit Image"
-                    icon={<IoPencil />}
-                  />
-                )}
+                <AvatarBadge
+                  onClick={onOpen}
+                  as={IconButton}
+                  size="sm"
+                  bottom="5px"
+                  colorScheme="gray"
+                  aria-label="Edit Image"
+                  icon={<IoPencil />}
+                />
               </Avatar>
             </Box>
             <Box mt={"30px"}>

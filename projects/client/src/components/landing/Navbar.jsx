@@ -29,7 +29,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { getItem } from "../../redux/reducer/CartReducer";
 import { logoutAuth } from "../../redux/reducer/AuthReducer";
-import getImage from "../getImage/getImage";
+import getImage from "../../utils/getImage";
 import NavMenu from "./NavMenu";
 import { HiMenu } from "react-icons/hi";
 
