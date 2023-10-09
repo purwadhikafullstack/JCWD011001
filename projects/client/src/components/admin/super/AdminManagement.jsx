@@ -12,7 +12,6 @@ const AdminManagement = () => {
   return (
     <Box w={"full"} minH={"100vh"}>
       <Box
-        h={"62px"}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}

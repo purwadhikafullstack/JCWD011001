@@ -11,11 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { IoTrashOutline } from "react-icons/io5";
 import DeleteVoucherModal from "./DeleteVoucherModal";
-
-const formatDate = (dateString) => {
-  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
+import dateFormatter from "../../../utils/dateFormatter";
 
 const VoucherList = () => {
   const dispatch = useDispatch();
@@ -51,7 +47,7 @@ const VoucherList = () => {
             rounded={"lg"}
             p={4}
             boxShadow={"lg"}
-            w={{ base: "100%", lg: "31%" }}
+            w={{ base: "100%", lg: "340px" }}
           >
             <Text mb={4} fontSize={"lg"} fontWeight={"bold"}>
               {voucher.name}
@@ -62,11 +58,11 @@ const VoucherList = () => {
             <Text my={4} color={"gray.500"}>
               {voucher.description}
             </Text>
-            <Flex justify={"space-between"} alignItems={"center"}>
+            <Flex justify={"space-between"} alignItems={"center"} gap={4} wrap={"wrap"}>
               <Text
                 color={isExpired(voucher.expired) ? "red" : "inherit"}
               >
-                Expired: {formatDate(voucher.expired)}
+                Expired: {dateFormatter(voucher.expired)}
               </Text>
               <IconButton
                 variant={"ghost"}

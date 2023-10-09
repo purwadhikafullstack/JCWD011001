@@ -271,48 +271,6 @@ const transactionController = {
       return res.status(500).json({ message: "Failed", error: error.message });
     }
   },
-
-  getAllUserTransaction: async (req, res) => {
-    try {
-      const { page = 1, limit = 5, order = "DESC", orderBy = "id", startDate, endDate } = req.query;
-      let filter = {};
-      if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
-      if (endDate) filter.createdAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
-      if (startDate && endDate) {
-        filter = {
-          createdAt: { [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)] },
-        };
-      }
-      const pagination = setPagination(limit, page);
-      const totalTransaction = await Transaction.count({
-        where: {
-          status: { [Op.lt]: 5 },
-          ...filter,
-        },
-      });
-      const totalPage = Math.ceil(totalTransaction / +limit);
-      const transaction = await Transaction.findAll({
-        where: {
-          status: { [Op.lt]: 5 },
-          ...filter,
-        },
-        ...pagination,
-        order: [[orderBy, order]],
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-      });
-      res.status(200).json({ message: "Success", totalPage, data: transaction });
-    } catch (error) {
-      res.status(500).json({ message: "Get Transaction Failed", error: error.message });
-    }
-  },
-
-  getAllFinishedUserTransaction: async (req, res) => {
-    try {
-      const { page = 1, limit = 5, order = "DESC", orderBy = "id", startDate, endDate } = req.query;
-    } catch (error) {
-      return res.status(500).json({ message: "Failed", error: error.message });
-    }
-  },
 };
 
 module.exports = transactionController;

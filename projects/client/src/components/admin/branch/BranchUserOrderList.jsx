@@ -1,118 +1,82 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  Flex,
-  FormLabel,
-  Icon,
-  Input,
-  Select,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useMediaQuery,
-  useToast,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllUserOrder,
-  getStoreData,
-} from "../../../redux/reducer/UserOrderReducer";
-import dateFormatter from "../../../utils/dateFormatter";
-import UserOrderDetail from "./UserOrderDetail";
-import orderStatus from "../../../utils/orderStatus";
-import { OrderPagination } from "./OrderPagination";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, FormLabel, Icon, Input, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react'
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { getBranchUserOrder } from '../../../redux/reducer/UserOrderReducer';
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { OrderPagination } from '../super/OrderPagination';
+import UserOrderDetail from '../super/UserOrderDetail';
+import dateFormatter from '../../../utils/dateFormatter';
+import orderStatus from '../../../utils/orderStatus';
 
-const UserOrderList = () => {
-  const dispatch = useDispatch();
-  const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { page } = useSelector((state) => state.UserOrderReducer);
-  const { allUserOrder } = useSelector((state) => state.UserOrderReducer);
-  const { storeData } = useSelector((state) => state.UserOrderReducer);
-  const [orderId, setOrderId] = useState(null);
-  const [index, setIndex] = useState(1);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [orderBy, setOrderBy] = useState("");
-  const [order, setOrder] = useState("desc");
-  const [storeId, setStoreId] = useState("");
-  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+const BranchUserOrderList = () => {
+    const dispatch = useDispatch();
+    const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { store_id } = useParams();
+    const { page } = useSelector((state) => state.UserOrderReducer);
+    const { branchUserOrder } = useSelector((state) => state.UserOrderReducer);
+    const [orderId, setOrderId] = useState(null);
+    const [index, setIndex] = useState(1);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [orderBy, setOrderBy] = useState("");
+    const [order, setOrder] = useState("desc");
+    const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
-  const handleOrderDetail = (orderId) => {
-    setOrderId(orderId);
-    onOpen();
-  };
-
-  useEffect(() => {
-    dispatch(getStoreData());
-  }, []);
-
-  useEffect(() => {
-    dispatch(
-      getAllUserOrder({ index, startDate, endDate, orderBy, order, storeId })
-    );
-  }, [index, startDate, endDate, orderBy, order, storeId]);
-
-  const handleFilterClick = () => {
-    const startDateValue = document.getElementById("startDate").value;
-    const endDateValue = document.getElementById("endDate").value;
-    const storeIdValue = document.getElementById("store").value;
-
-    setStartDate(startDateValue);
-    setEndDate(endDateValue);
-    setStoreId(storeIdValue);
-
-    if (startDateValue && endDateValue && startDateValue > endDateValue) {
-      toast({
-        title: "Error",
-        description: "End Date cannot be earlier than Start Date",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    const filter = {
-      index,
-      startDate,
-      endDate,
-      orderBy,
-      order,
-      storeId,
+    const handleOrderDetail = (orderId) => {
+      setOrderId(orderId);
+      onOpen();
     };
 
-    dispatch(getAllUserOrder(filter));
-  };
+    useEffect(() => {
+      dispatch(getBranchUserOrder({ index, startDate, endDate, orderBy, order, store_id }));
+    }, [index, startDate, endDate, orderBy, order]);
 
-  const handleClearDate = () => {
-    document.getElementById("startDate").value = "";
-    document.getElementById("endDate").value = "";
-    document.getElementById("store").value = "";
-    dispatch(
-      getAllUserOrder({
+    const handleFilterClick = () => {
+      const startDateValue = document.getElementById("startDate").value;
+      const endDateValue = document.getElementById("endDate").value;
+
+      setStartDate(startDateValue);
+      setEndDate(endDateValue);
+
+      if (startDateValue && endDateValue && startDateValue > endDateValue) {
+        toast({
+          title: "Error",
+          description: "End Date cannot be earlier than Start Date",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      const filter = {
         index,
-        startDate: "",
-        endDate: "",
+        startDate,
+        endDate,
         orderBy,
         order,
-        storeId: "",
-      })
-    );
-  };
+        store_id,
+      };
 
+      dispatch(getBranchUserOrder(filter));
+    };
+
+    const handleClearDate = () => {
+      document.getElementById("startDate").value = "";
+      document.getElementById("endDate").value = "";
+      dispatch(
+        getBranchUserOrder({
+          index,
+          startDate: "",
+          endDate: "",
+          orderBy,
+          order,
+          store_id,
+        })
+      );
+    };
   return (
     <>
       <Accordion allowToggle mb={8}>
@@ -185,22 +149,6 @@ const UserOrderList = () => {
                   id="endDate"
                 />
               </Box>
-              <Box>
-                <FormLabel fontSize={{ base: "sm", md: "md" }} htmlFor="store">
-                  Store
-                </FormLabel>
-                <Select
-                  size={{ base: "sm", md: "md" }}
-                  placeholder="All Store"
-                  id="store"
-                >
-                  {storeData.map((store) => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
-                </Select>
-              </Box>
               <Box gap={2}>
                 <Button
                   size={{ base: "sm", md: "md" }}
@@ -226,31 +174,30 @@ const UserOrderList = () => {
         </AccordionItem>
       </Accordion>
       <Box w={"full"} minH={"100vh"}>
-        {allUserOrder.length > 0 ? (
+        {branchUserOrder.length > 0 ? (
           <Table variant="simple" colorScheme="green">
             <Thead>
               <Tr>
                 <Th>Invoice ID</Th>
                 {isLargerThan768 && <Th>User</Th>}
                 <Th>Date</Th>
-                {isLargerThan768 && <Th>Status</Th>}
+                <Th>Status</Th>
                 <Th>Detail</Th>
+                <Th>Action</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {allUserOrder.map((order) => (
+              {branchUserOrder.map((order) => (
                 <Tr key={order.id}>
                   <Td>
-                    {order.user_id}
                     {order.id}
+                    {order.user_id}
                   </Td>
                   {isLargerThan768 && <Td>{order.name}</Td>}
                   <Td>{dateFormatter(order.createdAt)}</Td>
-                  {isLargerThan768 && (
-                    <Td color={orderStatus[order.status].color}>
-                      {orderStatus[order.status].status}
-                    </Td>
-                  )}
+                  <Td color={orderStatus[order.status].color}>
+                    {orderStatus[order?.status]?.status}
+                  </Td>
                   <Td>
                     <Button
                       onClick={() => handleOrderDetail(order.id)}
@@ -259,6 +206,7 @@ const UserOrderList = () => {
                       Detail
                     </Button>
                   </Td>
+                  <Td><Button>Action</Button></Td>
                 </Tr>
               ))}
             </Tbody>
@@ -285,15 +233,10 @@ const UserOrderList = () => {
         {page > 1 && (
           <OrderPagination page={page} index={index} setIndex={setIndex} />
         )}
-        <UserOrderDetail
-          isOpen={isOpen}
-          onClose={onClose}
-          orderId={orderId}
-          storeId={storeId}
-        />
+        <UserOrderDetail isOpen={isOpen} onClose={onClose} orderId={orderId} />
       </Box>
     </>
   );
-};
+}
 
-export default UserOrderList;
+export default BranchUserOrderList

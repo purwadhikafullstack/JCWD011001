@@ -1,8 +1,8 @@
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react'
-import UserOrderList from './UserOrderList';
+import ChartSuper from './ChartSuper';
 
-const Transaction = () => {
+const HomeDashboard = () => {
   return (
     <Box w={"full"} minH={"100vh"}>
       <Box
@@ -18,15 +18,15 @@ const Transaction = () => {
       >
         <Box>
           <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
-            User Transaction
+            Home
           </Text>
         </Box>
       </Box>
       <Box w={"full"}>
-        <UserOrderList />
+        <ChartSuper />
       </Box>
     </Box>
   );
 }
 
-export default Transaction
+export default HomeDashboard

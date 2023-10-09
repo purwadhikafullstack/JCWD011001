@@ -8,6 +8,7 @@ import {
   IoBarChartOutline,
   IoGridOutline,
   IoBagCheckOutline,
+  IoHomeOutline,
 } from "react-icons/io5";
 import MenuDashboard from "../../components/admin/MenuDashboard";
 import UserTransaction from "../../components/admin/branch/UserTransaction";
@@ -18,11 +19,14 @@ import BranchSalesReport from "../../components/admin/branch/BranchSalesReport";
 import NavbarAdmin from "../../components/admin/NavbarAdmin";
 import StockManagement from "../../components/admin/branch/StockManagement";
 import OrderUser from "../../components/admin/branch/OrderUser";
+import HomeBranchDashboard from "../../components/admin/branch/HomeBranchDashboard";
 
 const BranchDashboard = () => {
-  const [activePage, setActivePage] = useState("transaction");
+  const [activePage, setActivePage] = useState("home");
   const renderPage = () => {
     switch (activePage) {
+      case "home":
+        return <HomeBranchDashboard />;
       case "transaction":
         return <UserTransaction />;
       case "product":
@@ -46,7 +50,9 @@ const BranchDashboard = () => {
       <NavbarAdmin title="Branch Admin Dashboard" />
       <Flex flexDir={{ base: "column", md: "row" }}>
         <Box
-          w={{ base: "100%", md: "400px" }}
+          pos={"fixed"}
+          zIndex={10}
+          w={{ base: "100%", md: "260px" }}
           bg={"brand.main"}
           color="white"
           minH={{ md: "100vh" }}
@@ -57,6 +63,11 @@ const BranchDashboard = () => {
             direction={{ base: "row", md: "column" }}
             w={"full"}
           >
+            <MenuDashboard
+              onClick={() => setActivePage("home")}
+              icon={IoHomeOutline}
+              name="Home"
+            />
             <MenuDashboard
               onClick={() => setActivePage("transaction")}
               icon={IoCartOutline}
@@ -94,7 +105,7 @@ const BranchDashboard = () => {
             />
           </Stack>
         </Box>
-        <Box w={"full"} mt={{ base: "20px", md: "60px" }}>
+        <Box w={"full"} ml={{ md: "260px" }} mt={{ base: "116px", md: "60px" }}>
           {renderPage()}
         </Box>
       </Flex>

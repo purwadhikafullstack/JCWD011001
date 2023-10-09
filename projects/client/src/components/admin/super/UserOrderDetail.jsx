@@ -30,7 +30,7 @@ const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
 
   const handleClose = () => {
     onClose();
-    dispatch(clearOrderItem());
+    // dispatch(clearOrderItem());
   };
 
   useEffect(() => {
