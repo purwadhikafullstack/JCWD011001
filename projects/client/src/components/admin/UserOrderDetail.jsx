@@ -17,11 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearOrderItem,
   getUserTransactionItem,
-} from "../../../redux/reducer/UserOrderReducer";
-import orderStatus from "../../../utils/orderStatus";
-import dateFormatter from "../../../utils/dateFormatter";
-import getImage from "../../../utils/getImage";
-import priceFormatter from "../../../utils/priceFormatter";
+} from "../../redux/reducer/UserOrderReducer";
+import orderStatus from "../../utils/orderStatus";
+import dateFormatter from "../../utils/dateFormatter";
+import getImage from "../../utils/getImage";
+import priceFormatter from "../../utils/priceFormatter";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 
 const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
@@ -68,13 +68,9 @@ const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      size={{ base: "md", md: "2xl" }}
-    >
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent p={4}>
         <ModalHeader>
           <Text fontSize={"xl"} fontWeight={700}>
             Order #{orderItem.user_id}
@@ -84,13 +80,7 @@ const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
         <ModalCloseButton />
         <ModalBody>
           <Box display={"flex"} flexDir={"column"} gap={4}>
-            <Box
-              w={"full"}
-              display={"flex"}
-              flexDir={{ base: "column", md: "row" }}
-              justifyContent={{ base: "flex-end", md: "space-between" }}
-              alignItems={{ md: "center" }}
-            >
+            <Box>
               <Text fontWeight="bold">{orderItem.Store?.name}</Text>
               <Text>{dateFormatter(orderItem.createdAt)}</Text>
               <Text
@@ -115,30 +105,65 @@ const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
               <Text>Discount: {priceFormatter(orderItem.total_discount)}</Text>
             </Box>
             <Box>
+              <Text fontWeight="bold">Payment Receipt:</Text>
+              {orderItem?.transaction_img ? (
+                <Image
+                  src={getImage(orderItem?.transaction_img)}
+                  alt={`Receipt #${orderItem.user_id}${orderItem.id}`}
+                  w={"full"}
+                />
+              ) : (
+                <Text fontStyle={"italic"} color={"gray.500"}>
+                  {orderItem.name} has not uploaded the receipt
+                </Text>
+              )}
+            </Box>
+            <Box>
               <Text fontWeight="bold">Product Data:</Text>
-              {orderItem.Transactionitems?.map((transactionItem, index) => (
-                <Box key={transactionItem.id}>
-                  <Box display={"flex"} alignItems={"center"} gap={4}>
-                    {transactionItem.Product.product_img && (
-                      <Image
-                        src={getImage(transactionItem.Product.product_img)}
-                        alt={transactionItem.Product.name}
-                        style={{ maxWidth: "100px", maxHeight: "100px" }}
-                      />
-                    )}
-                    <Box>
-                      <Text>{transactionItem.Product.name}</Text>
-                      <Text>Qty: {transactionItem.quantity}</Text>
-                      <Text>
-                        {priceFormatter(transactionItem.Product.price)}
-                      </Text>
+              {orderItem.Transactionitems?.map((transactionItem, index) => {
+                const hasDiscount = transactionItem.Product.admin_discount > 0;
+                const discountedPrice = hasDiscount
+                  ? transactionItem.Product.price -
+                    transactionItem.Product.admin_discount
+                  : null;
+
+                return (
+                  <Box key={transactionItem.id}>
+                    <Box display={"flex"} alignItems={"center"} gap={4}>
+                      {transactionItem.Product.product_img && (
+                        <Image
+                          src={getImage(transactionItem.Product.product_img)}
+                          alt={transactionItem.Product.name}
+                          style={{ maxWidth: "100px", maxHeight: "100px" }}
+                        />
+                      )}
+                      <Box>
+                        <Text>{transactionItem.Product.name}</Text>
+                        <Text>Qty: {transactionItem.quantity}</Text>
+                        {hasDiscount && (
+                          <Box display={"flex"} alignItems={"center"} gap={4}>
+                            <Text>{priceFormatter(discountedPrice)}</Text>
+                            <Text
+                              color={"gray.500"}
+                              textDecorationLine={"line-through"}
+                            >
+                              {priceFormatter(transactionItem.Product.price)}
+                            </Text>
+                          </Box>
+                        )}
+                        {!hasDiscount && (
+                          <Text>
+                            {priceFormatter(transactionItem.Product.price)}
+                          </Text>
+                        )}
+                      </Box>
                     </Box>
+                    {index < orderItem.Transactionitems.length - 1 && (
+                      <Divider my={2} />
+                    )}
                   </Box>
-                  {index < orderItem.Transactionitems.length - 1 && (
-                    <Divider my={2} />
-                  )}
-                </Box>
-              ))}
+                );
+              })}
             </Box>
           </Box>
         </ModalBody>

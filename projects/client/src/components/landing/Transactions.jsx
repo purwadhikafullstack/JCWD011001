@@ -70,7 +70,7 @@ export default function Transactions() {
                   bg={"brand.main"}
                   _hover={{ bg: "brand.hover" }}
                   _active={{ bg: "brand.active" }}
-                  // isDisabled={cartLength <= 0}
+                  isDisabled={cartLength <= 0}
                 >
                   Checkout
                 </Button>

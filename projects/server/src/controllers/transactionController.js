@@ -168,7 +168,8 @@ const transactionController = {
       let total_discount = 0;
       for (const cartItem of cartItems) {
         const product = await Product.findByPk(cartItem.product_id);
-        total_discount += product.admin_discount;
+        const discountForCartItem = product.admin_discount * cartItem.quantity;
+        total_discount += discountForCartItem;
       }
 
       total_discount += voucher_discount;

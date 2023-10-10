@@ -1,11 +1,10 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, FormLabel, Icon, Input, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react'
-import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getBranchUserOrder } from '../../../redux/reducer/UserOrderReducer';
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { OrderPagination } from '../super/OrderPagination';
-import UserOrderDetail from '../super/UserOrderDetail';
+import UserOrderDetail from '../../admin/UserOrderDetail';
 import dateFormatter from '../../../utils/dateFormatter';
 import orderStatus from '../../../utils/orderStatus';
 
@@ -13,7 +12,6 @@ const BranchUserOrderList = () => {
     const dispatch = useDispatch();
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { store_id } = useParams();
     const { page } = useSelector((state) => state.UserOrderReducer);
     const { branchUserOrder } = useSelector((state) => state.UserOrderReducer);
     const [orderId, setOrderId] = useState(null);
@@ -30,7 +28,7 @@ const BranchUserOrderList = () => {
     };
 
     useEffect(() => {
-      dispatch(getBranchUserOrder({ index, startDate, endDate, orderBy, order, store_id }));
+      dispatch(getBranchUserOrder({ index, startDate, endDate, orderBy, order }));
     }, [index, startDate, endDate, orderBy, order]);
 
     const handleFilterClick = () => {
@@ -57,7 +55,6 @@ const BranchUserOrderList = () => {
         endDate,
         orderBy,
         order,
-        store_id,
       };
 
       dispatch(getBranchUserOrder(filter));
@@ -73,7 +70,6 @@ const BranchUserOrderList = () => {
           endDate: "",
           orderBy,
           order,
-          store_id,
         })
       );
     };

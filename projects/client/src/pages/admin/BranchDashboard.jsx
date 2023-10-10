@@ -52,7 +52,7 @@ const BranchDashboard = () => {
         <Box
           pos={"fixed"}
           zIndex={10}
-          w={{ base: "100%", md: "260px" }}
+          w={{ base: "100%", md: "280px" }}
           bg={"brand.main"}
           color="white"
           minH={{ md: "100vh" }}
@@ -105,7 +105,7 @@ const BranchDashboard = () => {
             />
           </Stack>
         </Box>
-        <Box w={"full"} ml={{ md: "260px" }} mt={{ base: "116px", md: "60px" }}>
+        <Box w={"full"} ml={{ md: "280px" }} mt={{ base: "116px", md: "60px" }}>
           {renderPage()}
         </Box>
       </Flex>

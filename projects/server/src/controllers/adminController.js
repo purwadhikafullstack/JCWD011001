@@ -58,6 +58,7 @@ const adminController = {
 
       let payload = {
         id: checkLogin.id,
+        store_id: checkBranch.id,
         name: checkLogin.name,
         email: checkLogin.email,
         role: checkLogin.role_id,

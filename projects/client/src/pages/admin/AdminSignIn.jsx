@@ -2,18 +2,17 @@ import {
   Box,
   Button,
   Center,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
   Spinner,
   Text,
   VStack,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import * as Yup from "yup";
@@ -23,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { loginAdmin } from "../../redux/reducer/AdminReducer";
 import { useNavigate } from "react-router-dom";
-// import ForgotPasswordModal from "../components/ForgotPasswordModal";
+import Logo from "../../assets/logo_main.png";
 
 const AdminSignIn = () => {
   const [show, setShow] = useState(false);
@@ -56,24 +55,30 @@ const AdminSignIn = () => {
       display={"flex"}
       justifyContent={"center"}
       alignItems={"center"}
-      flexDir={"column"}
       h={"100vh"}
+      bg={"gray.100"}
     >
-      <Center>
-        <Heading fontSize={"5xl"} mb={4} color={"brand.main"}>
-          Admin Page
-        </Heading>
-      </Center>
       <Box
+      bg={"white"}
         boxShadow={"lg"}
         rounded={"2xl"}
         w={{ base: "80vw", md: "60vw", lg: "40vw" }}
       >
-        <VStack spacing={"4"} px={8} py={12}>
+        <Box mt={8} display={"flex"} flexDir={"column"} alignItems={"center"} gap={2}>
+          <Image
+            w={"200px"}
+            src={Logo}
+            alt="logo"
+          />
+          <Heading fontSize={"3xl"} color={"brand.main"}>
+            Admin Page
+          </Heading>
+        </Box>
+        <VStack spacing={"4"} p={8}>
           <Box w={"full"}>
             <Text
               w={"100%"}
-              fontSize={"3xl"}
+              fontSize={"2xl"}
               display={"flex"}
               justifyContent={"flex-start"}
               fontWeight={"bold"}

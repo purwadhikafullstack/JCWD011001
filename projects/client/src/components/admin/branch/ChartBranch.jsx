@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBranchDailyOrderData } from "../../../redux/reducer/UserOrderReducer";
-import { useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import priceFormatter from "../../../utils/priceFormatter";
 import Chart from "chart.js/auto";
 
 const ChartBranch = () => {
   const dispatch = useDispatch();
-  const { store_id } = useParams();
   const { branchDailyOrderData } = useSelector(
     (state) => state.UserOrderReducer
   );
@@ -16,8 +14,8 @@ const ChartBranch = () => {
   const [branchName, setBranchName] = useState("");
 
   useEffect(() => {
-    dispatch(getBranchDailyOrderData(store_id));
-  }, [store_id]);
+    dispatch(getBranchDailyOrderData());
+  }, []);
 
   useEffect(() => {
     if (branchDailyOrderData && Object.keys(branchDailyOrderData).length > 0) {
@@ -36,7 +34,7 @@ const ChartBranch = () => {
       }
 
       chartRef.current.chart = new Chart(ctx, {
-        type: "bar",
+        type: "line",
         data: {
           labels: Object.keys(branchDailyOrderData),
           datasets: [
@@ -45,7 +43,8 @@ const ChartBranch = () => {
                 parseInt(item[branchName], 10)
               ),
               backgroundColor: "#2ecc71",
-              borderWidth: 1,
+              borderColor: "#2ecc71",
+              tension: 0.4,
             },
           ],
         },

@@ -69,7 +69,7 @@ export const getUserTransactionItem = (id) => {
     };
 };
 
-export const getBranchUserOrder = ({ index = 1, startDate, endDate, orderBy, order, store_id }) => {
+export const getBranchUserOrder = ({ index = 1, startDate, endDate, orderBy, order }) => {
     return async (dispatch) => {
         let query = `?page=${index}`;
         if (startDate) query += `&startDate=${startDate}`;
@@ -77,7 +77,9 @@ export const getBranchUserOrder = ({ index = 1, startDate, endDate, orderBy, ord
         if (orderBy) query += `&orderBy=${orderBy}`;
         if (order) query += `&order=${order}`;
         try {
-            const { data } = await axios.get(`${URL_API}/order/branch/${store_id}/${query}`);
+            const { data } = await axios.get(`${URL_API}/order/branch/${query}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
             dispatch(setPage(data.totalPage));
             dispatch(setBranchUserOrder(data.data));
         } catch (error) {
@@ -118,10 +120,12 @@ export const getDailyOrderData = () => {
     };
 };
 
-export const getBranchDailyOrderData = (store_id) => {
+export const getBranchDailyOrderData = () => {
     return async (dispatch) => {
         try {
-            const { data } = await axios.get(`${URL_API}/order/daily/${store_id}`);
+            const { data } = await axios.get(`${URL_API}/order/branch-daily`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
             await dispatch(setBranchDailyOrderData(data.data));
         } catch (error) {
             console.log(error);

@@ -29,7 +29,7 @@ import {
   getStoreData,
 } from "../../../redux/reducer/UserOrderReducer";
 import dateFormatter from "../../../utils/dateFormatter";
-import UserOrderDetail from "./UserOrderDetail";
+import UserOrderDetail from "../UserOrderDetail";
 import orderStatus from "../../../utils/orderStatus";
 import { OrderPagination } from "./OrderPagination";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";

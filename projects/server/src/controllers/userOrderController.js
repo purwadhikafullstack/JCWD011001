@@ -135,13 +135,9 @@ const userOrderController = {
           exclude: ["isactive", "createdAt", "updatedAt"],
         },
       });
-      return res
-        .status(200)
-        .json({ message: "Get Store Data Successful", stores });
+      return res.status(200).json({ message: "Get Store Data Successful", stores });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Get Store Data Failed", error: error.message });
+      return res.status(500).json({ message: "Get Store Data Failed", error: error.message });
     }
   },
 
@@ -156,7 +152,7 @@ const userOrderController = {
         endDate,
       } = req.query;
 
-      const { id } = req.params;
+      const { store_id } = req.user;
 
       let filter = {};
       if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
@@ -177,25 +173,21 @@ const userOrderController = {
       const totalTransaction = await Transaction.count({
         where: {
           ...filter,
-          store_id: id,
+          store_id: store_id,
         },
       });
       const totalPage = Math.ceil(totalTransaction / +limit);
       const transaction = await Transaction.findAll({
         where: {
           ...filter,
-          store_id: id,
+          store_id: store_id,
         },
         ...pagination,
         order: [[orderBy, order]],
       });
-      return res
-        .status(200)
-        .json({ message: "Success", totalPage, data: transaction });
+      return res.status(200).json({ message: "Success", totalPage, data: transaction });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Get Transaction Data Failed", error: error.message });
+      return res.status(500).json({ message: "Get Transaction Data Failed", error: error.message });
     }
   },
 
@@ -205,7 +197,7 @@ const userOrderController = {
       today.setHours(0, 0, 0, 0);
 
       const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 8);
       sevenDaysAgo.setHours(0, 0, 0, 0);
 
       const activeStores = await Store.findAll({
@@ -280,14 +272,14 @@ const userOrderController = {
       today.setHours(0, 0, 0, 0);
 
       const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 8);
       sevenDaysAgo.setHours(0, 0, 0, 0);
 
-      const { id } = req.params;
+      const { store_id } = req.user;
 
       const activeStore = await Store.findOne({
         where: {
-          id: id,
+          id: store_id,
           isactive: true,
         },
         attributes: ["id", "name"],
@@ -313,7 +305,7 @@ const userOrderController = {
           updatedAt: {
             [Op.between]: [sevenDaysAgo, today],
           },
-          store_id: id,
+          store_id: store_id,
         },
         group: [Sequelize.fn("DATE", Sequelize.col("updatedAt")), "store_id"],
       });

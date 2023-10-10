@@ -73,7 +73,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminSignIn />} />
           <Route path="/verification/:token" element={<Verify />} />
-          <Route path="reset-password/:token" element={<ResetPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/*" element={<Product />} />
           <Route path="/category/*" element={<Category />} />
@@ -87,7 +87,7 @@ function App() {
     if (role === 2) {
       return (
         <>
-          <Route path="/admin/branch/:store_id" element={<BranchDashboard />} />
+          <Route path="/admin/branch" element={<BranchDashboard />} />
         </>
       );
     }

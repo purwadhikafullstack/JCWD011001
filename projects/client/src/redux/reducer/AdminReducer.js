@@ -62,14 +62,13 @@ export const loginAdmin = (values, setLoading, toast, navigate) => {
         password: values.password,
       });
       const token = respon.data.token;
-      const store_id = respon.data.BranchData.id;
       localStorage.setItem("token", token);
       dispatch(setBranchAdmin(respon.data.Account));
       dispatch(loginSuccess());
       if (respon.data.Account.role_id === 1) {
         navigate("/admin/super");
       } else if (respon.data.Account.role_id === 2) {
-        navigate(`/admin/branch/${store_id}`);
+        navigate(`/admin/branch`);
       }
       toast({
         title: "Login Success",

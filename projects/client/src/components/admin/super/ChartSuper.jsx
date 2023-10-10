@@ -30,11 +30,13 @@ const ChartSuper = () => {
       label: `${branchName}`,
       data: labels.map((date) => dailyOrderData[date][branchName] || 0),
       backgroundColor: branchColors[index],
+      borderColor: branchColors[index],
+      tension: 0.4,
     }));
 
     const ctx = document.getElementById("myChart");
     chartRef.current = new Chart(ctx, {
-      type: "bar",
+      type: "line",
       data: {
         labels: labels,
         datasets: datasets,
