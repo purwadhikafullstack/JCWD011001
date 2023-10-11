@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Button,
-  IconButton,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, IconButton, useDisclosure } from "@chakra-ui/react";
 import { BiSolidEdit } from "react-icons/bi";
 import ChangeProductPicture from "./ChangeProductPicture";
 import { useState } from "react";
@@ -42,6 +35,7 @@ export default function ButtonChangeProductPicture({
 
         <Button
           variant={""}
+          size={{ base: "xl", lg: "2xl" }}
           borderRadius={"30px"}
           _hover={{ bg: "gray.300", borderRadius: "30px" }}
           onClick={onOpen}

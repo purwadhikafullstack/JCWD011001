@@ -12,7 +12,9 @@ export default function ButtonViewProductPicture({ item }) {
         <Button
           onClick={onOpen}
           variant={""}
+          size={{ base: "xl", lg: "2xl" }}
           borderRadius={"40px"}
+          ml={"1em"}
           _hover={{ bg: "brand.hover", color: "white", borderRadius: "40px" }}
         >
           View

@@ -2,6 +2,9 @@ import { Button, Flex } from "@chakra-ui/react";
 import React from "react";
 
 export const Pagination = ({ page, index, setIndex }) => {
+  console.log("page ", page);
+  console.log("index ", index);
+  // console.log("set", setIndex);
   const handlePreviousPage = () => {
     if (index > 1) {
       setIndex(index - 1);
@@ -37,7 +40,8 @@ export const Pagination = ({ page, index, setIndex }) => {
           fontWeight={700}
           color={"white"}
           bg={"#37630A"}
-          rounded={"lg"}>
+          rounded={"lg"}
+        >
           {pageNum}
         </Button>
       );
@@ -62,7 +66,8 @@ export const Pagination = ({ page, index, setIndex }) => {
         }}
         _active={{
           bg: "#2D5406",
-        }}>
+        }}
+      >
         Previous
       </Button>
       {pageButtons}
@@ -79,7 +84,8 @@ export const Pagination = ({ page, index, setIndex }) => {
         }}
         _active={{
           bg: "#2D5406",
-        }}>
+        }}
+      >
         Next
       </Button>
     </Flex>

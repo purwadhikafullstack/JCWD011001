@@ -29,6 +29,7 @@ const editProductSchema = Yup.object().shape({
   categoryId: Yup.string().required("Category is required"),
   price: Yup.number().required("Price must be number is required"),
   description: Yup.string().required("Description is required"),
+  weight: Yup.number().required("Weight is required"),
   // product_img: Yup.mixed()
   //   .required("Category Image is required")
   //   .test(
@@ -58,6 +59,7 @@ export default function ModalEditProduct({ isOpen, onClose, id, item }) {
       price: item.price || "",
       admin_discount: item.admin_discount || "",
       description: item.description || "",
+      weight: item.weight || "",
     },
     validationSchema: editProductSchema,
     onSubmit: (values) => {
@@ -121,12 +123,11 @@ export default function ModalEditProduct({ isOpen, onClose, id, item }) {
                         );
                       })}
                     </Select>
-                      {formik.touched.categoryId &&
-                        formik.errors.categoryId && (
-                          <FormErrorMessage>
-                            {formik.errors.categoryId}
-                          </FormErrorMessage>
-                        )}
+                    {formik.touched.categoryId && formik.errors.categoryId && (
+                      <FormErrorMessage>
+                        {formik.errors.categoryId}
+                      </FormErrorMessage>
+                    )}
                   </FormControl>
                   <FormControl
                     isInvalid={formik.touched.price && formik.errors.price}
@@ -195,29 +196,27 @@ export default function ModalEditProduct({ isOpen, onClose, id, item }) {
                         )}
                     </Center>
                   </FormControl>
-                  {/* <FormControl
-                    isInvalid={
-                      formik.touched.product_img && formik.errors.product_img
-                    }
+                  <FormControl
+                    isInvalid={formik.touched.weight && formik.errors.weight}
                   >
                     <Input
-                      type="file"
+                      type="textarea"
                       mt={5}
-                      accept=".jpeg, .jpg, .png, .gif"
-                      variant={""}
-                      id="product_img"
-                      name="product_img"
-                      value={formik.values.product_img}
+                      placeholder="weight"
+                      id="weight"
+                      name="weight"
+                      value={formik.values.weight}
+                      onChange={formik.handleChange}
                     ></Input>
                     <Center>
-                      {formik.touched.product_img &&
-                        formik.errors.product_img && (
-                          <FormErrorMessage>
-                            {formik.errors.product_img}
-                          </FormErrorMessage>
-                        )}
+                      {formik.touched.weight && formik.errors.weight && (
+                        <FormErrorMessage>
+                          {formik.errors.weight}
+                        </FormErrorMessage>
+                      )}
                     </Center>
-                  </FormControl> */}
+                  </FormControl>
+
                   <Input
                     type="hidden"
                     id="id"

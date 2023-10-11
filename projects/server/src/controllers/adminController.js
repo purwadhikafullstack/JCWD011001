@@ -396,8 +396,8 @@ const adminController = {
             attributes: ["name", "product_img", "price", "admin_discount"],
           },
         ],
-      });
-      return res.status(200).json({ message: "Success", data: findBranch });
+      })
+      return res.status(200).json({message : "Success", datas : findBranch})
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -516,13 +516,21 @@ const adminController = {
         twoDaysFromNow.setDate(twoDaysFromNow.getDate() + (findTransaction.duration || 2));
         await trans.update({expiredIn : twoDaysFromNow},{where : {id : transaction_id}}, {transaction : t})
       });
-      
-      // setTimeout(() => {
-      //   updateStatus(transaction_id);
-      // }, 1 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
-      // setTimeout(() => {
-      //   updateStatus(transaction_id);
-      // }, 2 * 60 * 1000); // 2 menit tester
+      // if (findTransaction.status === 3)
+
+      // if (findTransaction.expiredIn === date.now)
+      // pengecekan ke depan
+      // const isExpired = (dateString) => {
+    // const currentDate = new Date();
+    // const expiredDate = new Date(dateString);
+    // return expiredDate < currentDate;
+    // const expirationDate = new Date(expired);
+    //   const currentDate = new Date();
+// ini aku simpan di user Transaction di punya suami mbak vaya insyaAllah
+    //   if (expirationDate >= currentDate) {
+    //     return res.status(400).json({ message: "Expired date must be in the future" });
+    //   }
+  // };
   
       return res.status(200).json({ message: "Status updated to 3" });
     } catch (error) {

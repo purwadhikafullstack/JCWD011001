@@ -176,14 +176,15 @@ export const updateProduct = (values, toast, Swal) => {
   return async () => {
     const id = values.id;
     console.log("edit ", values)
-    const {newName, categoryId, price, admin_discount, description} = values
+    const {newName, categoryId, price, admin_discount, description, weigth} = values
     try {
       const data = await axios.patch(`${URL_API}/product/${id}`, { 
         newName : newName, 
         category_id : categoryId, 
         price : price,
         admin_discount : admin_discount,
-        description : description });
+        description : description,
+        weigth : weigth });
       Swal.fire({
         position: "top-end",
         icon: "success",

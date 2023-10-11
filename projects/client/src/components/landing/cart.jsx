@@ -37,6 +37,7 @@ import { useNavigate } from "react-router-dom";
 import { FaShopify } from "react-icons/fa";
 import ProductReducer from "../../redux/reducer/ProductReducer";
 import axios from "axios";
+import OnGoingCart from "./OnGoingCart";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
@@ -47,27 +48,41 @@ export default function Cart() {
   const [sold, setSold] = useState([]);
   const [idProduct, setIdProduct] = useState(0);
   const [branchProduct, setBranchProduct] = useState([]);
-  const [asli, setAsli] = useState(false);
-  console.log("asli", asli);
-  // item.map((haha) => {
-  //   console.log("haha", haha.Product?.id);
-  //   setIdProduct(haha.Product.id);
-  //   // return haha.Product?.id || 0; // Return the id or 0 if it's not available
-  // });
+
   const getImage = (image) => {
     return `${PUBLIC_URL}/${image}`;
   };
   const getItemDetails = async (id) => {
-    // const id = item.Product?.id;
     console.log("id");
     try {
       console.log("get di item detais", id);
-      const response = await axios.get(`${URL_API}/product/item/detail/${id}`);
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${id}/${store_id}`
+      );
       console.log("data get item", response);
       console.log("data get item productBranc", response.data.ProductBranch);
       setBranchProduct(response.data.ProductBranch);
       console.log("data get item", response.data.Item);
       setSold(response.data.Item);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const cekQuantity = async (products) => {
+    console.log("masukk ", products);
+    console.log("masukk ", products.product_id);
+    try {
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${products.product_id}/${store_id}}`
+      );
+      console.log("apa respon ?", response);
+      const itemQuantity = response.data.ProductBranch?.quantity;
+      console.log("QUAN", itemQuantity);
+      return false;
+      // if (products.quantity >= itemQuantity) {
+      //   return false;
+      // }
+      // return true;
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +97,7 @@ export default function Cart() {
     console.log("store depan ", products.store_id);
     await dispatch(getItem(store_id));
     await dispatch(getCart());
-    await getItemDetails(products.Product?.id);
+    // await getItemDetails(products.Product?.id);
   };
 
   const outCart = async (products) => {
@@ -90,7 +105,7 @@ export default function Cart() {
     await dispatch(deleteItem(products));
     await dispatch(getItem(store_id));
     await dispatch(getCart());
-    await getItemDetails(products.Product?.id);
+    // await getItemDetails(products.Product?.id);
   };
 
   const destroy = async (products) => {
@@ -138,6 +153,7 @@ export default function Cart() {
   useEffect(() => {
     dapat();
   }, [item]);
+  console.log("CARTS => ", item);
   return (
     <>
       <Navbar />
@@ -160,7 +176,6 @@ export default function Cart() {
                   <Box ml={"100px"}>
                     <Text>You haven't shop today, click the button below</Text>
                     <Button
-                      // bg={"brand.main"}
                       _hover={{ bg: "brand.hover", color: "white" }}
                       color={"black"}
                       onClick={() => navigate("/")}
@@ -176,68 +191,7 @@ export default function Cart() {
                 ) : (
                   item.map((products) => {
                     return (
-                      <Box key={products.id}>
-                        <Card
-                          mt={"8"}
-                          w={{
-                            base: "600px",
-                            lg: "800px",
-                          }}
-                          ml={"100px"}
-                          boxShadow={"lg"}
-                          key={products.id}
-                        >
-                          <CardBody>
-                            <Box fontWeight={"bold"} mb={"24px"}>
-                              <Text>{products.Store?.name}</Text>
-                            </Box>
-                            <Flex>
-                              <Image
-                                src={getImage(products.Product?.product_img)}
-                                w={"20%"}
-                              />
-                              <Box ml={"32px"}>
-                                <Text>{products.name}</Text>
-                                <Text fontWeight={"bold"}>
-                                  Rp. {products.price}
-                                </Text>
-                              </Box>
-                            </Flex>
-                            <Flex justify={"space-between"}>
-                              <Box>
-                                <IconButton
-                                  color={"blackAlpha.600"}
-                                  variant={""}
-                                  icon={<IoTrashOutline size={"md"} />}
-                                  onClick={() => destroy(products)}
-                                />
-                              </Box>
-                              <Box ml={{ md: "200px", lg: "400px" }}>
-                                <ButtonGroup variant={"none"}>
-                                  <IconButton
-                                    color={"red"}
-                                    icon={<AiOutlineMinusCircle />}
-                                    isDisabled={products.quantity === 1}
-                                    onClick={() => outCart(products)}
-                                  ></IconButton>
-                                  <Text fontSize={"2xl"}>
-                                    {products.quantity}
-                                  </Text>
-                                  <IconButton
-                                    color={"green"}
-                                    icon={<AiOutlinePlusCircle />}
-                                    onClick={() => inCart(products)}
-                                    isDisabled={
-                                      products.quantity >=
-                                      branchProduct.quantity
-                                    }
-                                  ></IconButton>
-                                </ButtonGroup>
-                              </Box>
-                            </Flex>
-                          </CardBody>
-                        </Card>
-                      </Box>
+                      <OnGoingCart key={products.id} products={products} />
                     );
                   })
                 )}

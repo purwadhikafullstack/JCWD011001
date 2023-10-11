@@ -39,8 +39,6 @@ const BranchDashboard = () => {
         return <BranchSalesReport />;
       case "stock":
         return <StockManagement />;
-      case "orders":
-        return <OrderUser />;
       default:
         return null;
     }
@@ -97,11 +95,6 @@ const BranchDashboard = () => {
               onClick={() => setActivePage("stock")}
               icon={IoGridOutline}
               name="Stock Management"
-            />
-            <MenuDashboard
-              onClick={() => setActivePage("orders")}
-              icon={IoBagCheckOutline}
-              name="User Order"
             />
           </Stack>
         </Box>

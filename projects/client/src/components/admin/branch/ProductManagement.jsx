@@ -1,16 +1,10 @@
 import {
-  Avatar,
-  AvatarBadge,
   Box,
   Button,
   ButtonGroup,
-  Card,
-  CardBody,
-  CardFooter,
   Center,
   Divider,
   Flex,
-  Heading,
   IconButton,
   Image,
   Input,
@@ -27,7 +21,6 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -49,8 +42,8 @@ import { destroyProduct } from "../../../redux/reducer/AdminReducer";
 import { BiSearchAlt } from "react-icons/bi";
 import ChangeProductPicture from "../../components/ChangeProductPicture";
 import ButtonChangeProductPicture from "../../components/ButtonChangeProductPicture";
-import ProductPicture from "./ProductPicture";
 import ButtonViewProductPicture from "../../components/ButtonViewProductPicture";
+import { Pagination } from "../../components/Pagination";
 
 const ProductManagement = () => {
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
@@ -60,9 +53,11 @@ const ProductManagement = () => {
   const [totalPage, setTotalPage] = useState("");
   const [orderByPrice, setOrderByPrice] = useState(false);
   const [orderBy, setOrderBy] = useState("name");
-  const [category, setCategory] = useState("");
+  const [categories, setCategory] = useState("");
   const [name, setName] = useState("");
   const [sortLabelText, setSortLabelText] = useState("Sort by price");
+  const { category } = useSelector((state) => state.CategoryReducer);
+  const [barang, setBarang] = useState([]);
 
   const [isLargerThanMD] = useMediaQuery("(min-width: 48em)");
   const handleNext = () => {
@@ -76,31 +71,45 @@ const ProductManagement = () => {
     if (page === 1) return;
     setPage(page - 1);
   };
+  const generatePageNumbers = (totalPage) => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPage; i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers;
+  };
+  const pageNumbers = generatePageNumbers(totalPage);
   const dispatch = useDispatch();
+  const orderByParam = orderByPrice ? "price" : orderBy; // Use 'price' if orderByPrice is true, otherwise use orderBy
   const fetchData = async () => {
-    const orderByParam = orderByPrice ? "price" : orderBy; // Use 'price' if orderByPrice is true, otherwise use orderBy
     const respon = await axios.get(
-      `http://localhost:8000/api/admin/product?name=${name}&limit=10&page=${page}&order=${order}&orderBy=${orderByParam}&category=${category}`
+      `http://localhost:8000/api/admin/product?name=${name}&limit=3&page=${page}&order=${order}&orderBy=${orderByParam}&category=${categories}`
     );
-    // console.log("isi", respon.data);
-    // console.log("total", respon.data.totalPage);
     setProduct(respon.data.data);
     setTotalPage(respon.data.totalPage);
   };
 
   useEffect(() => {
     fetchData();
+    // ambilData();
     if (modalClosedTrigger) {
       fetchData();
       setModalClosedTrigger(false);
     }
     // fetchData();
-  }, [page, order, orderBy, orderByPrice, category, modalClosedTrigger, name]);
+  }, [
+    page,
+    order,
+    orderBy,
+    orderByPrice,
+    categories,
+    modalClosedTrigger,
+    name,
+  ]);
 
   const handleSearch = () => {
     const name = document.getElementById("search").value;
     setName(name);
-    // if (name) dispatch(getProductSearch({ name, store_id }));
   };
   const handleOrderBy = () => {
     setOrderBy("name");
@@ -111,9 +120,9 @@ const ProductManagement = () => {
   const handleOrderByPrice = () => {
     setOrderByPrice(!orderByPrice);
     if (orderByPrice) {
-      setSortLabelText("Sort by price"); // Change the label text when sorting by price
+      setSortLabelText("Sort by price");
     } else {
-      setSortLabelText("Sort by name"); // Change the label text when sorting by name
+      setSortLabelText("Sort by name");
     }
   };
   const restore = async (item) => {
@@ -140,6 +149,9 @@ const ProductManagement = () => {
     await dispatch(deleteProduct(item, Swal));
     await fetchData();
   };
+  console.log("category masuk", category);
+  const itemsToMap = product || barang || [];
+  console.log("barangss", barang);
 
   return (
     <Box>
@@ -165,12 +177,14 @@ const ProductManagement = () => {
             <Select
               ml={{ base: "12px", lg: "48px" }}
               placeholder="All Category"
-              value={category}
+              value={categories}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value={"1"}>Vegetables</option>
-              <option value={"2"}>Fruit</option>
-              <option value={"3"}>Beverage</option>
+              {category.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
             </Select>
             <InputGroup ml={{ base: "12px", lg: "48px" }}>
               <InputLeftElement>
@@ -196,7 +210,7 @@ const ProductManagement = () => {
 
           <Divider mt={"10px"} />
 
-          <TableContainer mt={"10px"}>
+          <TableContainer mt={"10px"} fontSize={"11px"} fontWeight={"bold"}>
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -211,7 +225,7 @@ const ProductManagement = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {product.map(
+                {itemsToMap.map(
                   (item) => (
                     <Tr key={item.id}>
                       <Td>{item.Category?.name}</Td>
@@ -291,7 +305,7 @@ const ProductManagement = () => {
               <Tfoot></Tfoot>
             </Table>
           </TableContainer>
-          <Box ml={{ base: "8em", lg: "10em" }} mt={"20px"}>
+          <Box ml={{ base: "8em", lg: "380px" }} mt={"20px"}>
             <Button
               variant={"ghost"}
               _hover={{ bg: "brand.hover", color: "white" }}
@@ -300,10 +314,24 @@ const ProductManagement = () => {
             >
               Previous
             </Button>
+            {pageNumbers.map((pageNumber) => (
+              <Button
+                key={pageNumber}
+                _hover={{ bg: "brand.hover", color: "white" }}
+                ml={"0.5em"}
+                mr={"0.5em"}
+                onClick={() => setPage(pageNumber)}
+                isActive={page === pageNumber}
+                bgColor={page === pageNumber ? "red" : "brand.main"}
+                color={page === pageNumber ? "black" : "black"} // Set text color conditionally
+              >
+                {pageNumber}
+              </Button>
+            ))}
             <Button
               variant={"ghost"}
               _hover={{ bg: "brand.hover", color: "white" }}
-              ml={"20em"}
+              // ml={"20em"}
               onClick={() => handleNext()}
               isDisabled={page === totalPage}
             >

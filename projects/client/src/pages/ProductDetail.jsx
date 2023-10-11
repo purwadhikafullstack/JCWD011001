@@ -36,7 +36,9 @@ const ProductDetail = () => {
   };
   const getItemDetails = async (id) => {
     try {
-      const response = await axios.get(`${URL_API}/product/item/detail/${id}`);
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${id}/${store_id}`
+      );
       setBranchProduct(response.data.ProductBranch);
       setSold(response.data.Item);
     } catch (error) {

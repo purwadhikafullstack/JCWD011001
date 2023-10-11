@@ -229,7 +229,7 @@ const productController = {
   updateProduct: async (req, res) => {
     try {
       const { id } = req.params;
-      let { newName, category_id, price, admin_discount, description } = req.body;
+      let { newName, category_id, price, admin_discount, description, weight } = req.body;
       const findProduct = await Product.findOne({ where: { id } });
       console.log("update", findProduct);
       console.log("nama baru", newName)
@@ -245,6 +245,7 @@ const productController = {
             price,
             admin_discount,
             description,
+            weight,
           },
           { where: { id } },
           { transaction: t }
@@ -316,10 +317,10 @@ const productController = {
   },
   getItemDetail : async(req, res) => {
     try {
-      const {id} = req.params
-      const cekItem = await cartItem.findOne({where : {product_id : id}})
+      const {id, store_id} = req.params
+      const cekItem = await cartItem.findOne({where : {product_id : id, store_id}})
       console.log("adaa", cekItem)
-      const cekProduct = await ProductStore.findOne({where : {product_id : id}})
+      const cekProduct = await ProductStore.findOne({where : {product_id : id, store_id}})
       console.log("cek ", cekProduct)
       return res.status(200).json({message : "Successsss", Item : cekItem, ProductBranch : cekProduct})
     } catch (error) {
