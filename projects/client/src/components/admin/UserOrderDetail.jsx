@@ -105,7 +105,7 @@ const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
               <Text>Discount: {priceFormatter(orderItem.total_discount)}</Text>
             </Box>
             <Box>
-              <Text fontWeight="bold">Payment Receipt:</Text>
+              <Text fontWeight="bold" mb={2}>Payment Receipt:</Text>
               {orderItem?.transaction_img ? (
                 <Image
                   src={getImage(orderItem?.transaction_img)}

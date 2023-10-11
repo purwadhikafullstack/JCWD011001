@@ -321,7 +321,42 @@ export const branchSendOrder = (item) => {
   }
 }
 
-export const { setBranchAdmin, setStore, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } =
-  AdminReducer.actions;
+export const approveUserPayment = (orderId, toast) => {
+  return async() => {
+    try {
+      await axios.patch(`${URL_API}/admin/payment/approve/${orderId}`)
+      toast({
+        title: "Success",
+        description: "Payment approved",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  };
+};
+
+export const rejectUserPayment = (values, id, toast, onClose, resetForm) => {
+  return async() => {
+    try {
+      await axios.patch(`${URL_API}/admin/payment/reject/${id}`, values);
+      toast({
+        title: "Success",
+        description: "Payment rejected",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      resetForm();
+      onClose();
+    } catch (error) {
+      console.log(error)
+    }
+  };
+};
+
+export const { setBranchAdmin,setStore, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } = AdminReducer.actions;
 
 export default AdminReducer.reducer;

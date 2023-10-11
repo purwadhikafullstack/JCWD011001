@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       status: DataTypes.INTEGER,
       store_id: DataTypes.INTEGER,
       duration: DataTypes.INTEGER,
-      expiredIn: DataTypes.DATE
+      expiredIn: DataTypes.DATE,
+      message: DataTypes.STRING,
     },
     {
       sequelize,

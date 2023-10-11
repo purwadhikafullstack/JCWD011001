@@ -94,6 +94,7 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
           py={1}>
           {orderStatusArray[item.status].status}
         </Badge>
+        {item.message && <Text>Message: {item.message}</Text>}
       </Box>
       <Box>
         {products && (

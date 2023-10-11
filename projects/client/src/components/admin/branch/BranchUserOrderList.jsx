@@ -9,8 +9,11 @@ import {
   Flex,
   FormLabel,
   Icon,
-  IconButton,
   Input,
+  Menu,
+  MenuButton,
+  MenuList,
+  IconButton,
   Select,
   Table,
   Tbody,
@@ -25,7 +28,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { getBranchUserOrder } from "../../../redux/reducer/UserOrderReducer";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { OrderPagination } from "../super/OrderPagination";
 import UserOrderDetail from "../../admin/UserOrderDetail";
@@ -35,16 +38,18 @@ import Swal from "sweetalert2";
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import {
+  approveUserPayment,
   branchSendOrder,
   branchUserCancel,
   branchUserConfirm,
 } from "../../../redux/reducer/AdminReducer";
-import { getBranchUserOrder } from "../../../redux/reducer/UserOrderReducer";
+import RejectPaymentMessage from "./RejectPaymentMessage";
 
 const BranchUserOrderList = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenReject, onOpen: onOpenReject, onClose: onCloseReject } = useDisclosure();
   const { page } = useSelector((state) => state.UserOrderReducer);
   const { branchUserOrder } = useSelector((state) => state.UserOrderReducer);
   const [orderId, setOrderId] = useState(null);
@@ -59,6 +64,15 @@ const BranchUserOrderList = () => {
   const handleOrderDetail = (orderId) => {
     setOrderId(orderId);
     onOpen();
+  };
+
+  const handleApprovePayment = (orderId) => {
+    setOrderId(orderId);
+    dispatch(approveUserPayment(orderId, toast)).then(() => {
+      dispatch(
+        getBranchUserOrder({ index, startDate, endDate, orderBy, order })
+      );
+    });
   };
 
   useEffect(() => {
@@ -268,7 +282,7 @@ const BranchUserOrderList = () => {
               <Tr>
                 <Th>Invoice ID</Th>
                 {isLargerThan768 && <Th>User</Th>}
-                <Th>Date</Th>
+                {isLargerThan768 && <Th>Date</Th>}
                 <Th>Status</Th>
                 <Th>Detail</Th>
                 <Th>Action</Th>
@@ -282,7 +296,7 @@ const BranchUserOrderList = () => {
                     {order.user_id}
                   </Td>
                   {isLargerThan768 && <Td>{order.name}</Td>}
-                  <Td>{dateFormatter(order.createdAt)}</Td>
+                  {isLargerThan768 && <Td>{dateFormatter(order.createdAt)}</Td>}
                   <Td color={orderStatus[order.status].color}>
                     {orderStatus[order?.status]?.status}
                   </Td>
@@ -295,9 +309,7 @@ const BranchUserOrderList = () => {
                     </Button>
                   </Td>
                   <Td>
-                    <Td>
-                      {order.status === 0 ? (
-                        <Box>
+                    {order.status === 0 && <Box>
                           <Button
                             variant={""}
                             _hover={{ bg: "red", color: "white" }}
@@ -305,10 +317,45 @@ const BranchUserOrderList = () => {
                           >
                             Cancel
                           </Button>
-                        </Box>
-                      ) : order.status === 2 ? (
-                        <Box>
+                        </Box>}
+                    {order.status === 1 && <Menu>
+                      <MenuButton as={Button} size={"sm"}>
+                        <Text>Payment</Text>
+                      </MenuButton>
+                      <MenuList>
+                        <Box
+                          display={"flex"}
+                          flexDir={"column"}
+                          px={4}
+                          py={2}
+                          gap={4}
+                        >
                           <Button
+                            onClick={() => handleApprovePayment(order.id)}
+                            color={"white"}
+                            bg={"brand.main"}
+                            _hover={{ bg: "brand.hover" }}
+                            _active={{ bg: "brand.active" }}
+                            size={"sm"}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setOrderId(order.id);
+                              onOpenReject();
+                            }}
+                            variant={"outline"}
+                            colorScheme="red"
+                            size={"sm"}
+                          >
+                            Reject
+                          </Button>
+                        </Box>
+                      </MenuList>
+                    </Menu>}
+                    {order.status === 2 && <Box>
+                      <Button
                             variant={""}
                             _hover={{ bg: "red", color: "white" }}
                             onClick={() => handleCancel(order)}
@@ -322,45 +369,8 @@ const BranchUserOrderList = () => {
                             _hover={{ bg: "brand.hover", color: "white" }}
                             icon={<BsFillSendCheckFill />}
                           />
-                        </Box>
-                      ) : order.status === 1 ? (
-                        <Box>
-                          <Button
-                            variant={""}
-                            _hover={{ bg: "red", color: "white" }}
-                            onClick={() => handleCancel(order)}
-                          >
-                            Cancel
-                          </Button>
-                          <IconButton
-                            onClick={() => buttonConfirm(order)}
-                            variant={""}
-                            borderRadius={"30px"}
-                            _hover={{ bg: "brand.hover", color: "white" }}
-                            icon={<AiOutlineCheck />}
-                          />
-                        </Box>
-                      ) : order.status === 3 ? (
-                        <Box>
-                          <Text>AMAN</Text>
-                          {/* <Button
-                        variant={""}
-                        _hover={{ bg: "red", color: "white" }}
-                        onClick={() => handleCancel(item)}
-                      >
-                        Cancel
-                      </Button>
-                      <IconButton
-                        variant={""}
-                        borderRadius={"30px"}
-                        _hover={{ bg: "brand.hover", color: "white" }}
-                        icon={<AiOutlineCheck />}
-                      /> */}
-                        </Box>
-                      ) : (
-                        ""
-                      )}
-                    </Td>
+                    </Box>}
+                    {order.status >= 3 && <Text color={"gray.500"} fontStyle={"italic"}>No action</Text>}
                   </Td>
                 </Tr>
               ))}
@@ -389,6 +399,7 @@ const BranchUserOrderList = () => {
           <OrderPagination page={page} index={index} setIndex={setIndex} />
         )}
         <UserOrderDetail isOpen={isOpen} onClose={onClose} orderId={orderId} />
+        <RejectPaymentMessage isOpen={isOpenReject} onClose={onCloseReject} id={orderId} index={index} startDate={startDate} endDate={endDate} orderBy={orderBy} order={order} />
       </Box>
     </>
   );

@@ -537,6 +537,37 @@ const adminController = {
       return res.status(500).json({ message: error.message });
     }
   },
+
+  approveUserPayment: async (req, res) => {
+    try {
+      const { transaction_id } = req.params;
+      const findTransaction = await trans.findOne({ where: { id: transaction_id } });
+      if (!findTransaction) return res.status(404).json({ message: "Transaction not found" });
+
+      await db.sequelize.transaction(async (t) => {
+        await trans.update({ status: 2 }, { where: { id: transaction_id } }, { transaction: t });
+        return res.status(200).json({ message: "Status updated to 2" });
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+
+  rejectUserPayment: async (req, res) => {
+    try {
+      const { transaction_id } = req.params;
+      const { message } = req.body;
+      const findTransaction = await trans.findOne({ where: { id: transaction_id } });
+      if (!findTransaction) return res.status(404).json({ message: "Transaction not found" });
+
+      await db.sequelize.transaction(async (t) => {
+        await trans.update({ message, status: 0 }, { where: { id: transaction_id } }, { transaction: t });
+        return res.status(200).json({ message: "Success" });
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 };
 const updateStatus = async (transaction_id) => {
   console.log("masuk update status 4");

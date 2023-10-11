@@ -262,7 +262,7 @@ const transactionController = {
       const image = req.file.path;
       await db.sequelize.transaction(async (t) => {
         const data = await Transaction.update(
-          { transaction_img: image, status: 1 },
+          { transaction_img: image, message: null, status: 1 },
           { where: { id: id_transaction } },
           { transaction: t }
         );

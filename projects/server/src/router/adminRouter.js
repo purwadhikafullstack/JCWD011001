@@ -22,4 +22,7 @@ router.patch("/branch/cancel/:transaction_id", adminController.cancelUserTransac
 router.get("/branch/transaction", adminController.getAllTransaction)
 router.patch("/branch/confirm/:transaction_id", adminController.confirmUserOrder)
 router.patch("/branch/send/:transaction_id", adminController.sendUserOrder)
+router.patch("/payment/approve/:transaction_id", adminController.approveUserPayment)
+router.patch("/payment/reject/:transaction_id", adminController.rejectUserPayment)
+
 module.exports = router;
