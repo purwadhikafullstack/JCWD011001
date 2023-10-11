@@ -60,10 +60,7 @@ const authController = {
           },
           { transaction: t }
         );
-        await Cart.create(
-          { user_id: newUser.id, total_price: 0 },
-          { transaction: t }
-        );
+        await Cart.create({ user_id: newUser.id, total_price: 0 }, { transaction: t });
         if (refcode) {
           const findRefUser = await User.findOne({ where: { refcode } });
           if (findRefUser) {
@@ -93,18 +90,11 @@ const authController = {
             return res.status(404).json({ message: "Ref code not found" });
           }
         }
-        const token = jwt.sign(
-          { id: newUser.id, username: username, email: email },
-          process.env.JWT_KEY,
-          {
-            expiresIn: "1h",
-          }
-        );
+        const token = jwt.sign({ id: newUser.id, username: username, email: email }, process.env.JWT_KEY, {
+          expiresIn: "1h",
+        });
         const redirect = `http://localhost:3000/verification/${token}`;
-        const data = await fs.readFile(
-          path.resolve(__dirname, "../emails/registerEmail.html"),
-          "utf-8"
-        );
+        const data = await fs.readFile(path.resolve(__dirname, "../emails/registerEmail.html"), "utf-8");
         const tempCompile = await handlebars.compile(data);
         const tempResult = tempCompile({ username, email, redirect });
         console.log("ini");
@@ -179,19 +169,19 @@ const authController = {
       return res.status(500).json({ message: error.message });
     }
   },
-  getAdmin:async(req,res) => {
+  getAdmin: async (req, res) => {
     try {
       const findAdmin = await Admin.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
-      })
-      return res.status(200).json({message : "Admin", data : findAdmin})
+      });
+      return res.status(200).json({ message: "Admin", data: findAdmin });
     } catch (error) {
-      return res.status(500).json({message : "Failed", error : error.message})
+      return res.status(500).json({ message: "Failed", error: error.message });
     }
   },
-  cancelTransaction:async(req, res) => {
+  cancelTransaction: async (req, res) => {
     try {
       const {id} = req.user
       const {transaction_id} = req.params;
@@ -203,7 +193,7 @@ const authController = {
       })
       return res.status(200).json({message : "Success"})
     } catch (error) {
-      return res.status(500).json({message : error.message})
+      return res.status(500).json({ message: error.message });
     }
   },
   confirmOrder : async(req, res) => {

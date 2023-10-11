@@ -21,14 +21,14 @@ export const VoucherReducer = createSlice({
       state.userVoucher = [...action.payload];
     },
     setVoucherToUse: (state, action) => {
-      state.voucherToUse = {...action.payload};
+      state.voucherToUse = { ...action.payload };
     },
     setDeliveryVoucher: (state, action) => {
       state.deliveryVoucher = [...action.payload];
     },
     setDeliveryVoucherToUse: (state, action) => {
-      state.deliveryVoucherToUse = {...action.payload};
-    }
+      state.deliveryVoucherToUse = { ...action.payload };
+    },
   },
 });
 
@@ -126,6 +126,7 @@ export const getDeliveryVoucher = () => {
   };
 };
 
-export const { setAdminVoucher, setUserVoucher, setVoucherToUse, setDeliveryVoucher, setDeliveryVoucherToUse } = VoucherReducer.actions;
+export const { setAdminVoucher, setUserVoucher, setVoucherToUse, setDeliveryVoucher, setDeliveryVoucherToUse } =
+  VoucherReducer.actions;
 
 export default VoucherReducer.reducer;

@@ -7,5 +7,6 @@ router.get("/", storeController.cekStore);
 router.get("/nearest", storeController.cekNearestStore);
 router.get("/branch", storeController.getStore);
 router.get("/stock", verifyToken, storeController.getStoreStockHistory);
+router.get("/:id", storeController.getStorebyId);
 
 module.exports = router;

@@ -27,11 +27,11 @@ const productController = {
     try {
       const { page = 1, limit = 8, order = "ASC", orderBy = "name", category = "" } = req.query;
 
-      const pagination = setPagination(limit, page);
-      const totalProduct = await Product.count();
-      const totalPage = Math.ceil(totalProduct / +limit);
       const where = { isactive: true };
       if (category) where.category_id = category;
+      const pagination = setPagination(limit, page);
+      const totalProduct = await Product.count(where);
+      const totalPage = Math.ceil(totalProduct / +limit);
       const products = await Product.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt", "category_id"],

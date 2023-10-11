@@ -22,6 +22,11 @@ const storeDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
+const setPagination = (limit, page) => {
+  const offset = (page - 1) * +limit;
+  return { limit: parseInt(limit), offset };
+};
+
 const storeController = {
   cekStore: async (req, res) => {
     try {
@@ -59,16 +64,35 @@ const storeController = {
           exclude: ["createdAt", "updatedAt"],
         },
       });
-      return res.status(200).json({ message: "Success", data: data });
+      return res.status(200).json({ message: "Success Store", data: data });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
   },
   getStoreStockHistory: async (req, res) => {
     try {
-      const { product_id, store_id } = req.query;
-      const data = await db.Storestockhistory.findAll({ where: { product_id, store_id } });
-      console.log(data);
+      const { page = 1, limit = 3, product_id, store_id, startDate, endDate } = req.query;
+
+      let filter = {};
+      if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
+      if (endDate) filter.createdAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
+      if (startDate && endDate) {
+        filter = { createdAt: { [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)] } };
+      }
+      const pagination = setPagination(limit, page);
+      const totalHistory = await db.Storestockhistory.count({ where: { product_id, store_id, ...filter } });
+      const totalPage = Math.ceil(totalHistory / +limit);
+
+      const data = await db.Storestockhistory.findAll({ where: { product_id, store_id, ...filter }, ...pagination });
+      return res.status(200).json({ message: "Success", totalPage, data: data });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+  getStorebyId: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = await Store.findOne({ where: { id } });
       return res.status(200).json({ message: "Success", data: data });
     } catch (error) {
       return res.status(500).json({ message: error.message });

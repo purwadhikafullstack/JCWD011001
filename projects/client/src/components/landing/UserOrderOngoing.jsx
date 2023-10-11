@@ -26,7 +26,9 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
     dispatch(getTransaction({ index, startDate, endDate, orderBy, order }));
   }, [index, startDate, endDate, orderBy, order, detail]);
 
-  console.log(order);
+  useEffect(() => {
+    setIndex(1);
+  }, []);
 
   if (transaction.length === 0) {
     return (

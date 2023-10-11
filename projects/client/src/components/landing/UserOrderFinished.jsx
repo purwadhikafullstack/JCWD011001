@@ -28,6 +28,10 @@ const UserOrderFinished = ({ setDetail, detail, index, setIndex }) => {
     dispatch(getFinshedTransaction({ index, endDate, startDate, orderBy, order }));
   }, [index, endDate, startDate, orderBy, order, detail]);
 
+  useEffect(() => {
+    setIndex(1);
+  }, []);
+
   if (transaction.length === 0) {
     return (
       <>

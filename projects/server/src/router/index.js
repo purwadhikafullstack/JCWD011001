@@ -9,6 +9,7 @@ const transactionRouter = require("./transactionRouter");
 const addressRouter = require("./addressRouter");
 const regionRouter = require("./regionRouter");
 const voucherRouter = require("./voucherRouter");
+const reportRouter = require("./reportRouter");
 const userOrderRouter = require("./userOrderRouter");
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   addressRouter,
   regionRouter,
   voucherRouter,
+  reportRouter,
   userOrderRouter,
 };

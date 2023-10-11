@@ -6,6 +6,7 @@ const categoryController = require("./categoryController");
 const cartController = require("./cartController");
 const transactionController = require("./transactionController");
 const regionController = require("./regionController");
+const reportController = require("./reportController");
 
 module.exports = {
   authController,
@@ -16,4 +17,5 @@ module.exports = {
   cartController,
   transactionController,
   regionController,
+  reportController,
 };

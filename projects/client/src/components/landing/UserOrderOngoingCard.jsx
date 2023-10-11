@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -84,9 +84,16 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
           {item.id}
         </Text>
         <Text color={"gray.400"}>{changeDate(item.createdAt)}</Text>
-        <Text color={orderStatusArray[item.status].color} fontWeight={"bold"} mt={4}>
+        <Badge
+          bg={orderStatusArray[item.status].color}
+          fontWeight={"bold"}
+          mt={4}
+          textColor={"white"}
+          borderRadius={"2xl"}
+          px={3}
+          py={1}>
           {orderStatusArray[item.status].status}
-        </Text>
+        </Badge>
       </Box>
       <Box>
         {products && (

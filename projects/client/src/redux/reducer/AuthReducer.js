@@ -189,7 +189,7 @@ export const userCancel = (item) => {
           window.location.reload()
         }, 1000);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 }

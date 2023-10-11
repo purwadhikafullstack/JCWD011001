@@ -33,6 +33,7 @@ const {
   addressRouter,
   regionRouter,
   voucherRouter,
+  reportRouter,
   userOrderRouter
 } = require("./router");
 // db.sequelize.sync({ alter: true });
@@ -51,9 +52,9 @@ app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/region", regionRouter);
 app.use("/api/voucher", voucherRouter);
+app.use("/api/report", reportRouter);
 app.use("/api/order", userOrderRouter);
 app.use("/public", express.static(path.resolve(__dirname, "../public")));
-
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

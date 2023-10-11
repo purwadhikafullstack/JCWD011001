@@ -2,9 +2,14 @@ import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import StockManagementHistoryDetail from "./StockManagementHistoryDetail";
+import { Pagination } from "../../components/Pagination";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const StockManagementHistory = ({ setDetail, itemDetail }) => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [index, setIndex] = useState(1);
+  const [page, setPage] = useState(1);
   const { store_id, product_id } = itemDetail;
   const PUBLIC_URL = "http://localhost:8000";
   const getImage = (image) => {
@@ -16,17 +21,22 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
     setData([]);
   };
 
-  const fetchData = async () => {
+  const fetchData = async ({ startDate, endDate, index }) => {
     const token = localStorage.getItem("token");
-    const { data } = await axios.get(`${URL_API}/store/stock/?store_id=${store_id}&product_id=${product_id}`, {
+    let query = `&page=${index}`;
+    if (startDate) query += `&startDate=${startDate}`;
+    if (endDate) query += `&endDate=${endDate}`;
+    console.log("query", query);
+    const { data } = await axios.get(`${URL_API}/store/stock/?store_id=${store_id}&product_id=${product_id}${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    await setPage(data.totalPage);
     await setData(data.data);
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData({ startDate, endDate, index });
+  }, [startDate, endDate, index]);
 
   return (
     <Box ml={"48px"} mt={"24px"}>
@@ -67,7 +77,18 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
           </Box>
         </Flex>
       </Box>
-      {data && <StockManagementHistoryDetail history={data} setData={setData} />}
+      {data && (
+        <StockManagementHistoryDetail
+          history={data}
+          setData={setData}
+          startDate={startDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          setStartDate={setStartDate}
+          page={index}
+        />
+      )}
+      <Pagination page={page} index={index} setIndex={setIndex} />
     </Box>
   );
 };

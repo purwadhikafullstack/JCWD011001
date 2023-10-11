@@ -12,8 +12,8 @@ const initialState = {
   },
   login: false,
   admin: [],
-  product : [],
-  store : [],
+  product: [],
+  store: [],
   page: 1,
 };
 
@@ -22,8 +22,8 @@ export const AdminReducer = createSlice({
   initialState,
   reducers: {
     setBranchAdmin: (state, action) => {
-      const { id, name, email, role_id } = action.payload;
-      state.branchAdmin = { id, name, email, role_id };
+      const { id, name, email, role_id, store_id } = action.payload;
+      state.branchAdmin = { id, name, email, role_id, store_id };
       state.login = true;
     },
     loginSuccess: (state) => {
@@ -182,72 +182,72 @@ export const fetchStore = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL_API}/store/branch`);
-      dispatch(setStore(data.data))
+      dispatch(setStore(data.data));
       console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
-}
+};
 
 export const destroyProduct = (product, Swal) => {
   return async (dispatch) => {
-    console.log("destroy ", product)
-    const productId = product.id
-    console.log("id destroy reducer", productId)
+    console.log("destroy ", product);
+    const productId = product.id;
+    console.log("id destroy reducer", productId);
     try {
-      const result = await axios.delete(`${URL_API}/admin/product/${productId}`)
+      const result = await axios.delete(`${URL_API}/admin/product/${productId}`);
       Swal.fire({
-        icon: 'success',
-        title: 'Product Deleted...',
-        text: 'Back in business',
-      })
+        icon: "success",
+        title: "Product Deleted...",
+        text: "Back in business",
+      });
     } catch (error) {
       console.log(error);
     }
   };
-}
+};
 
 export const stockUpdate = (values, Swal) => {
-  return async(dispatch) => {
-    const token = localStorage.getItem("token")
-    console.log("update reducer ", values)
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    console.log("update reducer ", values);
     try {
-      await axios.post(`${URL_API}/admin/branch/stock`, {
-        productId : values.productId,
-        quantity : values.quantity
-      }, {
-        headers : {
-          Authorization : `Bearer ${token}`
+      await axios.post(
+        `${URL_API}/admin/branch/stock`,
+        {
+          productId: values.productId,
+          quantity: values.quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      }
-      )
+      );
       Swal.fire({
-        icon: 'success',
-        title: 'Stock in your branch updated...',
-        text: 'Back in business',
-      })
+        icon: "success",
+        title: "Stock in your branch updated...",
+        text: "Back in business",
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-}
+  };
+};
 export const disableProduct = (values, Swal, toast) => {
   return async () => {
     try {
-      const id = values.id
-      console.log("delete values", id)
-      const data = await axios.patch(
-        `${URL_API}/admin/delete/${id}`,
-        {}
-      )
+      const id = values.id;
+      console.log("delete values", id);
+      const data = await axios.patch(`${URL_API}/admin/delete/${id}`, {});
       Swal.fire({
-        icon: 'error',
-        title: 'Product disabled...',
-        text: 'Restore the product is stock already exist',
-      })
+        icon: "error",
+        title: "Product disabled...",
+        text: "Restore the product is stock already exist",
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast({
         title: "Failed",
         description: error?.response?.data?.message,
@@ -256,24 +256,21 @@ export const disableProduct = (values, Swal, toast) => {
         isClosable: true,
       });
     }
-  }
-}
+  };
+};
 export const enableProduct = (values, Swal, toast) => {
   return async () => {
     try {
-      const id = values.id
-      console.log("enable values", id)
-      const data = await axios.patch(
-        `${URL_API}/admin/enable/${id}`,
-        {}
-      )
+      const id = values.id;
+      console.log("enable values", id);
+      const data = await axios.patch(`${URL_API}/admin/enable/${id}`, {});
       Swal.fire({
-        icon: 'success',
-        title: 'Product enable...',
-        text: 'Back to business',
-      })
+        icon: "success",
+        title: "Product enable...",
+        text: "Back to business",
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast({
         title: "Failed",
         description: error?.response?.data?.message,
@@ -282,18 +279,18 @@ export const enableProduct = (values, Swal, toast) => {
         isClosable: true,
       });
     }
-  }
-}
+  };
+};
 export const branchUserCancel = (item) => {
-  return async(dispatch) => {
-    console.log("user cancel reducer masuk ", item)
-    console.log("id dari branch", item.id)
-    const transaction_id = item.id
-    console.log("inimi", transaction_id)
-    try { 
-      const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`)
+  return async (dispatch) => {
+    console.log("user cancel reducer masuk ", item);
+    console.log("id dari branch", item.id);
+    const transaction_id = item.id;
+    console.log("inimi", transaction_id);
+    try {
+      const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 }
@@ -324,9 +321,7 @@ export const branchSendOrder = (item) => {
   }
 }
 
-
-
-
-export const { setBranchAdmin,setStore, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } = AdminReducer.actions;
+export const { setBranchAdmin, setStore, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } =
+  AdminReducer.actions;
 
 export default AdminReducer.reducer;

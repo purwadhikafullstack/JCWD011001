@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
-import BranchSalesReportMonthStatistic from "./BranchSalesReportMonthStatistic";
-import { useSelector } from "react-redux";
 import axios from "axios";
-import BranchSalesReportUser from "./BranchSalesReportUser";
-import BranchSalesReportProduct from "./BranchSalesReportProduct";
-import BranchSalesReportTransaction from "./BranchSalesReportTransaction";
+import BranchSalesReportMonthStatistic from "../branch/BranchSalesReportMonthStatistic";
+import BranchSalesReportUser from "../branch/BranchSalesReportUser";
+import BranchSalesReportProduct from "../branch/BranchSalesReportProduct";
+import BranchSalesReportTransaction from "../branch/BranchSalesReportTransaction";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
-const BranchSalesReport = () => {
-  // const pathname = window.location.pathname.split("/");
-  // const id = pathname[pathname.length - 1];
+const SalesReportSuper = ({ item, handleClickBack }) => {
   const [data, setData] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -26,9 +23,7 @@ const BranchSalesReport = () => {
   };
   const fetchStore = async () => {
     try {
-      const { data } = await axios.get(`${URL_API}/report/store`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const { data } = await axios.get(`${URL_API}/store/${item.id}`);
       await setStoreData(data.data);
     } catch (error) {
       console.log(error);
@@ -47,7 +42,7 @@ const BranchSalesReport = () => {
 
   return (
     <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} fontFamily={"montserrat"} mr={"24px"}>
-      <Box>
+      <Box onClick={handleClickBack} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
         <Text fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>Sales Report {storeData.name}</Text>
       </Box>
       <BranchSalesReportMonthStatistic data={data} />
@@ -97,4 +92,4 @@ const BranchSalesReport = () => {
   );
 };
 
-export default BranchSalesReport;
+export default SalesReportSuper;

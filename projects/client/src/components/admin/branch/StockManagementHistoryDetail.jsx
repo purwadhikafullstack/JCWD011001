@@ -2,10 +2,7 @@ import { Box, Heading, Table, Thead, Tbody, Tr, Th, Td, Text, Tooltip, Flex, But
 import React, { useState } from "react";
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 
-const StockManagementHistoryDetail = ({ history }) => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
+const StockManagementHistoryDetail = ({ history, setStartDate, setEndDate, startDate, endDate, page }) => {
   const handleClearStartDate = () => {
     setStartDate("");
   };
@@ -54,7 +51,7 @@ const StockManagementHistoryDetail = ({ history }) => {
             </Tooltip>
 
             {startDate && (
-              <Button ml={2} colorScheme="red" size="sm" onClick={handleClearStartDate}>
+              <Button ml={2} mb={4} colorScheme="red" size="sm" onClick={handleClearStartDate}>
                 Clear
               </Button>
             )}
@@ -65,7 +62,7 @@ const StockManagementHistoryDetail = ({ history }) => {
               <Input type="date" mb={4} id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </Tooltip>
             {endDate && (
-              <Button ml={2} colorScheme="red" size="sm" onClick={handleClearEndDate}>
+              <Button ml={2} mb={4} colorScheme="red" size="sm" onClick={handleClearEndDate}>
                 Clear
               </Button>
             )}

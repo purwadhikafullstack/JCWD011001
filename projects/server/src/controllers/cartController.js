@@ -162,7 +162,6 @@ const cartController = {
         },
         { headers: { key: `94a44550ce043c478e36c13b4a63e3de` } }
       );
-      console.log("masuk ongkir", data)
       res.status(200).json({ data });
     } catch (error) {
       res.status(500).json({ error: error.message });
