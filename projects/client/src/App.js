@@ -35,7 +35,7 @@ import FrequentlyAskedQuestion from "./pages/user/FrequentlyAskedQuestion";
 
 function App() {
   const role = useSelector((state) => state.AdminReducer.branchAdmin.role_id);
-  const { user } = useSelector((state) => state.AuthReducer);
+  const { user, login } = useSelector((state) => state.AuthReducer);
   const dispatch = useDispatch();
 
   const fetchLocation = () => {
@@ -43,9 +43,8 @@ function App() {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { longitude, latitude } = position.coords;
-          console.log(longitude, latitude);
-          dispatch(setUserLocation(latitude, longitude));
-          dispatch(getStore_id({ lat: latitude, lon: longitude }));
+          await dispatch(setUserLocation(latitude, longitude));
+          await dispatch(getStore_id({ lat: latitude, lon: longitude }));
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -57,11 +56,13 @@ function App() {
   };
 
   useEffect(() => {
-    dispatch(getDefaultAddress());
-    if (!user.id) {
-      fetchLocation();
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(getDefaultAddress());
+      return;
     }
-  }, [user]);
+    fetchLocation();
+  }, [login]);
 
   const defaultRoutes = () => {
     if (role === "" || role === 3) {

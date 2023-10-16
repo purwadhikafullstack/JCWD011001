@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  Image,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, Center, Divider, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import getImage from "../../utils/getImage";
 
@@ -29,27 +18,27 @@ const ProductListItem = ({ product }) => {
   if (product.Product?.name) {
     return (
       <Box
-        align={"center"}
-        bg={"white"}
-        rounded={"3xl"}
-        w={"250px"}
-        h={"310px"}
-        boxShadow={"lg"}
+        align="center"
+        bg="white"
+        rounded="3xl"
+        w={{ base: "100%", md: "250px" }}
+        h="310"
+        p={2}
+        boxShadow={{ base: "lg", md: "xl" }}
         _hover={{
-          boxShadow: "2xl",
+          boxShadow: { base: "lg", md: "2xl" },
           cursor: "pointer",
         }}
         onClick={() => {
           navigate(`/product/${product.Product.id}`);
-        }}
-      >
+        }}>
         <Image
-          src={getImage(product.Product.product_img)}
-          w={"90%"}
-          h={"60%"}
-          alignContent={"center"}
-          fit={"cover"}
-          overflow={"hidden"}
+          src={getImage(product.Product.product_img) || null}
+          w="100%"
+          h={{ base: "auto", sm: "50%" }}
+          alignContent="center"
+          fit="cover"
+          overflow="hidden"
           fallback={
             <Center>
               <Spinner />
@@ -57,7 +46,7 @@ const ProductListItem = ({ product }) => {
           }
           loading="lazy"
         />
-        <Box mt={8} textAlign={"left"} pl={4}>
+        <Box mt={{ base: 4, md: 8 }} textAlign="left" pl={{ base: 2, md: 4 }}>
           <Flex alignItems="center">
             <Badge borderRadius="full" px="2" colorScheme="green">
               {product.Product.Category.name}
@@ -70,24 +59,13 @@ const ProductListItem = ({ product }) => {
               />
             )}
           </Flex>
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            noOfLines={1}
-          >
+          <Box mt={1} fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={2}>
             {product.Product.name}
           </Box>
           {isDiscount && (
             <>
               <Flex gap={2}>
-                <Text
-                  textAlign={"center"}
-                  fontWeight={"bold"}
-                  textDecoration={"line-through"}
-                  color={"#9b9b9b"}
-                >
+                <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
                   Rp.{product?.Product.price},-
                 </Text>
                 <Text textAlign={"center"} fontWeight={"bold"}>
@@ -97,9 +75,7 @@ const ProductListItem = ({ product }) => {
               </Flex>
             </>
           )}
-          {!isDiscount && (
-            <Text fontWeight={"bold"}>Rp.{product?.Product.price},-</Text>
-          )}
+          {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.Product.price},-</Text>}
         </Box>
       </Box>
     );
@@ -107,27 +83,27 @@ const ProductListItem = ({ product }) => {
 
   return (
     <Box
-      align={"center"}
-      bg={"white"}
-      rounded={"3xl"}
-      w={"250px"}
-      h={"310px"}
-      boxShadow={"lg"}
+      align="center"
+      bg="white"
+      rounded="3xl"
+      w={{ base: "100%", md: "250px" }}
+      h="310"
+      p={2}
+      boxShadow={{ base: "lg", md: "xl" }}
       _hover={{
-        boxShadow: "2xl",
+        boxShadow: { base: "lg", md: "2xl" },
         cursor: "pointer",
       }}
       onClick={() => {
         navigate(`/product/${product.id}`);
-      }}
-    >
+      }}>
       <Image
-        src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
-        w={"90%"}
-        h={"60%"}
-        alignContent={"center"}
-        fit={"cover"}
-        overflow={"hidden"}
+        src={getImage(product.product_img) || null}
+        w="100%"
+        h={{ base: "auto", sm: "50%" }}
+        alignContent="center"
+        fit="cover"
+        overflow="hidden"
         fallback={
           <Center>
             <Spinner />
@@ -135,7 +111,7 @@ const ProductListItem = ({ product }) => {
         }
         loading="lazy"
       />
-      <Box mt={8} textAlign={"left"} pl={4}>
+      <Box mt={{ base: 4, md: 8 }} textAlign="left" pl={{ base: 2, md: 4 }}>
         <Flex alignItems="center">
           <Badge borderRadius="full" px="2" colorScheme="green">
             {product.Category.name}
@@ -148,24 +124,13 @@ const ProductListItem = ({ product }) => {
             />
           )}
         </Flex>
-        <Box
-          mt="1"
-          fontWeight="semibold"
-          as="h4"
-          lineHeight="tight"
-          noOfLines={1}
-        >
+        <Box mt={1} fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={2}>
           {product.name}
         </Box>
         {isDiscount && (
           <>
             <Flex gap={2}>
-              <Text
-                textAlign={"center"}
-                fontWeight={"bold"}
-                textDecoration={"line-through"}
-                color={"#9b9b9b"}
-              >
+              <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
                 Rp.{product?.price},-
               </Text>
               <Text textAlign={"center"} fontWeight={"bold"}>

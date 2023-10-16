@@ -39,6 +39,7 @@ import { FaShopify } from "react-icons/fa";
 import ProductReducer from "../../redux/reducer/ProductReducer";
 import axios from "axios";
 import OnGoingCart from "./OnGoingCart";
+import CartLogin from "./CartLogin";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
@@ -54,16 +55,12 @@ export default function Cart() {
     return `${PUBLIC_URL}/${image}`;
   };
   const getItemDetails = async (id) => {
-    console.log("id");
     try {
-      console.log("get di item detais", id);
-      const response = await axios.get(
-        `${URL_API}/product/item/detail/${id}/${store_id}`
-      );
-      console.log("data get item", response);
-      console.log("data get item productBranc", response.data.ProductBranch);
+      const response = await axios.get(`${URL_API}/product/item/detail/${id}/${store_id}`);
+      // console.log("data get item", response);
+      // console.log("data get item productBranc", response.data.ProductBranch);
       setBranchProduct(response.data.ProductBranch);
-      console.log("data get item", response.data.Item);
+      // console.log("data get item", response.data.Item);
       setSold(response.data.Item);
     } catch (error) {
       console.log(error);
@@ -73,9 +70,7 @@ export default function Cart() {
     console.log("masukk ", products);
     console.log("masukk ", products.product_id);
     try {
-      const response = await axios.get(
-        `${URL_API}/product/item/detail/${products.product_id}/${store_id}}`
-      );
+      const response = await axios.get(`${URL_API}/product/item/detail/${products.product_id}/${store_id}}`);
       console.log("apa respon ?", response);
       const itemQuantity = response.data.ProductBranch?.quantity;
       console.log("QUAN", itemQuantity);
@@ -124,11 +119,7 @@ export default function Cart() {
     if (result.isConfirmed) {
       await dispatch(deleteItemFromCart(products));
       await dispatch(deleteItemCart(products));
-      Swal.fire(
-        "Deleted!",
-        "The item has been removed from the cart.",
-        "success"
-      );
+      Swal.fire("Deleted!", "The item has been removed from the cart.", "success");
     }
     await dispatch(getItem(store_id));
     await dispatch(getCart());
@@ -137,7 +128,7 @@ export default function Cart() {
     if (item && item.length > 0) {
       await item.forEach((items) => {
         if (items.Product) {
-          console.log("haha", items.Product.id);
+          // console.log("haha", items.Product.id);
           getItemDetails(items.Product.id);
         }
       });
@@ -145,15 +136,18 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    dispatch(getItem(store_id));
-    dispatch(getCart());
+    if (login) {
+      dispatch(getItem(store_id));
+      dispatch(getCart());
+    }
   }, [store_id]);
-  console.log("Item in useEffect:", item);
 
   useEffect(() => {
-    dapat();
+    if (login) {
+      dapat();
+    }
   }, [item]);
-  console.log("CARTS => ", item);
+
   return (
     <>
       <Navbar />
@@ -178,21 +172,18 @@ export default function Cart() {
                     <Button
                       _hover={{ bg: "brand.hover", color: "white" }}
                       color={"black"}
-                      onClick={() => navigate("/")}
+                      onClick={() => navigate("/shop")}
                       width={"800px"}
                       mt={"32px"}
                       variant={""}
                       borderRadius={"10px"}
-                      rightIcon={<FaShopify />}
-                    >
+                      rightIcon={<FaShopify />}>
                       See our products
                     </Button>
                   </Box>
                 ) : (
                   item.map((products) => {
-                    return (
-                      <OnGoingCart key={products.id} products={products} />
-                    );
+                    return <OnGoingCart key={products.id} products={products} />;
                   })
                 )}
               </Box>
@@ -203,49 +194,7 @@ export default function Cart() {
           </Stack>
         </Box>
       ) : (
-        <Box h={"100vh"} w={"100%"}>
-          <Stack>
-            <Box w={"800px"} h={"200px"} m={"100px auto"} align={"center"}>
-              <Image src={Logo} />
-              <Text fontSize={"3xl"} fontFamily={"initial"}>
-                Please Login First
-              </Text>
-              <Text fontSize={"xl"} fontFamily={"initial"}>
-                for better shopping
-              </Text>
-              <Box w={"270px"}></Box>
-              <Flex justifyContent={"space-around"} mt={"50px"}>
-                <Box>
-                  <Text>Don't have any account ? </Text>
-                  <Button
-                    mt={5}
-                    variant={"ghost"}
-                    _hover={{ bgColor: "brand.hover", color: "white" }}
-                    onClick={() => navigate("/register")}
-                  >
-                    Create One
-                  </Button>
-                </Box>
-                <Box bgColor={"black"}>
-                  <Divider orientation="vertical" />
-                </Box>
-                <Box>
-                  <Text>Already have an account ? </Text>
-                  <Button
-                    mt={5}
-                    variant={"ghost"}
-                    _hover={{ bgColor: "brand.hover", color: "white" }}
-                    onClick={() => {
-                      navigate("/signin");
-                    }}
-                  >
-                    Sign in
-                  </Button>
-                </Box>
-              </Flex>
-            </Box>
-          </Stack>
-        </Box>
+        <CartLogin />
       )}
     </>
   );

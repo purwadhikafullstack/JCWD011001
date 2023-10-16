@@ -56,8 +56,8 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
     }
   };
 
-  const handleClick = () => {
-    setDetail(true);
+  const handleClick = async () => {
+    await setDetail(true);
     setTransactionDetail(item);
     setTransactionProducts(products);
   };
@@ -65,8 +65,6 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
   useEffect(() => {
     getProduct();
   }, []);
-
-  console.log(products);
 
   return (
     <Flex
@@ -97,12 +95,13 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
         {item.message && <Text>Message: {item.message}</Text>}
       </Box>
       <Box>
-        {products && (
+        <Box>Total Price Detail</Box>
+        {/* {products && (
           <Image
             src={products[0]?.Product.product_img}
             alt={`Image for Order #${item.user_id}${item.id}${products[0]?.Product.name}`}
           />
-        )}
+        )} */}
         <Text fontWeight={"bold"}>Harga: Rp.{item.total_price},-</Text>
         <Text fontWeight={"bold"}>Harga Ongkir: Rp.{item.delivery_price},-</Text>
       </Box>

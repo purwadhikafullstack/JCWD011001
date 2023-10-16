@@ -138,22 +138,27 @@ export const loginAuth = (values, setLoading, toast, navigate) => {
   };
 };
 
-export const keepLogin = () => {
+export const keepLogin = (toast) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
       const respon = await axios.get(`${URL_API}/auth/keep`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      // console.log(respon.data);
       if (respon.data.findAdmin) dispatch(setBranchAdmin(respon.data.findAdmin));
       if (respon.data.findUser) {
         dispatch(setUser(respon.data.findUser));
         dispatch(setRoleId(3));
       }
     } catch (error) {
+      localStorage.removeItem("token");
+      toast({
+        title: "Login Expired",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch(logoutSuccess());
       console.log(error);
     }
   };
@@ -162,6 +167,7 @@ export const keepLogin = () => {
 export const setUserLocation = (latitude, longitude) => {
   return async (dispatch) => {
     try {
+      if (!latitude || !longitude) return;
       const { data } = await axios.get(
         `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${KEY}&language=id`
       );
@@ -181,25 +187,25 @@ export const userCancel = (item) => {
   return async (dispatch) => {
     console.log("user cancel reducer masuk ", item);
     console.log("id ts", item);
-    const transaction_id = item
-    console.log("inimi", transaction_id)
-    try { 
-      const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`)
-        setTimeout(() => {
-          window.location.reload()
-        }, 1000);
+    const transaction_id = item;
+    console.log("inimi", transaction_id);
+    try {
+      const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
-  }
-}
+  };
+};
 export const userConfirm = (item) => {
-  return async(dispatch) => {
-    console.log("user confirm reducer masuk", item)
-    const transaction_id = item
-    console.log("cocok ?", transaction_id)
+  return async (dispatch) => {
+    console.log("user confirm reducer masuk", item);
+    const transaction_id = item;
+    console.log("cocok ?", transaction_id);
     try {
-      const response = await axios.patch(`${URL_API}/auth/transaction/confirm/${transaction_id}`)
+      const response = await axios.patch(`${URL_API}/auth/transaction/confirm/${transaction_id}`);
     } catch (error) {
       console.log(error);
     }

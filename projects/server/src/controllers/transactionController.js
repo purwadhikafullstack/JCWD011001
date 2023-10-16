@@ -157,6 +157,7 @@ const transactionController = {
         voucher_id,
         delivery_voucher_id,
         courier,
+        duration,
       } = req.body;
 
       const cartItems = await Cartitem.findAll({
@@ -184,6 +185,7 @@ const transactionController = {
         store_id,
         courier,
         status: 0,
+        duration,
       });
 
       const voucherIds = [];

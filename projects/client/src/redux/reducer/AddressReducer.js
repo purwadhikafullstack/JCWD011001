@@ -64,6 +64,7 @@ export const addAddress = (fullAddress, id, latitude, longitude, city_id, toast,
 export const getAddress = (id) => {
   return async (dispatch) => {
     try {
+      if (!id) return;
       const { data } = await axios.get(`${URL_API}/address/${id}`);
       await dispatch(setUserAddress(data.data));
     } catch (error) {
@@ -168,6 +169,24 @@ export const getDefaultAddress = () => {
       const { data } = await axios.get(`${URL_API}/address/default`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      if (!data.data) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const { longitude, latitude } = position.coords;
+              await dispatch(setUserLocation(latitude, longitude));
+              await dispatch(getStore_id({ lat: latitude, lon: longitude }));
+              return;
+            },
+            (error) => {
+              console.error("Error getting location:", error);
+            }
+          );
+        } else {
+          console.log("Geolocation not supported");
+          return;
+        }
+      }
       await dispatch(setUserLocation(data.data?.latitude, data.data?.longitude));
       await dispatch(setDefaultAddress(data.data));
       await dispatch(getStore_id({ lat: data.data?.latitude, lon: data.data?.longitude }));

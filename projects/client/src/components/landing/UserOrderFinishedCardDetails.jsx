@@ -19,11 +19,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import getImage from "../../utils/getImage";
 
-const UserOrderFinishedCardDetails = ({
-  transactionDetail,
-  transactionProducts,
-}) => {
+const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }) => {
   const orderStatusArray = [
     { status: "Awaiting Payment", color: "red" },
     { status: "Waiting for Payment Confirmation", color: "orange" },
@@ -39,12 +37,7 @@ const UserOrderFinishedCardDetails = ({
   const RenderStatus = () => {
     if (transactionDetail.status === 6)
       return (
-        <Flex
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          h="100%"
-        >
+        <Flex direction="column" alignItems="center" justifyContent="center" h="100%">
           <Icon as={AiOutlineCheckCircle} boxSize={12} color="green.400" />
           <Text fontSize="xl" fontWeight="bold" mt={4}>
             Order Finished
@@ -56,12 +49,7 @@ const UserOrderFinishedCardDetails = ({
       );
 
     return (
-      <Flex
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        h="100%"
-      >
+      <Flex direction="column" alignItems="center" justifyContent="center" h="100%">
         <Icon as={AiOutlineCloseCircle} boxSize={12} color="red.400" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           Order Cancelled
@@ -94,7 +82,7 @@ const UserOrderFinishedCardDetails = ({
                 </Stack>
                 <Box w={"50%"} align={"right"} mr={"20%"}>
                   <Image
-                    src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
+                    src={getImage(item.Product.product_img) || null}
                     fit={"contain"}
                     w={"30%"}
                     overflow={"hidden"}
@@ -106,6 +94,10 @@ const UserOrderFinishedCardDetails = ({
             </Box>
           ))}
         <Box width={"100%"}>
+          <Text>
+            Send to: "<b>{transactionDetail.address}</b>"
+          </Text>
+
           <Box py="40px">{RenderStatus()}</Box>
         </Box>
       </CardBody>

@@ -63,6 +63,7 @@ const storeController = {
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
+        include: db.Admin,
       });
       return res.status(200).json({ message: "Success Store", data: data });
     } catch (error) {
@@ -71,7 +72,16 @@ const storeController = {
   },
   getStoreStockHistory: async (req, res) => {
     try {
-      const { page = 1, limit = 3, product_id, store_id, startDate, endDate } = req.query;
+      const {
+        page = 1,
+        limit = 3,
+        product_id,
+        store_id,
+        startDate,
+        endDate,
+        order = "DESC",
+        orderBy = "createdAt",
+      } = req.query;
 
       let filter = {};
       if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
@@ -83,7 +93,11 @@ const storeController = {
       const totalHistory = await db.Storestockhistory.count({ where: { product_id, store_id, ...filter } });
       const totalPage = Math.ceil(totalHistory / +limit);
 
-      const data = await db.Storestockhistory.findAll({ where: { product_id, store_id, ...filter }, ...pagination });
+      const data = await db.Storestockhistory.findAll({
+        where: { product_id, store_id, ...filter },
+        ...pagination,
+        order: [[orderBy, order]],
+      });
       return res.status(200).json({ message: "Success", totalPage, data: data });
     } catch (error) {
       return res.status(500).json({ message: error.message });

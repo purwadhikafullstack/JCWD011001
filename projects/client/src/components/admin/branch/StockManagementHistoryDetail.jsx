@@ -2,12 +2,24 @@ import { Box, Heading, Table, Thead, Tbody, Tr, Th, Td, Text, Tooltip, Flex, But
 import React, { useState } from "react";
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 
-const StockManagementHistoryDetail = ({ history, setStartDate, setEndDate, startDate, endDate, page }) => {
+const StockManagementHistoryDetail = ({ history, setStartDate, setEndDate, startDate, endDate, setIndex }) => {
   const handleClearStartDate = () => {
     setStartDate("");
+    setIndex(1);
   };
   const handleClearEndDate = () => {
     setEndDate("");
+    setIndex(1);
+  };
+
+  const handleStartDateSearch = (e) => {
+    setStartDate(e);
+    setIndex(1);
+  };
+
+  const handleEndDateSearch = (e) => {
+    setEndDate(e);
+    setIndex(1);
   };
 
   const changeDate = (createdAt) => {
@@ -47,7 +59,7 @@ const StockManagementHistoryDetail = ({ history, setStartDate, setEndDate, start
         <Flex gap={4} alignItems={"center"}>
           <Flex align="center">
             <Tooltip label="Start Date" aria-label="Start Date">
-              <Input type="date" mb={4} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              <Input type="date" mb={4} value={startDate} onChange={(e) => handleStartDateSearch(e.target.value)} />
             </Tooltip>
 
             {startDate && (
@@ -59,7 +71,13 @@ const StockManagementHistoryDetail = ({ history, setStartDate, setEndDate, start
           <Text mb={4}>to</Text>
           <Flex align="center">
             <Tooltip label="End Date" aria-label="End Date">
-              <Input type="date" mb={4} id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <Input
+                type="date"
+                mb={4}
+                id="endDate"
+                value={endDate}
+                onChange={(e) => handleEndDateSearch(e.target.value)}
+              />
             </Tooltip>
             {endDate && (
               <Button ml={2} mb={4} colorScheme="red" size="sm" onClick={handleClearEndDate}>
@@ -73,17 +91,17 @@ const StockManagementHistoryDetail = ({ history, setStartDate, setEndDate, start
       <Table variant="simple">
         <Thead>
           <Tr>
-            <Th>No</Th>
             <Th>Date</Th>
             <Th>Quantity</Th>
+            <Th>Description</Th>
           </Tr>
         </Thead>
         <Tbody>
           {history.map((item, index) => (
             <Tr key={index}>
-              <Td>{index + 1}</Td>
               <Td>{changeDate(item.createdAt)}</Td>
               <Td>{item.quantity}</Td>
+              <Td>{item.description || "Test"}</Td>
             </Tr>
           ))}
         </Tbody>

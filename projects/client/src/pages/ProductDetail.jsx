@@ -26,8 +26,9 @@ import {
   setChanges,
 } from "../redux/reducer/CartReducer";
 import Swal from "sweetalert2";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import getImage from "../utils/getImage";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import UserLocation from "../components/landing/UserLocation";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
@@ -48,6 +49,7 @@ const ProductDetail = () => {
 
   const getProductStock = async (id) => {
     try {
+      if (!id) return;
       const { data } = await axios.get(`${URL_API}/product/stock?id=${id}`);
       await setStock(data.data);
     } catch (error) {
@@ -56,13 +58,10 @@ const ProductDetail = () => {
   };
   const getItemDetails = async (id) => {
     try {
-      const response = await axios.get(
-        `${URL_API}/product/item/detail/${id}/${store_id}`
-      );
-      console.log("HAHA", response);
-      setBranchProduct(response.data.ProductBranch);
-      console.log("APAKAH INI ? ", response.data.Item);
-      setSold(response.data.Item);
+      if (!id) return;
+      const response = await axios.get(`${URL_API}/product/item/detail/${id}/${store_id}`);
+      await setBranchProduct(response.data.ProductBranch);
+      await setSold(response.data.Item);
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +75,7 @@ const ProductDetail = () => {
       await getItemDetails(id);
       const { data } = await axios.get(apiUrl);
       const productData = data.data?.Product || data.data;
+      console.log(data.data);
       await setProduct(productData);
       if (productData.admin_discount > 0) await setIsDiscount(true);
       if (data.data.quantity) await setStock(data.data);
@@ -94,7 +94,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getProductDetail();
-  }, [store_id, id]);
+  }, [store_id]);
 
   const incrementQuantity = () => {
     setJumlah(jumlah + 1);
@@ -108,7 +108,7 @@ const ProductDetail = () => {
   if (!product) return <Notfound />;
 
   return (
-    <Box width={"50%"} mx={"auto"} mt={4}>
+    <Box width={{ base: "90%", md: "50%" }} mx="auto" mt={4} p={4}>
       <Box mb={4}>
         <Link to={"/"}>Home</Link>
         {" > "}
@@ -119,10 +119,12 @@ const ProductDetail = () => {
         <Link>{product?.name}</Link>
       </Box>
       <Box>
-        <Flex gap={{ base: 4, md: 8 }}>
+        <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 8 }}>
           <Image
-            src={getImage(product.product_img)}
-            w={"45%"}
+            src={getImage(product.product_img) || null}
+            w={{ base: "100%", md: "45%" }}
+            fit={"cover"}
+            overflow={"hidden"}
             boxShadow={"2xl"}
           />
           <Box>
@@ -160,7 +162,7 @@ const ProductDetail = () => {
             <Divider my={4} />
             {store_id && (
               <>
-                <Text>
+                <Text mb={4}>
                   Stock {stock.Store?.name}: {stock?.quantity}
                 </Text>
                 {login ? (
@@ -275,17 +277,6 @@ const ProductDetail = () => {
                 </Flex>
               </>
             )}
-            {/* <Button
-              w={"full"}
-              mt={4}
-              variant={"outline"}
-              colorScheme="teal"
-              leftIcon={<HiOutlineShoppingCart />}
-              onClick={() => inCart(product)}
-              isDisabled={login === false || store_id === null}
-            >
-              Add Cart
-            </Button> */}
           </Box>
         </Flex>
       </Box>

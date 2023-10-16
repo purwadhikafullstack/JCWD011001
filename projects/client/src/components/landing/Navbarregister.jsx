@@ -64,11 +64,17 @@ const Navbarregister = () => {
   });
 
   return (
-    <Box mt={"5vh"} p={"1%"} width={"30vw"} mx={"auto"} border={"1px solid grey"} borderRadius={"10px"}>
+    <Box
+      my={{ base: "5vh" }}
+      p={{ base: "4%", md: "2%" }}
+      width={{ base: "90%", md: "30vw" }}
+      mx="auto"
+      border="1px solid grey"
+      borderRadius="10px">
       <form onSubmit={formik.handleSubmit}>
         <FormControl>
           <Flex justify={"space-between"}>
-            <FormLabel isRequired>Email address</FormLabel>
+            <FormLabel>Email address</FormLabel>
             {formik.touched.email && formik.errors.email ? (
               <FormHelperText color="red">{formik.errors.email}</FormHelperText>
             ) : null}
@@ -83,7 +89,7 @@ const Navbarregister = () => {
           </InputGroup>
 
           <Flex justify={"space-between"}>
-            <FormLabel isRequired>Username</FormLabel>
+            <FormLabel>Username</FormLabel>
             {formik.touched.username && formik.errors.username ? (
               <FormHelperText color="red">{formik.errors.username}</FormHelperText>
             ) : null}

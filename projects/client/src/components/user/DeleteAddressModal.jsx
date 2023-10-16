@@ -25,7 +25,7 @@ const DeleteAddressModal = ({ isOpen, onClose, address_id }) => {
     await dispatch(deleteAddress(address_id, toast));
     onClose();
     await dispatch(getAddress(id));
-  }
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -37,10 +37,7 @@ const DeleteAddressModal = ({ isOpen, onClose, address_id }) => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text>
-            Once you delete this address, it cannot be undone. Are you sure want
-            to delete this address?
-          </Text>
+          <Text>Once you delete this address, it cannot be undone. Are you sure want to delete this address?</Text>
         </ModalBody>
 
         <ModalFooter>
@@ -50,8 +47,7 @@ const DeleteAddressModal = ({ isOpen, onClose, address_id }) => {
             color={"brand.main"}
             _hover={{ bg: "gray.100" }}
             _active={{ bg: "gray.300" }}
-            onClick={onClose}
-          >
+            onClick={onClose}>
             Cancel
           </Button>
           <Button
@@ -59,8 +55,7 @@ const DeleteAddressModal = ({ isOpen, onClose, address_id }) => {
             color={"white"}
             bg={"brand.main"}
             _hover={{ bg: "brand.hover" }}
-            _active={{ bg: "brand.active" }}
-          >
+            _active={{ bg: "brand.active" }}>
             Yes, Delete
           </Button>
         </ModalFooter>

@@ -6,6 +6,7 @@ import Navbarregister from "../components/landing/Navbarregister";
 const Register = () => {
   return (
     <Box>
+      <Navbar />
       <Navbarregister />
     </Box>
   );

@@ -1,8 +1,24 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Box, Center, Skeleton, Stack, Badge, Icon, Text } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Box,
+  Center,
+  Skeleton,
+  Stack,
+  Badge,
+  Icon,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Pagination } from "../../components/Pagination";
 import { AiOutlineInbox } from "react-icons/ai";
+import UserOrderDetail from "../UserOrderDetail";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateState }) => {
@@ -12,6 +28,7 @@ const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateS
   const [index, setIndex] = useState(1);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const changeDate = (createdAt) => {
     const monthNames = [
@@ -52,6 +69,8 @@ const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateS
   ];
 
   const [transaction, setTransaction] = useState(null);
+  const [transactionDetail, setTransactionDetail] = useState(null);
+
   const fetchData = async () => {
     try {
       let query = `?page=${index}`;
@@ -64,6 +83,11 @@ const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateS
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleClick = (id) => {
+    setTransactionDetail(id);
+    onOpen();
   };
 
   useEffect(() => {
@@ -110,7 +134,7 @@ const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateS
           <Tbody>
             {transaction &&
               transaction.map((item, index) => (
-                <Tr key={index} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
+                <Tr key={index} _hover={{ bg: "gray.100" }} cursor={"pointer"} onClick={() => handleClick(item.id)}>
                   <Td>
                     {item.user_id}
                     {item.id}
@@ -137,6 +161,7 @@ const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateS
         </Table>
       </Center>
       <Pagination page={page} index={index} setIndex={setIndex} />
+      <UserOrderDetail isOpen={isOpen} onClose={onClose} orderId={transactionDetail} />
     </Stack>
   );
 };

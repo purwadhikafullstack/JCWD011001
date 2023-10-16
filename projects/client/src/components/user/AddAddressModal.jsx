@@ -68,17 +68,13 @@ const AddAddressModal = ({ isOpen, onClose }) => {
   };
 
   const saveAddressData = async () => {
-    const provinceName = selectedProvinceData
-      ? selectedProvinceData.province
-      : "";
+    const provinceName = selectedProvinceData ? selectedProvinceData.province : "";
     const addressData = `${district}, ${selectedCity.name}, ${provinceName}`;
     fullAddress = `${streetAddress}, ${district}, ${selectedCity.name}, ${provinceName}`;
 
     try {
       const location = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?key=${KEY}&q=${encodeURIComponent(
-          addressData
-        )}&language=id`
+        `https://api.opencagedata.com/geocode/v1/json?key=${KEY}&q=${encodeURIComponent(addressData)}&language=id`
       );
 
       latitude = location.data.results[0].geometry.lat;
@@ -101,17 +97,7 @@ const AddAddressModal = ({ isOpen, onClose }) => {
       setSubmitLoading(true);
       const city_id = selectedCity.id;
       await saveAddressData();
-      await dispatch(
-        addAddress(
-          fullAddress,
-          id,
-          latitude,
-          longitude,
-          city_id,
-          toast,
-          onClose
-        )
-      );
+      await dispatch(addAddress(fullAddress, id, latitude, longitude, city_id, toast, onClose));
       await dispatch(getAddress(id));
       setSubmitLoading(false);
       resetFormValues();
@@ -136,14 +122,11 @@ const AddAddressModal = ({ isOpen, onClose }) => {
                 setSelectedCity({ id: "", name: "" });
                 setCities([]);
 
-                const selectedProvinceData = provinces.find(
-                  (province) => province.province_id === selectedValue
-                );
+                const selectedProvinceData = provinces.find((province) => province.province_id === selectedValue);
 
                 setSelectedProvinceData(selectedProvinceData);
                 getCities(selectedValue);
-              }}
-            >
+              }}>
               {provinces.map((province) => (
                 <option key={province.province_id} value={province.province_id}>
                   {province.province}
@@ -158,17 +141,14 @@ const AddAddressModal = ({ isOpen, onClose }) => {
               placeholder="Select City"
               onChange={async (e) => {
                 const selectedValue = e.target.value;
-                const selectedCityData = cities.find(
-                  (city) => city.city_name === selectedValue
-                );
+                const selectedCityData = cities.find((city) => city.city_name === selectedValue);
                 setSelectedCity({
                   id: selectedCityData.city_id,
                   name: selectedValue,
                 });
               }}
               value={selectedCity.name}
-              isDisabled={!selectedProvince}
-            >
+              isDisabled={!selectedProvince}>
               {cities.map((city) => (
                 <option key={city.city_id} value={city.city_name}>
                   {city.city_name}
@@ -217,17 +197,9 @@ const AddAddressModal = ({ isOpen, onClose }) => {
             bgColor={"brand.main"}
             onClick={onSubmit}
             isLoading={submitLoading}
-            isDisabled={
-              !(
-                selectedProvince &&
-                selectedCity.id &&
-                district &&
-                streetAddress
-              )
-            }
+            isDisabled={!(selectedProvince && selectedCity.id && district && streetAddress)}
             _hover={{ bgColor: "brand.hover" }}
-            _active={{ bgColor: "brand.active" }}
-          >
+            _active={{ bgColor: "brand.active" }}>
             Add Address
           </Button>
         </ModalFooter>

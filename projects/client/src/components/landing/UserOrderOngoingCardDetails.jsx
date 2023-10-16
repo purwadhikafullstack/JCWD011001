@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import UserOrderOngoingCardDetailOrder from "./UserOrderOngoingCardDetailStatus";
+import getImage from "../../utils/getImage";
 
 const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, setDetail }) => {
   const orderStatusArray = [
@@ -43,22 +44,17 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
           {orderStatusArray.map((step, index) => (
             <Step label={step.status} key={index}>
               <StepIndicator>
-                <StepStatus
-                  complete={<StepIcon />}
-                  incomplete={<StepNumber />}
-                  active={<StepNumber />}
-                />
+                <StepStatus complete={<StepIcon />} incomplete={<StepNumber />} active={<StepNumber />} />
               </StepIndicator>
-
-              <StepSeparator _horizontal={{ ml: "0" }} />
+              <StepSeparator _horizontal={{ base: { ml: "0" }, md: { ml: "5" } }} />
             </Step>
           ))}
         </Stepper>
-        <Flex justifyContent={"space-between"}>
+        <Flex justifyContent={"space-between"} flexDirection={{ base: "column", md: "row" }}>
           <Text>
             Step {activeStep + 1}: <b>{activeStepText}</b>
           </Text>
-          <Text>
+          <Text mt={{ base: "4", md: "0" }}>
             Next Step {activeStep + 2}: <b>{nextStep}</b>
           </Text>
         </Flex>
@@ -72,6 +68,8 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
     );
   };
 
+  console.log(transactionDetail);
+
   return (
     <Card>
       <CardHeader fontSize={"25px"} borderBottomColor={"red"}>
@@ -84,7 +82,6 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
             <Box key={item.id}>
               <Flex justify={"space-between"}>
                 <Stack spacing="2">
-                  {console.log("inikah ?", item)}
                   <Text fontWeight={"bold"} fontSize={"20px"}>
                     {item.Product.name}
                   </Text>
@@ -93,7 +90,7 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
                 </Stack>
                 <Box w={"50%"} align={"right"} mr={"20%"}>
                   <Image
-                    src="https://cdn10.bigcommerce.com/s-f70ch/products/106/images/307/18__31743.1449827934.1280.1280.jpg?c=2"
+                    src={getImage(item.Product.product_img) || null}
                     fit={"contain"}
                     w={"30%"}
                     overflow={"hidden"}
@@ -106,7 +103,9 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
           ))}
         <Box width={"100%"}>
           <Text fontSize={"25px"}>Track Order</Text>
-
+          <Text>
+            Send to: "<b>{transactionDetail.address}</b>"
+          </Text>
           <Box py="40px">{RenderStatus()}</Box>
         </Box>
       </CardBody>

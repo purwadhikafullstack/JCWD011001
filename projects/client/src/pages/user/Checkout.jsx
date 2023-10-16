@@ -1,15 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Image,
-  Text,
-  useDisclosure,
-  Select,
-  Spinner,
-  Button,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Image, Text, useDisclosure, Select, Spinner, Button, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Logo from "../../assets/logo_main.png";
 import ConfirmBackToCart from "../../components/user/ConfirmBackToCart";
@@ -30,20 +19,12 @@ const Checkout = () => {
   const toast = useToast();
   const { user } = useSelector((state) => state.AuthReducer);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenVoucher,
-    onOpen: onOpenVoucher,
-    onClose: onCloseVoucher,
-  } = useDisclosure();
+  const { isOpen: isOpenVoucher, onOpen: onOpenVoucher, onClose: onCloseVoucher } = useDisclosure();
   const { defaultAddress } = useSelector((state) => state.AddressReducer);
   const { carts, item } = useSelector((state) => state.CartReducer);
-  const { store_id, storeCityId } = useSelector(
-    (state) => state.ProductReducer
-  );
+  const { store_id, storeCityId } = useSelector((state) => state.ProductReducer);
   const [deliveryDetail, setDeliveryDetail] = useState("");
-  const { voucherToUse, deliveryVoucherToUse } = useSelector(
-    (state) => state.VoucherReducer
-  );
+  const { voucherToUse, deliveryVoucherToUse } = useSelector((state) => state.VoucherReducer);
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
   const [voucher_discount, setVoucherDiscount] = useState(0);
   const [delivery_discount, setDeliveryDiscount] = useState(0);
@@ -51,6 +32,7 @@ const Checkout = () => {
   const [totalWeight, setTotalWeight] = useState(0);
   const [deliveryPrice, setDeliveryprice] = useState(0);
   const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
+  const [delivDuration, setDelivDuration] = useState("");
   let product_price = 0;
   product_price = carts?.total_price || 0;
 
@@ -78,6 +60,7 @@ const Checkout = () => {
           delivery_voucher_id: deliveryVoucherToUse?.id,
           total_discount: vouchers_discount,
           courier: deliveryDetail,
+          duration: delivDuration,
         },
         {
           headers: {
@@ -134,13 +117,9 @@ const Checkout = () => {
         minH={"60px"}
         borderBottom={1}
         borderStyle={"solid"}
-        borderColor={"#D7F0AA"}
-      >
+        borderColor={"#D7F0AA"}>
         <Box>
-          <Flex
-            justifyContent={{ base: "center", md: "flex-start" }}
-            align={"center"}
-          >
+          <Flex justifyContent={{ base: "center", md: "flex-start" }} align={"center"}>
             <Image
               onClick={onOpen}
               src={Logo}
@@ -154,11 +133,7 @@ const Checkout = () => {
           </Flex>
         </Box>
       </Box>
-      <Box
-        w={"full"}
-        py={"16px"}
-        px={{ base: "28px", md: "48px", lg: "100px" }}
-      >
+      <Box w={"full"} py={"16px"} px={{ base: "28px", md: "48px", lg: "100px" }}>
         <Text fontSize={{ base: "2xl", md: "4xl" }} fontWeight={"medium"}>
           Checkout
         </Text>
@@ -173,29 +148,15 @@ const Checkout = () => {
                 <Divider my={2} />
                 <Text fontWeight={"medium"}>{nameExist}</Text>
                 <Text my={2}>{user.phone}</Text>
-                <Text>
-                  {defaultAddress ? (
-                    defaultAddress.address
-                  ) : (
-                    <Spinner size="sm" />
-                  )}
-                </Text>
-                <Text
-                  mt={2}
-                  fontSize={"sm"}
-                  fontStyle={"italic"}
-                  color={"gray.500"}
-                >
+                <Text>{defaultAddress ? defaultAddress.address : <Spinner size="sm" />}</Text>
+                <Text mt={2} fontSize={"sm"} fontStyle={"italic"} color={"gray.500"}>
                   *your order will be delivered to your default address
                 </Text>
                 <Divider my={4} />
                 <Text fontWeight={"bold"} mb={2} color={"brand.main"}>
                   Courier Option:
                 </Text>
-                <Select
-                  placeholder="Select delivery option"
-                  onChange={(e) => setDeliveryDetail(e.target.value)}
-                >
+                <Select placeholder="Select delivery option" onChange={(e) => setDeliveryDetail(e.target.value)}>
                   <option value={"jne"}>JNE</option>
                   <option value={"tiki"}>TIKI</option>
                   <option value={"pos"}>POS</option>
@@ -210,6 +171,7 @@ const Checkout = () => {
                     weight={totalWeight}
                     products={item}
                     setDeliveryprice={setDeliveryprice}
+                    setDelivDuration={setDelivDuration}
                   />
                 ) : null}
               </Box>
@@ -238,8 +200,7 @@ const Checkout = () => {
               rounded={"lg"}
               border={"1px"}
               borderColor={"gray.200"}
-              boxShadow={"lg"}
-            >
+              boxShadow={"lg"}>
               <Box w={"full"} p={4}>
                 <Button
                   onClick={onOpenVoucher}
@@ -250,8 +211,7 @@ const Checkout = () => {
                   borderColor={"brand.main"}
                   rounded={"lg"}
                   _hover={{ bg: "gray.100" }}
-                  _active={{ bg: "gray.300" }}
-                >
+                  _active={{ bg: "gray.300" }}>
                   Use Voucher
                 </Button>
               </Box>
@@ -295,8 +255,7 @@ const Checkout = () => {
                   _hover={{ bg: "brand.hover" }}
                   _active={{ bg: "brand.active" }}
                   mt={8}
-                  isDisabled={isCheckoutDisabled}
-                >
+                  isDisabled={isCheckoutDisabled}>
                   Checkout
                 </Button>
                 {!deliveryPrice && (

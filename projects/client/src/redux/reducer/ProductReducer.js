@@ -61,8 +61,8 @@ export const getProduct = ({ index = 1, order = "ASC", orderBy = "name", categor
 export const getStoreProduct = ({ lat, lon, index = 1, order = "ASC", orderBy = "name", category }) => {
   return async (dispatch) => {
     try {
+      if (!lat || !lon) return;
       const { data } = await axios.get(`${URL_API}/store/nearest/?lat=${lat}&lon=${lon}`);
-      console.log("store_id", data.data);
       if (!data.data.id) {
         dispatch(setStore_id(null));
         dispatch(getProduct({ index }));
@@ -96,6 +96,7 @@ export const getStoreProductNext = ({ store_id, index, order, orderBy, category 
 export const getStore_id = ({ lat, lon }) => {
   return async (dispatch) => {
     try {
+      if (!lat || !lon) return;
       const { data } = await axios.get(`${URL_API}/store/nearest/?lat=${lat} &lon=${lon}`);
       if (data) return dispatch(setStore_id(data.data));
       else dispatch(setStore_id(null));
@@ -108,7 +109,7 @@ export const getStore_id = ({ lat, lon }) => {
 export const getStoreStock = ({ id }) => {
   return async (dispatch) => {
     try {
-      console.log(id);
+      if (!id) return;
       const { data } = await axios.get(`${URL_API}/product/stock/${id}`);
       dispatch(setStoreStock(data.data));
     } catch (error) {
@@ -175,16 +176,17 @@ export const addProduct = (values, productImg, Swal, toast) => {
 export const updateProduct = (values, toast, Swal) => {
   return async () => {
     const id = values.id;
-    console.log("edit ", values)
-    const {newName, categoryId, price, admin_discount, description, weigth} = values
+    console.log("edit ", values);
+    const { newName, categoryId, price, admin_discount, description, weigth } = values;
     try {
-      const data = await axios.patch(`${URL_API}/product/${id}`, { 
-        newName : newName, 
-        category_id : categoryId, 
-        price : price,
-        admin_discount : admin_discount,
-        description : description,
-        weigth : weigth });
+      const data = await axios.patch(`${URL_API}/product/${id}`, {
+        newName: newName,
+        category_id: categoryId,
+        price: price,
+        admin_discount: admin_discount,
+        description: description,
+        weigth: weigth,
+      });
       Swal.fire({
         position: "top-end",
         icon: "success",

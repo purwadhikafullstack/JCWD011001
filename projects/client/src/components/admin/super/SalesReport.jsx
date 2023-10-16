@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Stack, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,8 @@ const SalesReport = () => {
     fetchStore();
   }, []);
 
+  console.log(stores);
+
   if (detail) {
     return (
       <Box>
@@ -54,17 +56,28 @@ const SalesReport = () => {
         px={8}>
         <Box>
           <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
-            Sales Report{" "}
+            Sales Report
           </Text>
         </Box>
       </Box>
       <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} mr={"24px"}>
-        {stores &&
-          stores.map((item, index) => (
-            <Box key={index} _hover={{ bg: "gray.100" }} cursor={"pointer"} onClick={() => handleClickStore(item)}>
-              <Text>{item.name}</Text>
-            </Box>
-          ))}
+        <Table>
+          <Thead>
+            <Tr>
+              <Th>Store Name</Th>
+              <Th>Admin</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {stores &&
+              stores.map((item, index) => (
+                <Tr key={index} onClick={() => handleClickStore(item)} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
+                  <Td>{item.name}</Td>
+                  <Td>{item.Admin.name}</Td>
+                </Tr>
+              ))}
+          </Tbody>
+        </Table>
       </Stack>
     </Box>
   );

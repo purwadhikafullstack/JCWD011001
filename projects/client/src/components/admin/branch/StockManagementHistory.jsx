@@ -39,39 +39,40 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
   }, [startDate, endDate, index]);
 
   return (
-    <Box ml={"48px"} mt={"24px"}>
+    <Box mx={{ base: "0", sm: "12px" }} mt={{ base: "0", sm: "24px" }}>
       <Button onClick={handleBack} bg={"brand.main"} _hover={{ bg: "brand.hover" }} color={"white"}>
         Back
       </Button>
       <Box
         borderWidth="1px"
         borderRadius="lg"
-        p="4"
+        p={{ base: "2", md: "4" }}
         boxShadow="lg"
-        width="100%"
-        mt={"48px"}
+        width={{ base: "100%", sm: "auto" }}
+        mt={{ base: "24px", sm: "48px" }}
         mx="auto"
         display="flex"
         justifyContent="center"
-        alignItems="center">
-        <Flex alignItems="center">
+        alignItems="center"
+        flexDirection={{ base: "column", md: "row" }}>
+        <Flex alignItems="center" justifyContent={{ base: "center", md: "flex-start" }} mb={{ base: "4", md: "0" }}>
           <Image
             src={getImage(itemDetail.Product.product_img) || "/default-image.jpg"}
             alt={itemDetail.name}
-            boxSize="150px"
+            boxSize={{ base: "100px", md: "150px" }}
             objectFit="cover"
           />
-          <Box ml="4">
-            <Text fontSize="xl" fontWeight="bold">
+          <Box ml={{ base: "0", md: "4" }} mt={{ base: "4", md: "0" }}>
+            <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="bold">
               {itemDetail.name}
             </Text>
-            <Text fontSize="lg" color="gray.600">
+            <Text fontSize={{ base: "md", md: "lg" }} color="gray.600">
               Price: Rp.{itemDetail.Product.price},-
             </Text>
-            <Text fontSize="lg" color="gray.600">
+            <Text fontSize={{ base: "md", md: "lg" }} color="gray.600">
               Discount: Rp.{itemDetail.Product.admin_discount},-
             </Text>
-            <Text fontSize="lg" color="gray.600">
+            <Text fontSize={{ base: "md", md: "lg" }} color="gray.600">
               Quantity: {itemDetail.quantity}
             </Text>
           </Box>
@@ -86,6 +87,7 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
           setEndDate={setEndDate}
           setStartDate={setStartDate}
           page={index}
+          setIndex={setIndex}
         />
       )}
       <Pagination page={page} index={index} setIndex={setIndex} />

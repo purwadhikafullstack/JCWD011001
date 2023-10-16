@@ -56,8 +56,8 @@ const UserOrderFinishedCard = ({ item, setDetail, setTransactionDetail, setTrans
     }
   };
 
-  const handleClick = () => {
-    setDetail(true);
+  const handleClick = async () => {
+    await setDetail(true);
     setTransactionDetail(item);
     setTransactionProducts(products);
   };
@@ -94,12 +94,14 @@ const UserOrderFinishedCard = ({ item, setDetail, setTransactionDetail, setTrans
         </Badge>
       </Box>
       <Box>
-        {products && (
+        <Box>Total Price Detail</Box>
+
+        {/* {products && (
           <Image
             src={products[0]?.Product.product_img}
             alt={`Image for Order #${item.user_id}${item.id}${products[0]?.Product.name}`}
           />
-        )}
+        )} */}
         <Text fontWeight={"bold"}>Harga: Rp.{item.total_price},-</Text>
         <Text fontWeight={"bold"}>Harga Ongkir: Rp.{item.delivery_price},-</Text>
       </Box>

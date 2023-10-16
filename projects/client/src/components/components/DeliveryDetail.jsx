@@ -3,12 +3,28 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 const key = process.env.REACT_APP_RO_KEY;
 const URL_API = process.env.REACT_APP_API_BASE_URL;
-const DeliveryDetail = ({ storeCityId, city_id, deliveryDetail, products, setDeliveryprice }) => {
+
+function findMaxNumber(input) {
+  var numberPattern = /\d+/g;
+  var numbers = input.match(numberPattern);
+  if (numbers) {
+    if (numbers.length > 1) {
+      return Math.max(...numbers.map(Number));
+    } else if (numbers.length === 1) {
+      return parseInt(numbers[0]);
+    }
+  }
+  return null;
+}
+
+const DeliveryDetail = ({ storeCityId, city_id, deliveryDetail, products, setDeliveryprice, setDelivDuration }) => {
   console.log(storeCityId, city_id, deliveryDetail, products);
   const weightsArray = products.map((product) => product.Product.weight * product.quantity);
   const totalWeight = weightsArray.reduce((acc, currentWeight) => acc + currentWeight, 0);
   const [rajaongkir, setRajaongkir] = useState();
   const [pick, setPick] = useState({});
+  const numberPattern = /\d+/g;
+
   const fetchRajaOngkir = async () => {
     try {
       const { data } = await axios.post(
@@ -24,8 +40,10 @@ const DeliveryDetail = ({ storeCityId, city_id, deliveryDetail, products, setDel
   };
 
   const handlePickDeliv = (option) => {
+    console.log(option);
     setPick(option);
     setDeliveryprice(option.cost[0].value);
+    setDelivDuration(findMaxNumber(option.cost[0].etd));
   };
 
   useEffect(() => {
