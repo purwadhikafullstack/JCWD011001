@@ -4,6 +4,7 @@ const { cartController } = require("../controllers");
 const router = express.Router();
 
 router.patch("/", verifyToken, cartController.addCartItem)
+router.patch("/quantity", verifyToken, cartController.addQuantityCart)
 router.patch("/item", verifyToken, cartController.removeItemCart)
 router.get("/item/:store_id", verifyToken, cartController.getItemsCart)
 router.get("/", verifyToken, cartController.getCart)

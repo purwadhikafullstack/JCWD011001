@@ -1,9 +1,24 @@
-import { Box, Button, Card, CardBody, CardFooter, Center, Flex, Heading, Spinner, Text, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Center,
+  Flex,
+  Heading,
+  Spinner,
+  Text,
+  Stack,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductListItem from "./ProductListItem";
 import { Pagination } from "../components/Pagination";
-import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer";
+import {
+  getProduct,
+  getStoreProduct,
+} from "../../redux/reducer/ProductReducer";
 import SearchProducts from "../components/SearchProducts";
 import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 
@@ -19,7 +34,8 @@ const ProductList = () => {
 
   useEffect(() => {
     if (!location) dispatch(getProduct({ index, orderBy, order }));
-    if (location) dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
+    if (location)
+      dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
   }, [index, lon, lat, store, store_id, location, orderBy, order]);
 
   const handleOrderBy = () => {
@@ -33,7 +49,9 @@ const ProductList = () => {
     return (
       <Box w={"100%"} py={"40px"} px={{ base: "60px", lg: "100px" }}>
         <Stack mb={10}>
-          <Heading as={"h2"}>Anda Sedang Melihat {store ? store : "Produk Terbaru Kami"}</Heading>
+          <Heading as={"h2"}>
+            You is looking at {store ? store : "Produk Terbaru Kami"}
+          </Heading>
           <Flex gap={2} justify={"space-between"} mx={"20"}>
             <SearchProducts />
             <Box>
@@ -59,7 +77,7 @@ const ProductList = () => {
     <Box w={"100%"} py={"40px"} px={{ base: "60px", lg: "100px" }}>
       <Stack mb={10}>
         <Heading as={"h2"} align={"center"}>
-          Anda Sedang Melihat {store ? store : "Produk Terbaru Kami"}
+          Product in {store ? store : "Produk Terbaru Kami"}
         </Heading>
         <Flex gap={2} justify={"space-between"} mx={"20"}>
           <SearchProducts />

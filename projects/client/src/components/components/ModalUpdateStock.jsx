@@ -124,7 +124,7 @@ export default function ModalUpdateStock({ isOpen, onClose, id }) {
                       type="submit"
                       // isDisabled={isButtonDisabled}
                     >
-                      Edit Product
+                      Update Stock
                     </Button>
                   </ModalFooter>
                 </form>

@@ -197,7 +197,7 @@ const userOrderController = {
           console.log("Current date:", currentDate);
           
           // Perform any other operations on this transaction here
-          if(currentDate >= expirationDate){
+          if(currentDate >= expirationDate && transaction.status === 3){
             await db.sequelize.transaction(async(t) => {
               const result = await Transaction.update({status : 4},{where : {id: transactions.id}}, {transaction : t})
             })

@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
   deleteProduct,
+  getProduct,
   restoreProduct,
   updateProduct,
 } from "../../../redux/reducer/ProductReducer";
@@ -40,7 +41,6 @@ import { FaCheck, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { destroyProduct } from "../../../redux/reducer/AdminReducer";
 import { BiSearchAlt } from "react-icons/bi";
-import ChangeProductPicture from "../../components/ChangeProductPicture";
 import ButtonChangeProductPicture from "../../components/ButtonChangeProductPicture";
 import ButtonViewProductPicture from "../../components/ButtonViewProductPicture";
 import { Pagination } from "../../components/Pagination";
@@ -49,6 +49,7 @@ const ProductManagement = () => {
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
   const [product, setProduct] = useState([]);
   const [page, setPage] = useState(1);
+  const [index, setIndex] = useState(1);
   const [order, setOrder] = useState("ASC");
   const [totalPage, setTotalPage] = useState("");
   const [orderByPrice, setOrderByPrice] = useState(false);
@@ -57,14 +58,12 @@ const ProductManagement = () => {
   const [name, setName] = useState("");
   const [sortLabelText, setSortLabelText] = useState("Sort by price");
   const { category } = useSelector((state) => state.CategoryReducer);
-  const [barang, setBarang] = useState([]);
+  const [dataLength, setDataLength] = useState(0);
+  const [limits, setLimits] = useState(0);
+  console.log("SELECT", categories);
 
-  const [isLargerThanMD] = useMediaQuery("(min-width: 48em)");
   const handleNext = () => {
     setPage(page + 1);
-  };
-  const handleOrder = () => {
-    setOrder(order === "ASC" ? "DESC" : "ASC");
   };
 
   const handlePrev = () => {
@@ -79,24 +78,22 @@ const ProductManagement = () => {
     return pageNumbers;
   };
   const pageNumbers = generatePageNumbers(totalPage);
+  console.log("total page", totalPage);
   const dispatch = useDispatch();
-  const orderByParam = orderByPrice ? "price" : orderBy; // Use 'price' if orderByPrice is true, otherwise use orderBy
+  const orderByParam = orderByPrice ? "price" : orderBy;
   const fetchData = async () => {
     const respon = await axios.get(
-      `http://localhost:8000/api/admin/product?name=${name}&limit=3&page=${page}&order=${order}&orderBy=${orderByParam}&category=${categories}`
+      `http://localhost:8000/api/admin/product?name=${name}&limit=10&page=${page}&order=${order}&orderBy=${orderByParam}&category=${categories}`
     );
     setProduct(respon.data.data);
     setTotalPage(respon.data.totalPage);
   };
-
   useEffect(() => {
     fetchData();
-    // ambilData();
     if (modalClosedTrigger) {
       fetchData();
       setModalClosedTrigger(false);
     }
-    // fetchData();
   }, [
     page,
     order,
@@ -110,11 +107,6 @@ const ProductManagement = () => {
   const handleSearch = () => {
     const name = document.getElementById("search").value;
     setName(name);
-  };
-  const handleOrderBy = () => {
-    setOrderBy("name");
-    setOrderByPrice(false);
-    fetchData();
   };
 
   const handleOrderByPrice = () => {
@@ -149,9 +141,8 @@ const ProductManagement = () => {
     await dispatch(deleteProduct(item, Swal));
     await fetchData();
   };
-  console.log("category masuk", category);
-  const itemsToMap = product || barang || [];
-  console.log("barangss", barang);
+
+  const itemsToMap = product || [];
 
   return (
     <Box>
@@ -180,11 +171,12 @@ const ProductManagement = () => {
               value={categories}
               onChange={(e) => setCategory(e.target.value)}
             >
-              {category.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              {category &&
+                category.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
             </Select>
             <InputGroup ml={{ base: "12px", lg: "48px" }}>
               <InputLeftElement>
@@ -225,82 +217,60 @@ const ProductManagement = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {itemsToMap.map(
-                  (item) => (
-                    <Tr key={item.id}>
-                      <Td>{item.Category?.name}</Td>
-                      <Td>{item.name}</Td>
-                      <Td>{item.price}</Td>
-                      <Td>{item.admin_discount}</Td>
-                      <Td>{item.weight} Kg</Td>
-                      <Td>
-                        <Flex>
-                          <ButtonChangeProductPicture
-                            item={item}
-                            setModalClosedTrigger={setModalClosedTrigger}
-                          />
-                          <ButtonViewProductPicture item={item} />
-                        </Flex>
-                      </Td>
-                      <Td textColor={item.isactive ? "black" : "red"}>
-                        {item.isactive ? "Enable" : "Disable"}
-                      </Td>
-                      <Td>
-                        <Flex>
-                          <ButtonEditProduct
-                            setModalClosedTrigger={setModalClosedTrigger}
-                            id={item.id}
-                            item={item}
-                          />
-                          {item.isactive ? (
-                            <Button variant={""} onClick={() => deactive(item)}>
-                              Disable
-                            </Button>
-                          ) : (
-                            // <IconButton
-                            //   color={"red"}
-                            //   mt={"12px"}
-                            //   variant={""}
-                            //   icon={
-                            //     <RxCross1
-                            //       size={"sm"}
-                            //       onClick={() => deactive(item)}
-                            //     />
-                            //   }
-                            // />
-                            <Box>
-                              <Flex>
-                                <IconButton
-                                  color={"green"}
-                                  variant={""}
-                                  // mt={"10px"}
-                                  icon={
-                                    <FaCheck
-                                      // size={"sm"}
-                                      onClick={() => restore(item)}
-                                    />
-                                  }
-                                />
-                                <IconButton
-                                  // mt={"22px"}
-                                  color={"red"}
-                                  variant={""}
-                                  icon={
-                                    <FaTrashCan
-                                      onClick={() => handleDeleteProduct(item)}
-                                    />
-                                  }
-                                />
-                              </Flex>
-                            </Box>
-                          )}
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  )
-                  // const active = item.isactive;
-                  // const newPrice = item.price - item.admin_discount;
-                )}
+                {itemsToMap.map((item) => (
+                  <Tr key={item.id}>
+                    <Td>{item.Category?.name}</Td>
+                    <Td>{item.name}</Td>
+                    <Td>{item.price}</Td>
+                    <Td>{item.admin_discount}</Td>
+                    <Td>{item.weight} g</Td>
+                    <Td>
+                      <Flex>
+                        <ButtonChangeProductPicture
+                          item={item}
+                          setModalClosedTrigger={setModalClosedTrigger}
+                        />
+                        <ButtonViewProductPicture item={item} />
+                      </Flex>
+                    </Td>
+                    <Td textColor={item.isactive ? "black" : "red"}>
+                      {item.isactive ? "Enable" : "Disable"}
+                    </Td>
+                    <Td>
+                      <Flex>
+                        <ButtonEditProduct
+                          setModalClosedTrigger={setModalClosedTrigger}
+                          id={item.id}
+                          item={item}
+                        />
+                        {item.isactive ? (
+                          <Button variant={""} onClick={() => deactive(item)}>
+                            Disable
+                          </Button>
+                        ) : (
+                          <Box>
+                            <Flex>
+                              <IconButton
+                                color={"green"}
+                                variant={""}
+                                icon={<FaCheck onClick={() => restore(item)} />}
+                              />
+                              <IconButton
+                                color={"red"}
+                                variant={""}
+                                icon={
+                                  <FaTrashCan
+                                    onClick={() => handleDeleteProduct(item)}
+                                  />
+                                }
+                              />
+                            </Flex>
+                          </Box>
+                        )}
+                      </Flex>
+                    </Td>
+                  </Tr>
+                ))}
               </Tbody>
               <Tfoot></Tfoot>
             </Table>
@@ -323,7 +293,7 @@ const ProductManagement = () => {
                 onClick={() => setPage(pageNumber)}
                 isActive={page === pageNumber}
                 bgColor={page === pageNumber ? "red" : "brand.main"}
-                color={page === pageNumber ? "black" : "black"} // Set text color conditionally
+                color={page === pageNumber ? "black" : "black"}
               >
                 {pageNumber}
               </Button>
@@ -338,6 +308,7 @@ const ProductManagement = () => {
               Next
             </Button>
           </Box>
+          <Box></Box>
         </Box>
       </Stack>
     </Box>

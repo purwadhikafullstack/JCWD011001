@@ -194,47 +194,52 @@ const adminController = {
     try {
       const {
         page = 1,
-        limit = 5,
+        limit = 10,
         order = "ASC",
         orderBy = "name",
-        category = "", // This should correspond to a valid category ID
+        category = "", 
         name = "",
-        minPrice = 0,
-        maxPrice = Infinity,
       } = req.query;
-
+  
       const findName = { name: { [Op.like]: `%${name || ""}%` } };
       const pagination = { offset: (page - 1) * limit, limit: +limit };
-      const totalProduct = await Product.count();
-      const totalPage = Math.ceil(totalProduct / +limit);
+      let totalProductQuery = {};
+  
       const where = {};
-
+  
       if (category) {
         where.category_id = category;
+        totalProductQuery = { category_id: category };
       }
-
+  
       let orderByColumn;
       if (orderBy === "price") {
-        orderByColumn = Sequelize.literal("price"); // Sort by price
+        orderByColumn = Sequelize.literal("price"); 
       } else {
-        orderByColumn = Sequelize.col(orderBy); // Sort by other columns
+        orderByColumn = Sequelize.col(orderBy); 
       }
-
+  
+      const totalProduct = await Product.count({
+        where: totalProductQuery,
+      });
+      const totalPage = Math.ceil(totalProduct / +limit);
+  
       const products = await Product.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt", "category_id"],
         },
-        include: [{ model: Category, as: "Category" }], // Make sure this is set up correctly
+        include: [{ model: Category, as: "Category" }],
         ...pagination,
         where: { ...findName, ...where },
         order: [[orderByColumn, order]],
       });
-
+  
       res.status(200).json({ page, totalProduct, totalPage, limit, data: products });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
+  
   deleteProduct: async (req, res) => {
     try {
       const { productId } = req.params;
@@ -253,9 +258,9 @@ const adminController = {
   branchStock : async(req, res) => {
     try {
       const {productId, quantity, description} = req.body
+      // let description = "Update Stock"
       const findStore = await Store.findOne({where : {admin_id : req.user.id}})
       console.log("dapat adminnya", findStore)
-      console.log("dapat adminnya", findStore.id)
       const existingProductStore = await productStore.findOne({
         where: { product_id: productId, store_id: findStore.id },
       });
@@ -263,18 +268,21 @@ const adminController = {
       const existingStoresHistory = await stockHistory.findOne({
         where: { product_id: productId, store_id: findStore.id },
       });
-      console.log("deskripsi ", description)
       console.log("update sampai sini", existingStoresHistory)
       if (existingProductStore) {
-        existingProductStore.quantity = quantity;
+        let quantityUpdate;
+        quantityUpdate = existingProductStore.quantity + quantity;
+        console.log("apa inii ??", quantity)
+        console.log("ini tambahan", quantityUpdate)
+        existingProductStore.quantity = quantityUpdate;
         await existingProductStore.save();
         await db.sequelize.transaction(async (t) => {
           await stockHistory.create({
             product_id : productId,
             store_id : findStore.id,
-            quantity : quantity,
+            quantity : quantityUpdate,
             isactive : true,
-            description : description
+            description : `Update Stock ${quantity} pcs`
           }, {transaction : t})
         })
         return res.status(200).json({ message: "Update Success" });
@@ -291,7 +299,7 @@ const adminController = {
             store_id : findStore.id,
             quantity : quantity,
             isactive : true,
-            description : description
+            description : `Update Stock ${quantity} pcs`
           }, {transaction : t})
         })
         return res.status(200).json({message : "Sucess"})
@@ -304,7 +312,6 @@ const adminController = {
     try {
       const { id } = req.params;
       const findProduct = await productStore.findOne({ where: { id } });
-      console.log("deActive product branch", findProduct);
       await db.sequelize.transaction(async (t) => {
         await productStore.update(
           {
@@ -323,7 +330,6 @@ const adminController = {
     try {
       const { id } = req.params;
       const findProduct = await productStore.findOne({ where: { id } });
-      console.log("enable,", findProduct);
       await db.sequelize.transaction(async (t) => {
         await productStore.update(
           {
@@ -338,12 +344,16 @@ const adminController = {
   },
   getStockBranch: async (req, res) => {
     try {
+      const { product_name = "", page = 1 } = req.query;
+      const findProduct = {
+        "$Product.name$": { [Op.like]: `%${product_name || ""}%` },
+      };
       const store = await Store.findOne({ where: { admin_id: req.user.id } });
+      console.log("adakajhh", store)
       if (!store) {
         return res.status(404).json({ message: "Store not found for the user." });
       }
-      console.log("store get ", store);
-      console.log("admin store get", store.admin_id);
+      const where = { store_id: store.id };
       const findBranch = await productStore.findAll({
         where: {
           store_id: store.id,
@@ -355,8 +365,9 @@ const adminController = {
           {
             model: Product,
             attributes: ["name", "product_img", "price", "admin_discount"],
-          },
+          }
         ],
+        where : {...findProduct, ...where}
       })
       return res.status(200).json({message : "Success", datas : findBranch})
     } catch (error) {
@@ -381,7 +392,6 @@ const adminController = {
     try {
       const { user_id } = req.params;
       const checkTrans = await trans.findOne({ where: { user_id: user_id, status: 0 } });
-      console.log("checkUser ", checkTrans);
       return res.status(200).json({ message: "Success", data: checkTrans });
     } catch (error) {
       return res.status(500).json({ message: error.message });

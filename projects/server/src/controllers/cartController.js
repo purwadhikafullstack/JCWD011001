@@ -18,6 +18,43 @@ const cartController = {
   addCartItem: async (req, res) => {
     try {
       const { id } = req.user;
+      const { total_price, cartId, productId , store_id,quantity } = req.body;
+      const checkCart = await cart.findOne({ where: { user_id: id } });
+      console.log("check cart", checkCart)
+      const checkProduct = await product.findOne({ where: { id: productId } });
+      const newPrice = checkProduct.price - checkProduct.admin_discount;
+      const totalPrice = (checkCart.total_price += newPrice);
+      const checkItem = await items.findOne({ where: { product_id: checkProduct.id, cart_id: checkCart.id, store_id}  });
+      await db.sequelize.transaction(async (t) => {
+        const result = await cart.update({ total_price: totalPrice }, { where: { user_id: id } }, { transaction: t });
+        if (checkItem) {
+          if (checkItem.quantity === null) {
+            checkItem.quantity = quantity;
+          }
+          if (checkItem.quantity >= 0) {
+            checkItem.quantity += quantity;
+          }
+          checkItem.save();
+          return res.status(200).json({ message: "Success" });
+        } else {
+          const addItem = await items.create({
+            name: checkProduct.name,
+            product_id: checkProduct.id,
+            quantity,
+            price: newPrice,
+            cart_id: checkCart.id,
+            store_id : store_id,
+          });
+          return res.status(200).json({ message: "Success", data: addItem });
+        }
+      });
+    } catch (error) {
+      return res.status(500).json({ message: "Failed", error: error.message });
+    }
+  },
+  addQuantityCart : async(req,res) => {
+    try {
+      const { id } = req.user;
       const { total_price, cartId, productId , store_id } = req.body;
       const checkCart = await cart.findOne({ where: { user_id: id } });
       console.log("check cart", checkCart)
@@ -60,7 +97,7 @@ const cartController = {
       const checkProduct = await product.findOne({ where: { id: productId } });
       const newPrice = checkProduct.price - checkProduct.admin_discount;
       const totalPrice = (checkCart.total_price -= newPrice);
-      const checkItem = await items.findOne({ where: { product_id: checkProduct.id } });
+      const checkItem = await items.findOne({ where: { product_id: checkProduct.id, store_id } });
       await db.sequelize.transaction(async (t) => {
         if (totalPrice !== 0) {
           const result = await cart.update({ total_price: totalPrice }, { where: { user_id: id } }, { transaction: t });

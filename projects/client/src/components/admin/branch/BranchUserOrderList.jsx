@@ -49,7 +49,11 @@ const BranchUserOrderList = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isOpenReject, onOpen: onOpenReject, onClose: onCloseReject } = useDisclosure();
+  const {
+    isOpen: isOpenReject,
+    onOpen: onOpenReject,
+    onClose: onCloseReject,
+  } = useDisclosure();
   const { page } = useSelector((state) => state.UserOrderReducer);
   const { branchUserOrder } = useSelector((state) => state.UserOrderReducer);
   const [orderId, setOrderId] = useState(null);
@@ -59,7 +63,6 @@ const BranchUserOrderList = () => {
   const [orderBy, setOrderBy] = useState("");
   const [order, setOrder] = useState("desc");
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const [render, setRender] = useState(false);
 
   const handleOrderDetail = (orderId) => {
     setOrderId(orderId);
@@ -136,8 +139,9 @@ const BranchUserOrderList = () => {
     if (result.isConfirmed) {
       dispatch(branchUserCancel(item));
       Swal.fire("Cancel!", "The product has been canceled.", "success");
-      setRender(true);
-      getBranchUserOrder();
+      dispatch(
+        getBranchUserOrder({ index, startDate, endDate, orderBy, order })
+      );
     }
   };
   const buttonConfirm = async (item) => {
@@ -156,13 +160,12 @@ const BranchUserOrderList = () => {
       dispatch(branchUserConfirm(item));
       console.log("confirm ", item);
       Swal.fire("Cancel!", "Order Confirm.", "success");
-      setRender(true);
-      getBranchUserOrder();
+      dispatch(
+        getBranchUserOrder({ index, startDate, endDate, orderBy, order })
+      );
     }
   };
   const buttonSend = async (item) => {
-    console.log("send ", item);
-    // dispatch(userCancel(item));
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -174,9 +177,10 @@ const BranchUserOrderList = () => {
     });
     if (result.isConfirmed) {
       dispatch(branchSendOrder(item));
-      Swal.fire("Cancel!", "Order Confirm.", "success");
-      setRender(true);
-      getBranchUserOrder();
+      Swal.fire("Approve!", "Order Send.", "success");
+      dispatch(
+        getBranchUserOrder({ index, startDate, endDate, orderBy, order })
+      );
     }
   };
   return (
@@ -360,20 +364,39 @@ const BranchUserOrderList = () => {
                     )}
                     {order.status === 2 && (
                       <Box>
-                        <Button
-                          variant={""}
-                          _hover={{ bg: "red", color: "white" }}
-                          onClick={() => handleCancel(order)}
-                        >
-                          Cancel
-                        </Button>
-                        <IconButton
-                          onClick={() => buttonSend(order)}
-                          variant={""}
-                          borderRadius={"30px"}
-                          _hover={{ bg: "brand.hover", color: "white" }}
-                          icon={<BsFillSendCheckFill />}
-                        />
+                        <Menu>
+                          <MenuButton as={Button} size={"sm"}>
+                            <Text>Option</Text>
+                          </MenuButton>
+                          <MenuList>
+                            <Box
+                              display={"flex"}
+                              flexDir={"column"}
+                              px={4}
+                              py={2}
+                              gap={4}
+                            >
+                              <Button
+                                onClick={() => buttonSend(order)}
+                                color={"white"}
+                                bg={"brand.main"}
+                                _hover={{ bg: "brand.hover" }}
+                                _active={{ bg: "brand.active" }}
+                                size={"sm"}
+                              >
+                                Send
+                              </Button>
+                              <Button
+                                onClick={() => handleCancel(order)}
+                                variant={"outline"}
+                                colorScheme="red"
+                                size={"sm"}
+                              >
+                                Cancel
+                              </Button>
+                            </Box>
+                          </MenuList>
+                        </Menu>
                       </Box>
                     )}
                     {order.status >= 3 && (
@@ -409,7 +432,16 @@ const BranchUserOrderList = () => {
           <OrderPagination page={page} index={index} setIndex={setIndex} />
         )}
         <UserOrderDetail isOpen={isOpen} onClose={onClose} orderId={orderId} />
-        <RejectPaymentMessage isOpen={isOpenReject} onClose={onCloseReject} id={orderId} index={index} startDate={startDate} endDate={endDate} orderBy={orderBy} order={order} />
+        <RejectPaymentMessage
+          isOpen={isOpenReject}
+          onClose={onCloseReject}
+          id={orderId}
+          index={index}
+          startDate={startDate}
+          endDate={endDate}
+          orderBy={orderBy}
+          order={order}
+        />
       </Box>
     </>
   );

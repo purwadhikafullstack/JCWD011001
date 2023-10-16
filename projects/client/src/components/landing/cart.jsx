@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
+import Logo from "../../assets/logo_main.png";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import Transactions from "./Transactions";
@@ -33,7 +34,7 @@ import {
   getCart,
   getItem,
 } from "../../redux/reducer/CartReducer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaShopify } from "react-icons/fa";
 import ProductReducer from "../../redux/reducer/ProductReducer";
 import axios from "axios";
@@ -145,7 +146,6 @@ export default function Cart() {
 
   useEffect(() => {
     dispatch(getItem(store_id));
-    // dapat();
     dispatch(getCart());
   }, [store_id]);
   console.log("Item in useEffect:", item);
@@ -161,7 +161,7 @@ export default function Cart() {
         <Box fontFamily={"montserrat"}>
           <Stack>
             <Box
-              ml={"100px"}
+              ml={{ base: "30px", lg: "100px" }}
               mt={"48px"}
               fontSize={"2xl"}
               fontWeight={"bold"}
@@ -203,8 +203,48 @@ export default function Cart() {
           </Stack>
         </Box>
       ) : (
-        <Box>
-          <Text>Please Login Fist</Text>
+        <Box h={"100vh"} w={"100%"}>
+          <Stack>
+            <Box w={"800px"} h={"200px"} m={"100px auto"} align={"center"}>
+              <Image src={Logo} />
+              <Text fontSize={"3xl"} fontFamily={"initial"}>
+                Please Login First
+              </Text>
+              <Text fontSize={"xl"} fontFamily={"initial"}>
+                for better shopping
+              </Text>
+              <Box w={"270px"}></Box>
+              <Flex justifyContent={"space-around"} mt={"50px"}>
+                <Box>
+                  <Text>Don't have any account ? </Text>
+                  <Button
+                    mt={5}
+                    variant={"ghost"}
+                    _hover={{ bgColor: "brand.hover", color: "white" }}
+                    onClick={() => navigate("/register")}
+                  >
+                    Create One
+                  </Button>
+                </Box>
+                <Box bgColor={"black"}>
+                  <Divider orientation="vertical" />
+                </Box>
+                <Box>
+                  <Text>Already have an account ? </Text>
+                  <Button
+                    mt={5}
+                    variant={"ghost"}
+                    _hover={{ bgColor: "brand.hover", color: "white" }}
+                    onClick={() => {
+                      navigate("/signin");
+                    }}
+                  >
+                    Sign in
+                  </Button>
+                </Box>
+              </Flex>
+            </Box>
+          </Stack>
         </Box>
       )}
     </>

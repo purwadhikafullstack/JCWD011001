@@ -21,21 +21,21 @@ export const CartReducer = createSlice({
       state.carts = action.payload
     },
     addToCart: (state, action) => {
-      const { id } = action.payload;
+      const { id, quantity } = action.payload;
       console.log("masuk", action.payload)
       const existCartItemIndex = state.cart.findIndex((item) => item.id === id);
 
       if (existCartItemIndex !== -1) {
         state.cart = state.cart.map((item, index) => {
           if (index === existCartItemIndex) {
-            return { ...item, quantity: item.quantity + 1 };
+            return { ...item, quantity: item.quantity + quantity };
           }
           return item;
         });
       } else {
-        state.cart = [...state.cart, { ...action.payload, quantity: 1 }];
+        state.cart = [...state.cart, { ...action.payload, quantity }];
       }
-      state.totalHarga += action.payload.price;
+      state.totalHarga += action.payload.price * quantity;
     },
     deleteFromCart: (state, action) => {
       const { id } = action.payload;
@@ -92,17 +92,20 @@ export const getCart = () => {
   };
 };
 
-export const addCart = (products,store_id, Swal) => {
+export const addCart = (products,store_id, quantity, Swal) => {
   return async (dispatch) => {
+    console.log("PRODUCSR", products)
+    console.log("KENAPA", store_id)
+    console.log("quantity", quantity)
     const dataProduct = products.Product || products;
     const discount = products.price - products.admin_discount
-    const total_price = discount;
+    const total_price = discount * quantity;
     const productId = dataProduct.product_id || dataProduct.id;
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(
         `${URL_API}/cart/`,
-        { productId, total_price, store_id },
+        { productId, total_price, store_id, quantity },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -129,7 +132,7 @@ export const addQuantity = (products, Swal) => {
     const token = localStorage.getItem("token");
     try {
       const result = await axios.patch(
-        `${URL_API}/cart/`,
+        `${URL_API}/cart/quantity`,
         { productId, total_price, store_id },
         {
           headers: {

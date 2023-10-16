@@ -29,17 +29,15 @@ export default function UserProfile() {
     <>
       <Navbar />
       <Box fontFamily={"montserrat"}>
-        <Stack>
+        <Stack px={"30px"}>
           <Text
-            ml={"96px"}
+            ml={{ base: "30px", lg: "96px" }}
             mt={"24px"}
-            fontSize={"48px"}
-            borderBottomColor={"red"}
-            border={"10px"}
+            fontSize={{ base: "24px", lg: "48px" }}
           >
             Profile Setting
           </Text>
-          <Box m={"16px auto"} w={"850px"}>
+          <Box m={"16px auto"} w={{ base: "100%", lg: "850px" }} px={"20px"}>
             <Box>
               <Avatar
                 size={{ base: "xl", md: "2xl" }}

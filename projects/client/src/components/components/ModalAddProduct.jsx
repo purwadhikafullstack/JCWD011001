@@ -4,6 +4,7 @@ import {
   Center,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -94,8 +95,10 @@ export default function ModalAddProduct({ isOpen, onClose }) {
               <Box>
                 <form onSubmit={formik.handleSubmit}>
                   <FormControl
+                    isRequired
                     isInvalid={formik.touched.name && formik.errors.name}
                   >
+                    <FormLabel>Name</FormLabel>
                     <Input
                       id="name"
                       name="name"
@@ -112,6 +115,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                     </Center>
                   </FormControl>
                   <FormControl
+                    isRequired
                     isInvalid={
                       formik.touched.category_id && formik.errors.category_id
                     }
@@ -139,13 +143,14 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                     </Select>
                   </FormControl>
                   <FormControl
+                    isRequired
                     isInvalid={
                       formik.touched.product_img && formik.errors.product_img
                     }
                   >
+                    <FormLabel mt={5}>Image</FormLabel>
                     <Input
                       type="file"
-                      mt={5}
                       accept=".jpeg, .jpg, .png, .gif"
                       variant={""}
                       id="product_img"
@@ -168,8 +173,10 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                     </Center>
                   </FormControl>
                   <FormControl
+                    isRequired
                     isInvalid={formik.touched.price && formik.errors.price}
                   >
+                    <FormLabel mt={5}>Price</FormLabel>
                     <Input
                       id="price"
                       name="price"
@@ -177,7 +184,6 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       value={formik.values.price}
                       onChange={formik.handleChange}
                       placeholder="Price"
-                      mt={5}
                     ></Input>
                     <Center>
                       {formik.touched.price && formik.errors.price && (
@@ -193,6 +199,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       formik.errors.admin_discount
                     }
                   >
+                    <FormLabel mt={5}>Admin Discount</FormLabel>
                     <Input
                       placeholder="Discount (optional)"
                       id="admin_discount"
@@ -201,7 +208,6 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       type="text"
                       value={formik.values.admin_discount}
                       onChange={formik.handleChange}
-                      mt={5}
                     ></Input>
                     <Center>
                       {formik.touched.admin_discount &&
@@ -213,13 +219,14 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                     </Center>
                   </FormControl>
                   <FormControl
+                    isRequired
                     isInvalid={
                       formik.touched.description && formik.errors.description
                     }
                   >
+                    <FormLabel mt={5}>Description</FormLabel>
                     <Input
                       type="textarea"
-                      mt={5}
                       placeholder="Description"
                       id="description"
                       name="description"
@@ -236,8 +243,10 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                     </Center>
                   </FormControl>
                   <FormControl
+                    isRequired
                     isInvalid={formik.touched.weigth && formik.errors.weigth}
                   >
+                    <FormLabel mt={5}>Weight</FormLabel>
                     <Input
                       id="weigth"
                       name="weigth"
@@ -245,7 +254,6 @@ export default function ModalAddProduct({ isOpen, onClose }) {
                       value={formik.values.weigth}
                       onChange={formik.handleChange}
                       placeholder="Weight"
-                      mt={5}
                     ></Input>
                     <Center>
                       {formik.touched.weigth && formik.errors.weigth && (

@@ -97,14 +97,13 @@ export default function OnGoingCart({ products }) {
     cekQuantity(products);
   }, [products]);
   return (
-    <Box>
+    <Box px={"20px"}>
       <Card
         mt={"8"}
         w={{
-          base: "600px",
-          lg: "800px",
+          base: "100%",
         }}
-        ml={"100px"}
+        ml={{ lg: "100px" }}
         boxShadow={"lg"}
         key={products.id}
       >
@@ -113,7 +112,7 @@ export default function OnGoingCart({ products }) {
             <Text>{products.Store?.name}</Text>
           </Box>
           <Flex>
-            <Image src={getImage(products.Product?.product_img)} w={"20%"} />
+            <Image src={getImage(products.Product?.product_img)} w={"30%"} />
             <Box ml={"32px"}>
               <Text>{products.name}</Text>
               <Text fontWeight={"bold"}>Rp. {products.price}</Text>
@@ -124,7 +123,7 @@ export default function OnGoingCart({ products }) {
               <IconButton
                 color={"blackAlpha.600"}
                 variant={""}
-                icon={<IoTrashOutline size={"md"} />}
+                icon={<IoTrashOutline size={{ base: "", lg: "md" }} />}
                 onClick={() => destroy(products)}
               />
             </Box>

@@ -32,6 +32,7 @@ import { logoutAuth } from "../../redux/reducer/AuthReducer";
 import getImage from "../../utils/getImage";
 import NavMenu from "./NavMenu";
 import { HiMenu } from "react-icons/hi";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { item, cart } = useSelector((state) => state.CartReducer);
@@ -47,9 +48,21 @@ const Navbar = () => {
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   const { user } = useSelector((state) => state.AuthReducer);
-  function onKlik() {
-    dispatch(logoutAuth(toast));
-  }
+  const onKlik = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Thanks for shopping with us!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Logout!",
+    });
+    if (result.isConfirmed) {
+      dispatch(logoutAuth(toast));
+      Swal.fire("See you!", "We will miss you.", "success");
+    }
+  };
 
   useEffect(() => {
     dispatch(getItem(store_id));
@@ -85,7 +98,12 @@ const Navbar = () => {
             {isMobile ? (
               <Popover>
                 <PopoverTrigger>
-                  <IconButton color={"brand.main"} bg={"white"} rounded={"full"} icon={<HiMenu size={24} />} />
+                  <IconButton
+                    color={"brand.main"}
+                    bg={"white"}
+                    rounded={"full"}
+                    icon={<HiMenu size={24} />}
+                  />
                 </PopoverTrigger>
                 <PopoverContent>
                   <PopoverBody>

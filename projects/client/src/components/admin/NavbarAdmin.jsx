@@ -2,12 +2,25 @@ import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { logoutAdmin } from "../../redux/reducer/AdminReducer";
+import Swal from "sweetalert2";
 
 const NavbarAdmin = (props) => {
   const dispatch = useDispatch();
   const toast = useToast();
-  const handleLogout = () => {
-    dispatch(logoutAdmin(toast));
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Logout?",
+      text: "Good work Admin!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Logout!",
+    });
+    if (result.isConfirmed) {
+      dispatch(logoutAdmin(toast));
+      Swal.fire("See you!", "We will miss you.", "success");
+    }
   };
   return (
     <header>

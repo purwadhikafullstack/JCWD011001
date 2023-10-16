@@ -44,7 +44,12 @@ export default function Transactions() {
   return (
     <>
       <Box
-        ml={{ base: "100px", lg: "24px" }}
+        // w={{
+        //   base: "300px",
+        //   md: "600px",
+        //   lg: "800px",
+        // }}
+        ml={{ base: "30px", lg: "100px" }}
         mt={"32px"}
         position={"sticky"}
         top={"20px"}

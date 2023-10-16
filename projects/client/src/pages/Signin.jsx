@@ -23,7 +23,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Navbar from "../components/landing/Navbar";
 import { loginAuth } from "../redux/reducer/AuthReducer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ForgotPassword from "../components/user/ForgotPassword";
 
 const loginSchema = Yup.object().shape({
@@ -88,6 +88,14 @@ export default function Signin() {
             Sign in
           </Text>
           <Text color={"#5f6c37"}>Please login first before shopping</Text>
+          <Flex alignItems="center" justifyContent="center">
+            <Text color={"#5f6c37"}>Don't have any account ?</Text>
+            <Link to={"/register"}>
+              <Text ml={2} color="green">
+                Create one
+              </Text>
+            </Link>
+          </Flex>
           <form onSubmit={formik.handleSubmit}>
             <Box w={{ sm: "300px", md: "400px", lg: "500px" }} m={"auto"}>
               <FormControl
@@ -166,7 +174,7 @@ export default function Signin() {
                 mt={"20px"}
               >
                 <Button
-                onClick={onOpen}
+                  onClick={onOpen}
                   variant={"link"}
                   color={"#bc6c25"}
                   fontSize={{ sm: "12px", md: "16px", lg: "16px" }}

@@ -204,7 +204,7 @@ const authController = {
       await db.sequelize.transaction(async(t) => {
         const result = await ts.update({status : 6}, {where : {id: transaction_id}}, {transaction : t})
       })
-      return res.status(200).json({message : "AMAN DAHH"})
+      return res.status(200).json({message : "AMAN DAHH", data : result})
     } catch (error) {
       return res.status(500).json({message : error.message})
     }
