@@ -7,12 +7,13 @@ const categoryController = {
     try {
       const { name } = req.body;
 
-      // Check if a file has been uploaded
       if (!req.file) {
         return res.status(400).json({ message: "Category image is required" });
       }
 
-      const categoryExist = await Category.findOne({ where: { name, isactive: true } });
+      const categoryExist = await Category.findOne({
+        where: { name, isactive: true },
+      });
       if (categoryExist) {
         return res.status(400).json({ message: "Category already exists" });
       }
@@ -36,9 +37,23 @@ const categoryController = {
         where: { isactive: true },
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
+
       if (categories.length === 0) {
         return res.status(404).json({ message: "No categories found" });
       }
+
+      categories.sort((a, b) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+
       return res.status(200).json({ message: "Success", categories });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -91,7 +106,9 @@ const categoryController = {
           { where: { id: id } },
           { transaction: t }
         );
-        return res.status(200).json({ message: "Category updated", updatedCategory });
+        return res
+          .status(200)
+          .json({ message: "Category updated", updatedCategory });
       });
     } catch (error) {
       return res.status(500).json({ message: error.message });

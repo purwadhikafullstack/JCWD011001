@@ -132,13 +132,10 @@ const ProductDetail = () => {
                       leftIcon={<HiOutlineShoppingCart />}
                       onClick={() => inCart(product, store_id)}
                       isDisabled={
-                        stock.quantity < 10 ||
                         login === false ||
                         (sold?.quantity ?? 0) === (branchProduct?.quantity ?? 0)
                       }>
-                      {stock.quantity < 10
-                        ? "Low stock"
-                        : (sold?.quantity ?? 0) === (branchProduct?.quantity ?? 0)
+                      {(sold?.quantity ?? 0) === (branchProduct?.quantity ?? 0)
                         ? "Out of Stock"
                         : "Add Cart"}
                     </Button>

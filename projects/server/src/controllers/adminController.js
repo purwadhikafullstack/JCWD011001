@@ -249,46 +249,7 @@ const adminController = {
       return res.status(500).json({ message: error.message });
     }
   },
-  // updateStock: async (req, res) => {
-  //   try {
-  //     const { productId, quantity } = req.body;
-  //     const store = await Store.findOne({ where: { admin_id: req.user.id } });
-  //     if (!store) {
-  //       return res.status(404).json({ message: "Store not found for the user." });
-  //     }
-  //     const existingProductStore = await productStore.findOne({
-  //       where: { product_id: productId, store_id: store.id },
-  //     });
-  //     console.log("existing product", existingProductStore)
-  //     const existingStoresHistory = await stockHistory.findOne({
-  //       where: { product_id: productId, store_id: store.id },
-  //     });
-  //     console.log("update sampai sini", existingStoresHistory)
-  //     if (existingProductStore) {
-  //       existingProductStore.quantity = quantity;
-  //       existingStoresHistory.quantity = quantity
-  //       await existingProductStore.save();
-  //       await existingStoresHistory.save()
-  //       return res.status(200).json({ message: "Update Success" });
-  //     } else {
-  //       await productStore.create({
-  //         product_id: productId,
-  //         store_id: store.id,
-  //         quantity: quantity,
-  //         isactive: true,
-  //       });
-  //       await stockHistory.create({
-  //         product_id: productId,
-  //         store_id: store.id,
-  //         quantity: quantity,
-  //         isactive: true,
-  //       })
-  //       return res.status(200).json({ message: "Create Success" });
-  //     }
-  //   } catch (error) {
-  //     return res.status(500).json({ message: error.message });
-  //   }
-  // },
+
   branchStock : async(req, res) => {
     try {
       const {productId, quantity, description} = req.body
@@ -421,8 +382,6 @@ const adminController = {
       const { user_id } = req.params;
       const checkTrans = await trans.findOne({ where: { user_id: user_id, status: 0 } });
       console.log("checkUser ", checkTrans);
-      // const transAll = await trans.findAll()
-      // console.log("all", transAll)
       return res.status(200).json({ message: "Success", data: checkTrans });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -437,7 +396,6 @@ const adminController = {
           },
         ],
       })
-      // console.log("all", transAll)
       return res.status(200).json({message : "Succeswes", data : transAll})
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -447,28 +405,30 @@ const adminController = {
     try {
       const {transaction_id} = req.params
       const findTransaction = await trans.findOne({where : {id : transaction_id}})
-      // console.log("dapatt dong", findTransaction)
       const findTsItem = await Transactionitem.findAll({where : {transaction_id : findTransaction.id}})
-      // console.log("transaction item => ", findTsItem)
       let product_idSold;
       let quantitySold;
       let quantityFinal = 0;
-      
+
       for (const item of findTsItem) {
         product_idSold = item.product_id;
         quantitySold = item.quantity;
-        // console.log("product ID:", product_idSold);
-        // console.log("quantity:", quantitySold);
+
         const findProducs = await productStore.findOne({where : {product_id : product_idSold}})
-      // console.log("inimii quantity nya =>", findProducs)
-      // console.log("inimii productnya =>", findProducs.product_id)
-      // console.log("inimii quantitunya =>", findProducs.quantity)
+
       quantityFinal = findProducs.quantity + quantitySold
-      console.log("nahhh", quantityFinal);
+
       await db.sequelize.transaction(async(t) => {
         const result = await trans.update({status : 5},{where : {id : transaction_id}}, {transaction :t})
         const responsCart = await cart.update({total_price : 0}, {where : {user_id: transaction_id}}, {transaction: t})
-        const restoreProduct = await productStore.update({quantity : quantityFinal}, {where : {product_id : findProducs.product_id}})
+        const restoreProduct = await productStore.update({quantity : quantityFinal, isactive : true}, {where : {product_id : findProducs.product_id}})
+
+        await stockHistory.create({
+          product_id : findProducs.product_id,
+          store_id : findProducs.store_id,
+          quantity : quantityFinal,
+          description : `Cancel Order ${quantitySold}`
+        }, {transaction : t})
       })
       }
       return res.status(200).json({message : "Success"})
@@ -480,7 +440,7 @@ const adminController = {
     try {
       const {transaction_id} = req.params
       const findTransaction = await trans.findOne({where : {id : transaction_id}})
-      // console.log("dapatt lagi dong", findTransaction)
+
       await db.sequelize.transaction(async(t) => {
         const result = await trans.update({status : 2},{where : {id : transaction_id}}, {transaction :t})
       })
@@ -489,49 +449,19 @@ const adminController = {
       return res.status(500).json({message : error.message})
     }
   },
-  // sendUserOrder :async(req, res) => {
-  //   try {
-  //     const {transaction_id} = req.params
-  //     const findTransaction = await trans.findOne({where : {id : transaction_id}})
-  //     console.log("dapatt lagi dong", findTransaction)
-  //     await db.sequelize.transaction(async(t) => {
-  //       const result = await trans.update({status : 3},{where : {id : transaction_id}}, {transaction :t})
-  //     })
-  //     return res.status(200).json({message : "AMAN dahh"})
-  //   } catch (error) {
-  //     return res.status(500).json({message : error.message})
-  //   }
-  // },
-  
-  
+
   sendUserOrder: async (req, res) => {
     try {
       const { transaction_id } = req.params;
       const findTransaction = await trans.findOne({ where: { id: transaction_id } });
       console.log("Got it", findTransaction);
-      
+
       await db.sequelize.transaction(async (t) => {
         const result = await trans.update({ status: 3 }, { where: { id: transaction_id } }, { transaction: t });
         const twoDaysFromNow = new Date();
         twoDaysFromNow.setDate(twoDaysFromNow.getDate() + (findTransaction.duration || 2));
         await trans.update({expiredIn : twoDaysFromNow},{where : {id : transaction_id}}, {transaction : t})
       });
-      // if (findTransaction.status === 3)
-
-      // if (findTransaction.expiredIn === date.now)
-      // pengecekan ke depan
-      // const isExpired = (dateString) => {
-    // const currentDate = new Date();
-    // const expiredDate = new Date(dateString);
-    // return expiredDate < currentDate;
-    // const expirationDate = new Date(expired);
-    //   const currentDate = new Date();
-// ini aku simpan di user Transaction di punya suami mbak vaya insyaAllah
-    //   if (expirationDate >= currentDate) {
-    //     return res.status(400).json({ message: "Expired date must be in the future" });
-    //   }
-  // };
-  
       return res.status(200).json({ message: "Status updated to 3" });
     } catch (error) {
       return res.status(500).json({ message: error.message });

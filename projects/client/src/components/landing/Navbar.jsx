@@ -59,7 +59,7 @@ const Navbar = () => {
     <header>
       <Box
         py={"16px"}
-        px={{ base: "28px", md: "56px", lg: "100px" }}
+        px={{ base: "28px", md: "48px", lg: "100px" }}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
@@ -132,7 +132,7 @@ const Navbar = () => {
                 </Box>
               </Flex>
             </Link>
-            <Flex alignItems={"center"} ml={4}>
+            <Flex alignItems={"center"} ml={{ base: 2, md: 4}}>
               {login ? (
                 <Menu>
                   <MenuButton

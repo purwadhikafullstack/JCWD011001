@@ -42,6 +42,23 @@ const addressController = {
     }
   },
 
+  getAddressById: async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userAddress = await UserAddress.findByPk(id, {
+      attributes: { exclude: ["createdAt", "updatedAt"] }
+    });
+
+    if (!userAddress) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    return res.status(200).json({ message: "Successfully retrieved", data: userAddress });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to get address" });
+  }
+},
+
   updateAddress: async (req, res) => {
     try {
       const { id } = req.params;

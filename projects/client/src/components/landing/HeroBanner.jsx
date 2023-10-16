@@ -10,7 +10,7 @@ import Banner_5 from "../../assets/banners/banner_5.png";
 
 const HeroBanner = () => {
   return (
-    <Box w={"100%"} py={{ base: "28px", md: "40px", lg: "60px"}} px={{ base: "28px", md: "56px", lg: "100px" }}>
+    <Box w={"100%"} py={{ base: "28px", md: "40px", lg: "60px"}} px={{ base: "28px", md: "48px", lg: "100px" }}>
       <Carousel
         showArrows={true}
         showThumbs={false}

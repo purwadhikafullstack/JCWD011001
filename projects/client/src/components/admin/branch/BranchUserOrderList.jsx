@@ -309,68 +309,78 @@ const BranchUserOrderList = () => {
                     </Button>
                   </Td>
                   <Td>
-                    {order.status === 0 && <Box>
-                          <Button
-                            variant={""}
-                            _hover={{ bg: "red", color: "white" }}
-                            onClick={() => handleCancel(order)}
-                          >
-                            Cancel
-                          </Button>
-                        </Box>}
-                    {order.status === 1 && <Menu>
-                      <MenuButton as={Button} size={"sm"}>
-                        <Text>Payment</Text>
-                      </MenuButton>
-                      <MenuList>
-                        <Box
-                          display={"flex"}
-                          flexDir={"column"}
-                          px={4}
-                          py={2}
-                          gap={4}
+                    {order.status === 0 && (
+                      <Box>
+                        <Button
+                          variant={""}
+                          _hover={{ bg: "red", color: "white" }}
+                          onClick={() => handleCancel(order)}
                         >
-                          <Button
-                            onClick={() => handleApprovePayment(order.id)}
-                            color={"white"}
-                            bg={"brand.main"}
-                            _hover={{ bg: "brand.hover" }}
-                            _active={{ bg: "brand.active" }}
-                            size={"sm"}
+                          Cancel
+                        </Button>
+                      </Box>
+                    )}
+                    {order.status === 1 && (
+                      <Menu>
+                        <MenuButton as={Button} size={"sm"}>
+                          <Text>Payment</Text>
+                        </MenuButton>
+                        <MenuList>
+                          <Box
+                            display={"flex"}
+                            flexDir={"column"}
+                            px={4}
+                            py={2}
+                            gap={4}
                           >
-                            Approve
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setOrderId(order.id);
-                              onOpenReject();
-                            }}
-                            variant={"outline"}
-                            colorScheme="red"
-                            size={"sm"}
-                          >
-                            Reject
-                          </Button>
-                        </Box>
-                      </MenuList>
-                    </Menu>}
-                    {order.status === 2 && <Box>
-                      <Button
-                            variant={""}
-                            _hover={{ bg: "red", color: "white" }}
-                            onClick={() => handleCancel(order)}
-                          >
-                            Cancel
-                          </Button>
-                          <IconButton
-                            onClick={() => buttonSend(order)}
-                            variant={""}
-                            borderRadius={"30px"}
-                            _hover={{ bg: "brand.hover", color: "white" }}
-                            icon={<BsFillSendCheckFill />}
-                          />
-                    </Box>}
-                    {order.status >= 3 && <Text color={"gray.500"} fontStyle={"italic"}>No action</Text>}
+                            <Button
+                              onClick={() => handleApprovePayment(order.id)}
+                              color={"white"}
+                              bg={"brand.main"}
+                              _hover={{ bg: "brand.hover" }}
+                              _active={{ bg: "brand.active" }}
+                              size={"sm"}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setOrderId(order.id);
+                                onOpenReject();
+                              }}
+                              variant={"outline"}
+                              colorScheme="red"
+                              size={"sm"}
+                            >
+                              Reject
+                            </Button>
+                          </Box>
+                        </MenuList>
+                      </Menu>
+                    )}
+                    {order.status === 2 && (
+                      <Box>
+                        <Button
+                          variant={""}
+                          _hover={{ bg: "red", color: "white" }}
+                          onClick={() => handleCancel(order)}
+                        >
+                          Cancel
+                        </Button>
+                        <IconButton
+                          onClick={() => buttonSend(order)}
+                          variant={""}
+                          borderRadius={"30px"}
+                          _hover={{ bg: "brand.hover", color: "white" }}
+                          icon={<BsFillSendCheckFill />}
+                        />
+                      </Box>
+                    )}
+                    {order.status >= 3 && (
+                      <Text color={"gray.500"} fontStyle={"italic"}>
+                        No action
+                      </Text>
+                    )}
                   </Td>
                 </Tr>
               ))}

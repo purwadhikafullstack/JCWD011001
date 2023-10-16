@@ -24,7 +24,7 @@ let fullAddress = "";
 let latitude = "";
 let longitude = "";
 
-const EditAddressModal = ({ isOpen, onClose, address_id }) => {
+const EditAddressModal = ({ isOpen, onClose, address_id, initialAddress }) => {
   const dispatch = useDispatch();
   const toast = useToast();
   const [provinces, setProvinces] = useState([]);
@@ -39,6 +39,17 @@ const EditAddressModal = ({ isOpen, onClose, address_id }) => {
   const { user } = useSelector((state) => state.AuthReducer);
 
   const id = user.id;
+
+  useEffect(() => {
+    if (initialAddress?.address) {
+      const addressParts = initialAddress.address.split(", ");
+
+      setStreetAddress(addressParts[0] || "");
+      setDistrict(addressParts[1] || "");
+      setSelectedCity("");
+      setSelectedProvince("");
+    }
+  }, [initialAddress]);
 
   useEffect(() => {
     const getProvinces = async () => {
@@ -99,11 +110,10 @@ const EditAddressModal = ({ isOpen, onClose, address_id }) => {
       setSubmitLoading(true);
       await saveAddressData();
       await dispatch(
-        editAddress(address_id, id, fullAddress, latitude, longitude, toast, onClose)
+        editAddress(address_id, id, fullAddress, latitude, longitude, toast, onClose, resetFormValues)
       );
       await dispatch(getAddress(id));
       setSubmitLoading(false);
-      resetFormValues();
     }
   };
 
@@ -111,7 +121,7 @@ const EditAddressModal = ({ isOpen, onClose, address_id }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add New Address</ModalHeader>
+        <ModalHeader>Edit Address</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl isRequired>

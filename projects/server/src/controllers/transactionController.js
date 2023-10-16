@@ -1,15 +1,13 @@
 const { Sequelize, Op } = require("sequelize");
 const db = require("../../models");
-const { Transaction, Product, ProductStore, Transactionitem, Cart, Cartitem, Voucherdetail, Uservoucher } = db;
+const { Transaction, Product, ProductStore, Transactionitem, Cart, Cartitem, Voucherdetail, Uservoucher, Storestockhistory } = db;
 
 const createFreeShippingVoucher = async (userId) => {
   try {
     const successfulTransactionsCount = await Transaction.count({
       where: {
         user_id: userId,
-        status: {
-          [Op.gte]: 5,
-        },
+        status: 6,
       },
     });
     if (successfulTransactionsCount % 5 === 0 && successfulTransactionsCount > 0) {
@@ -206,10 +204,27 @@ const transactionController = {
           },
         });
 
+        const soldQuantity = cartItem.quantity;
+        const remainingQuantity = productStore.quantity - soldQuantity;
+
         await productStore.update({
-          quantity: productStore.quantity - cartItem.quantity,
+          quantity: remainingQuantity,
         });
         await productStore.save();
+
+        if (remainingQuantity === 0) {
+          await productStore.update({
+            isactive: false,
+          });
+          await productStore.save();
+        };
+
+        await Storestockhistory.create({
+          product_id: cartItem.product_id,
+          store_id: store_id,
+          quantity: remainingQuantity,
+          description: `Sold ${soldQuantity} pcs`,
+        });
 
         await Transactionitem.create({
           transaction_id: newTransaction.id,

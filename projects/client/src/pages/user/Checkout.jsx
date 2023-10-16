@@ -125,7 +125,7 @@ const Checkout = () => {
     <Box>
       <Box
         py={"16px"}
-        px={{ base: "28px", md: "56px", lg: "100px" }}
+        px={{ base: "28px", md: "48px", lg: "100px" }}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
@@ -301,7 +301,7 @@ const Checkout = () => {
                 </Button>
                 {!deliveryPrice && (
                   <Text color="red.500" fontSize={"sm"} fontStyle={"italic"} mt={2}>
-                    *Please select a delivery option to proceed.
+                    *Please select a delivery option to proceed
                   </Text>
                 )}
               </Box>
