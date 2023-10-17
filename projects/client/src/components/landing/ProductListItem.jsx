@@ -21,9 +21,9 @@ const ProductListItem = ({ product }) => {
         align="center"
         bg="white"
         rounded="3xl"
-        w={{ base: "100%", md: "250px" }}
-        h="310"
+        w={{ base: "150px", md: "200px" }}
         p={2}
+        pb={6}
         boxShadow={{ base: "lg", md: "xl" }}
         _hover={{
           boxShadow: { base: "lg", md: "2xl" },
@@ -34,8 +34,7 @@ const ProductListItem = ({ product }) => {
         }}>
         <Image
           src={getImage(product.Product.product_img) || null}
-          w="100%"
-          h={{ base: "auto", sm: "50%" }}
+          w="50%"
           alignContent="center"
           fit="cover"
           overflow="hidden"
@@ -64,18 +63,26 @@ const ProductListItem = ({ product }) => {
           </Box>
           {isDiscount && (
             <>
-              <Flex gap={2}>
-                <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
+              <Flex gap={2} direction={{ base: "column", md: "row" }}>
+                <Text
+                  fontWeight={"bold"}
+                  textDecoration={"line-through"}
+                  color={"#9b9b9b"}
+                  fontSize={{ base: "xs", md: "lg" }}>
                   Rp.{product?.Product.price},-
                 </Text>
-                <Text textAlign={"center"} fontWeight={"bold"}>
+                <Text fontWeight={"bold"} fontSize={{ base: "xs", md: "lg" }}>
                   Rp.{product?.Product.price - product?.Product.admin_discount}
                   ,-
                 </Text>
               </Flex>
             </>
           )}
-          {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.Product.price},-</Text>}
+          {!isDiscount && (
+            <Text fontWeight={"bold"} mb={3}>
+              Rp.{product?.Product.price},-
+            </Text>
+          )}
         </Box>
       </Box>
     );
@@ -86,9 +93,9 @@ const ProductListItem = ({ product }) => {
       align="center"
       bg="white"
       rounded="3xl"
-      w={{ base: "100%", md: "250px" }}
-      h="310"
+      w={{ base: "150px", md: "200px" }}
       p={2}
+      pb={8}
       boxShadow={{ base: "lg", md: "xl" }}
       _hover={{
         boxShadow: { base: "lg", md: "2xl" },
@@ -99,8 +106,7 @@ const ProductListItem = ({ product }) => {
       }}>
       <Image
         src={getImage(product.product_img) || null}
-        w="100%"
-        h={{ base: "auto", sm: "50%" }}
+        w="50%"
         alignContent="center"
         fit="cover"
         overflow="hidden"
@@ -129,17 +135,25 @@ const ProductListItem = ({ product }) => {
         </Box>
         {isDiscount && (
           <>
-            <Flex gap={2}>
-              <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
+            <Flex gap={2} direction={{ base: "column", md: "row" }}>
+              <Text
+                fontWeight={"bold"}
+                textDecoration={"line-through"}
+                color={"#9b9b9b"}
+                fontSize={{ base: "xs", md: "lg" }}>
                 Rp.{product?.price},-
               </Text>
-              <Text textAlign={"center"} fontWeight={"bold"}>
+              <Text fontWeight={"bold"} fontSize={{ base: "xs", md: "lg" }}>
                 Rp.{product?.price - product?.admin_discount},-
               </Text>
             </Flex>
           </>
         )}
-        {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>}
+        {!isDiscount && (
+          <Text fontWeight={"bold"} mb={3}>
+            Rp.{product?.price},-
+          </Text>
+        )}
       </Box>
     </Box>
   );

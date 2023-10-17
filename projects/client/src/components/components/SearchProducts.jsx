@@ -33,7 +33,7 @@ const SearchProducts = () => {
   }, [searchValue]);
 
   return (
-    <Box>
+    <Box w={"50%"}>
       <InputGroup bg={"white"}>
         <InputLeftElement>
           <BiSearchAlt color="#37630A" />

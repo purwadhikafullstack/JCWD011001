@@ -44,12 +44,10 @@ const Category = () => {
             <Heading as="h2">Category</Heading>
             <Flex gap={2}>
               <Button onClick={handleOrderBy} gap={2}>
-                <Text>Order By: </Text>
-                {orderBy === "name" ? "name" : "Price"}
+                {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
               <Button onClick={handleOrder} gap={2}>
-                <Text>Order: </Text>
-                {order === "ASC" ? "Ascending" : "Descending"}
+                {order === "ASC" ? "ASC" : "DESC"}
               </Button>
             </Flex>
           </Stack>
@@ -72,12 +70,10 @@ const Category = () => {
       <Center>
         <Flex gap={2} mb={4}>
           <Button onClick={handleOrderBy} gap={2}>
-            <Text>Order By: </Text>
-            {orderBy === "name" ? "name" : "Price"}
+            {orderBy === "name" ? "NAME" : "PRICE"}
           </Button>
           <Button onClick={handleOrder} gap={2}>
-            <Text>Order: </Text>
-            {order === "ASC" ? "Ascending" : "Descending"}
+            {order === "ASC" ? "ASC" : "DESC"}
           </Button>
         </Flex>
       </Center>

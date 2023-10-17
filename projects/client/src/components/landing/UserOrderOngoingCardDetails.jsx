@@ -23,7 +23,7 @@ import getImage from "../../utils/getImage";
 const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, setDetail }) => {
   const orderStatusArray = [
     { status: "Awaiting Payment", color: "red" },
-    { status: "Waiting for Payment Confirmation", color: "orange" },
+    { status: "Wait for Confirmation", color: "orange" },
     { status: "Processing", color: "orange" },
     { status: "Shipped", color: "green" },
     { status: "Confirm Your Order", color: "green" },
@@ -40,7 +40,7 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
 
     return (
       <Stack>
-        <Stepper size="lg" colorScheme="green" index={activeStep}>
+        <Stepper size={{ base: "sm", md: "lg" }} colorScheme="green" index={activeStep}>
           {orderStatusArray.map((step, index) => (
             <Step label={step.status} key={index}>
               <StepIndicator>
@@ -88,11 +88,11 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
                   <Text>Rp.{item.price},-</Text>
                   <Text mt={"45%"}>Quantity {item.quantity}</Text>
                 </Stack>
-                <Box w={"50%"} align={"right"} mr={"20%"}>
+                <Box w={{ base: "50%", md: "30%" }} align={"right"}>
                   <Image
                     src={getImage(item.Product.product_img) || null}
                     fit={"contain"}
-                    w={"30%"}
+                    w={"100%"}
                     overflow={"hidden"}
                     loading="lazy"
                   />

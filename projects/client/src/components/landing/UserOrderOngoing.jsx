@@ -5,7 +5,9 @@ import { getTransaction } from "../../redux/reducer/TransactionReducer";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import UserOrderOngoingCard from "./UserOrderOngoingCard";
 import UserOrderOngoingCardDetails from "./UserOrderOngoingCardDetails";
+import { useNavigate } from "react-router-dom";
 const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
+  const navigate = useNavigate();
   const { transaction } = useSelector((state) => state.TransactionReducer);
   const dispatch = useDispatch();
   const [transactionDetail, setTransactionDetail] = useState({});
@@ -33,10 +35,10 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
   if (transaction.length === 0) {
     return (
       <>
-        <Flex gap={4}>
-          <Flex align="center">
+        <Flex direction={{ base: "column", md: "row" }} gap={4} mb={4}>
+          <Flex align="center" mb={{ base: 4, md: 0 }}>
             <Tooltip label="Start Date" aria-label="Start Date">
-              <Input type="date" mb={4} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </Tooltip>
             {startDate && (
               <Button ml={2} colorScheme="red" size="sm" onClick={handleClearStartDate}>
@@ -44,9 +46,9 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
               </Button>
             )}
           </Flex>
-          <Flex align="center">
+          <Flex align="center" mb={{ base: 4, md: 0 }}>
             <Tooltip label="End Date" aria-label="End Date">
-              <Input type="date" mb={4} id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <Input type="date" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </Tooltip>
             {endDate && (
               <Button ml={2} colorScheme="red" size="sm" onClick={handleClearEndDate}>
@@ -54,7 +56,7 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
               </Button>
             )}
           </Flex>
-          <Select placeholder="Select Order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
+          <Select value={orderBy} onChange={(e) => setOrderBy(e.target.value)} mb={{ base: 4, md: 0 }}>
             <option value={"id"}>Invoice ID</option>
             <option value={"status"}>Status</option>
           </Select>
@@ -76,7 +78,7 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
           <Text color="gray.600" mt={2}>
             It looks like you haven't placed any orders yet.
           </Text>
-          <Button colorScheme="green" mt={4}>
+          <Button colorScheme="green" mt={4} onClick={() => navigate("/shop")}>
             Place an Order
           </Button>
         </Flex>
@@ -87,10 +89,10 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
   if (!detail) {
     return (
       <>
-        <Flex gap={4}>
-          <Flex align="center">
+        <Flex direction={{ base: "column", md: "row" }} gap={4} mb={4}>
+          <Flex align="center" mb={{ base: 4, md: 0 }}>
             <Tooltip label="Start Date" aria-label="Start Date">
-              <Input type="date" mb={4} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </Tooltip>
             {startDate && (
               <Button ml={2} colorScheme="red" size="sm" onClick={handleClearStartDate}>
@@ -98,9 +100,9 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
               </Button>
             )}
           </Flex>
-          <Flex align="center">
+          <Flex align="center" mb={{ base: 4, md: 0 }}>
             <Tooltip label="End Date" aria-label="End Date">
-              <Input type="date" mb={4} id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <Input type="date" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </Tooltip>
             {endDate && (
               <Button ml={2} colorScheme="red" size="sm" onClick={handleClearEndDate}>
@@ -108,7 +110,7 @@ const UserOrderOngoing = ({ setDetail, detail, index, setIndex }) => {
               </Button>
             )}
           </Flex>
-          <Select placeholder="Select Order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
+          <Select value={orderBy} onChange={(e) => setOrderBy(e.target.value)} mb={{ base: 4, md: 0 }}>
             <option value={"id"}>Invoice ID</option>
             <option value={"status"}>Status</option>
           </Select>

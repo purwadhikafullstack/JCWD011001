@@ -11,6 +11,7 @@ import {
   Text,
   Stack,
   Icon,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,8 @@ import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 import { AiOutlineInbox } from "react-icons/ai";
 
 const ProductList = () => {
+  const displayDirection = useBreakpointValue({ base: "column", md: "row" });
+  const maxBoxWidth = useBreakpointValue({ base: "100%", md: "80%", lg: "60%" });
   const products = useSelector((state) => state.ProductReducer.product);
   const { store, store_id } = useSelector((state) => state.ProductReducer);
   const [orderBy, setOrderBy] = useState("name");
@@ -54,13 +57,9 @@ const ProductList = () => {
             <SearchProducts />
             <Box>
               <Button onClick={handleOrderBy} mr={2}>
-                <Text>Order By: </Text>
-                {orderBy === "name" ? "name" : "Price"}
+                {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
-              <Button onClick={handleOrder}>
-                <Text>Order: </Text>
-                {order === "ASC" ? "Ascending" : "Descending"}
-              </Button>
+              <Button onClick={handleOrder}>{order === "ASC" ? "ASC" : "DESC"}</Button>
             </Box>
           </Flex>
         </Stack>
@@ -78,28 +77,29 @@ const ProductList = () => {
   }
 
   return (
-    <Box w="100%" py="40px" px={{ base: "20px", md: "60px", lg: "100px" }}>
+    <Box maxW={maxBoxWidth} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
       <Stack spacing={6} mb={10}>
         <Heading as="h2" textAlign="center">
           {store ? store : "Our Recent Product"}
         </Heading>
         {store && (
-          <Flex direction={{ base: "column", md: "row" }} gap={2} justify="space-between" mx="auto" w="100%">
+          <Flex gap={2} justify="space-between">
             <SearchProducts />
             <Box>
               <Button onClick={handleOrderBy} mr={2}>
-                <Text>Order By: </Text>
-                {orderBy === "name" ? "name" : "Price"}
+                {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
-              <Button onClick={handleOrder}>
-                <Text>Order: </Text>
-                {order === "ASC" ? "Ascending" : "Descending"}
-              </Button>
+              <Button onClick={handleOrder}>{order === "ASC" ? "ASC" : "DESC"}</Button>
             </Box>
           </Flex>
         )}
       </Stack>
-      <Flex direction={{ base: "column", md: "row" }} align="center" justify="center" w="100%" gap={4}>
+      <Flex
+        direction="row"
+        flexWrap="wrap"
+        w="100%"
+        gap={4}
+        justifyContent={{ base: "space-between", xl: "center", md: "center" }}>
         {products.map((product, index) => (
           <ProductListItem product={product} key={index} />
         ))}

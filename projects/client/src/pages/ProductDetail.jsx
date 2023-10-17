@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Divider,
-  Flex,
-  Heading,
-  IconButton,
-  Image,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Divider, Flex, Heading, IconButton, Image, Text, Tooltip } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -19,12 +8,7 @@ import ProductStock from "./ProductStock";
 import { store } from "../redux/store";
 import Notfound from "./Notfound";
 import { HiOutlineShoppingCart } from "react-icons/hi";
-import {
-  addCart,
-  addToCart,
-  getItem,
-  setChanges,
-} from "../redux/reducer/CartReducer";
+import { addCart, addToCart, getItem, setChanges } from "../redux/reducer/CartReducer";
 import Swal from "sweetalert2";
 import getImage from "../utils/getImage";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
@@ -61,9 +45,7 @@ const ProductDetail = () => {
   const getItemDetails = async (id) => {
     try {
       if (!id) return;
-      const response = await axios.get(
-        `${URL_API}/product/item/detail/${id}/${store_id}`
-      );
+      const response = await axios.get(`${URL_API}/product/item/detail/${id}/${store_id}`);
       await setBranchProduct(response.data.ProductBranch);
       await setSold(response.data.Item);
     } catch (error) {
@@ -116,25 +98,20 @@ const ProductDetail = () => {
       <Box mb={4}>
         <Link to={"/"}>Home</Link>
         {" > "}
-        <Link to={`/category/${product?.Category?.id}`}>
-          {product?.Category?.name}
-        </Link>
+        <Link to={`/category/${product?.Category?.id}`}>{product?.Category?.name}</Link>
         {" > "}
         <Link>{product?.name}</Link>
       </Box>
       <Box>
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          gap={{ base: 4, md: 8 }}
-        >
+        <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 8 }}>
           <Image
             src={getImage(product.product_img) || null}
-            w={{ base: "100%", md: "45%" }}
+            w={{ base: "100%", md: "50%" }}
             fit={"cover"}
             overflow={"hidden"}
             boxShadow={"2xl"}
           />
-          <Box>
+          <Box w={{ base: "100%", md: "50%" }}>
             <Heading textTransform={"uppercase"} pr={4}>
               {product?.name}
             </Heading>
@@ -142,12 +119,7 @@ const ProductDetail = () => {
             {isDiscount && (
               <>
                 <Flex gap={2}>
-                  <Text
-                    textAlign={"center"}
-                    fontWeight={"bold"}
-                    textDecoration={"line-through"}
-                    color={"#9b9b9b"}
-                  >
+                  <Text textAlign={"center"} fontWeight={"bold"} textDecoration={"line-through"} color={"#9b9b9b"}>
                     Rp.{product?.price},-
                   </Text>
                   <Text textAlign={"center"} fontWeight={"bold"}>
@@ -160,9 +132,7 @@ const ProductDetail = () => {
                 </Flex>
               </>
             )}
-            {!isDiscount && (
-              <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>
-            )}{" "}
+            {!isDiscount && <Text fontWeight={"bold"}>Rp.{product?.price},-</Text>}{" "}
             <Box my={4} textAlign={"justify"} pr={4}>
               {product?.description}
             </Box>
@@ -176,8 +146,7 @@ const ProductDetail = () => {
                   <Tooltip
                     label={stock.quantity < 10 ? "Low stock" : "Add to cart!"}
                     bg={"brand.main"}
-                    aria-label="A tooltip"
-                  >
+                    aria-label="A tooltip">
                     <Box>
                       <Flex mt={3}>
                         <ButtonGroup gap={"22px"}>
@@ -190,8 +159,7 @@ const ProductDetail = () => {
                             rounded={"full"}
                             disabled={jumlah <= 1}
                             icon={<FaMinus />}
-                            onClick={decrementQuantity}
-                          ></IconButton>
+                            onClick={decrementQuantity}></IconButton>
                           <Text fontWeight={"bold"} fontSize={"24px"}>
                             {jumlah}
                           </Text>
@@ -206,12 +174,10 @@ const ProductDetail = () => {
                             }}
                             isDisabled={
                               jumlah === branchProduct?.quantity ||
-                              jumlah ===
-                                branchProduct?.quantity - sold?.quantity ||
+                              jumlah === branchProduct?.quantity - sold?.quantity ||
                               (sold?.quantity ?? 0) === branchProduct?.quantity
                             }
-                            onClick={incrementQuantity}
-                          ></IconButton>
+                            onClick={incrementQuantity}></IconButton>
                         </ButtonGroup>
                       </Flex>
                       <Button
@@ -221,14 +187,8 @@ const ProductDetail = () => {
                         colorScheme="teal"
                         leftIcon={<HiOutlineShoppingCart />}
                         onClick={() => inCart(product, store_id, jumlah)}
-                        isDisabled={
-                          login === false ||
-                          (sold?.quantity ?? 0) ===
-                            (branchProduct?.quantity ?? 0)
-                        }
-                      >
-                        {(sold?.quantity ?? 0) ===
-                        (branchProduct?.quantity ?? 0)
+                        isDisabled={login === false || (sold?.quantity ?? 0) === (branchProduct?.quantity ?? 0)}>
+                        {(sold?.quantity ?? 0) === (branchProduct?.quantity ?? 0)
                           ? "Out of Stock"
                           : `Add ${jumlah} to Cart`}
                       </Button>
@@ -248,18 +208,13 @@ const ProductDetail = () => {
                     </Button> */}
                   </Tooltip>
                 ) : (
-                  <Tooltip
-                    label="Please login first!"
-                    bg={"brand.main"}
-                    aria-label="A tooltip"
-                  >
+                  <Tooltip label="Please login first!" bg={"brand.main"} aria-label="A tooltip">
                     <Button
                       variant={"outline"}
                       colorScheme="teal"
                       leftIcon={<HiOutlineShoppingCart />}
                       onClick={() => inCart(product, store_id)}
-                      isDisabled={login === false}
-                    >
+                      isDisabled={login === false}>
                       Add Cart
                     </Button>
                   </Tooltip>
@@ -269,8 +224,7 @@ const ProductDetail = () => {
             {!store_id && (
               <>
                 <Text textTransform={"uppercase"} fontWeight={"bold"} mb={4}>
-                  Kami Belum Menyediakan Layanan di Lokasimu, Sementara ini kami
-                  menyediakan produk di toko ini:
+                  Kami Belum Menyediakan Layanan di Lokasimu, Sementara ini kami menyediakan produk di toko ini:
                 </Text>
                 <Flex gap={4} justify={"center"}>
                   {stock.map((product) => (

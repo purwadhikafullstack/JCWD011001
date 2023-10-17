@@ -80,11 +80,11 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
                   <Text>Rp.{item.price},-</Text>
                   <Text mt={"45%"}>Quantity {item?.quantity}</Text>
                 </Stack>
-                <Box w={"50%"} align={"right"} mr={"20%"}>
+                <Box w={{ base: "50%", md: "30%" }} align={"right"}>
                   <Image
                     src={getImage(item.Product.product_img) || null}
                     fit={"contain"}
-                    w={"30%"}
+                    w={"100%"}
                     overflow={"hidden"}
                     loading="lazy"
                   />
