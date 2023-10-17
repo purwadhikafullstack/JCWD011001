@@ -99,7 +99,7 @@ const ProductList = () => {
         flexWrap="wrap"
         w="100%"
         gap={4}
-        justifyContent={{ base: "space-between", xl: "center", md: "center" }}>
+        justifyContent={{ base: "space-evenly", xl: "center", md: "center" }}>
         {products.map((product, index) => (
           <ProductListItem product={product} key={index} />
         ))}

@@ -48,7 +48,7 @@ const productController = {
   },
   getProductStore: async (req, res) => {
     try {
-      const { store_id, page = 1, limit = 8, order = "ASC", orderBy = "name", category = "" } = req.query;
+      const { store_id, page = 1, limit = 9, order = "ASC", orderBy = "name", category = "" } = req.query;
 
       const pagination = setPagination(limit, page);
       const totalProduct = await ProductStore.count({ where: { store_id, isactive: true } });

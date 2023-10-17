@@ -63,7 +63,7 @@ const ProductListItem = ({ product }) => {
           </Box>
           {isDiscount && (
             <>
-              <Flex gap={2} direction={{ base: "column", md: "row" }}>
+              <Flex gap={2} direction={{ base: "column" }}>
                 <Text
                   fontWeight={"bold"}
                   textDecoration={"line-through"}
@@ -135,7 +135,7 @@ const ProductListItem = ({ product }) => {
         </Box>
         {isDiscount && (
           <>
-            <Flex gap={2} direction={{ base: "column", md: "row" }}>
+            <Flex gap={2} direction={{ base: "column" }}>
               <Text
                 fontWeight={"bold"}
                 textDecoration={"line-through"}
