@@ -51,7 +51,7 @@ const productController = {
       const { store_id, page = 1, limit = 8, order = "ASC", orderBy = "name", category = "" } = req.query;
 
       const pagination = setPagination(limit, page);
-      const totalProduct = await ProductStore.count({ where: { store_id } });
+      const totalProduct = await ProductStore.count({ where: { store_id, isactive:true } });
       const totalPage = Math.ceil(totalProduct / +limit);
 
       const includeProduct = [

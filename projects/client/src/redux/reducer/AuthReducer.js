@@ -191,9 +191,6 @@ export const userCancel = (item) => {
     console.log("inimi", transaction_id);
     try {
       const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
     } catch (error) {
       console.log(error);
     }

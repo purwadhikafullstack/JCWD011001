@@ -11,21 +11,33 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloudUpload } from "react-icons/ai";
+import {
+  AiOutlineCheckCircle,
+  AiOutlineClockCircle,
+  AiOutlineCloudUpload,
+} from "react-icons/ai";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { BiPackage } from "react-icons/bi";
 import React, { useState } from "react";
 import { useRef } from "react";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { getTransaction, uploadTransactionImage } from "../../redux/reducer/TransactionReducer";
+import {
+  getTransaction,
+  uploadTransactionImage,
+} from "../../redux/reducer/TransactionReducer";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { userCancel, userConfirm } from "../../redux/reducer/AuthReducer";
 import Swal from "sweetalert2";
 import { branchUserCancel } from "../../redux/reducer/AdminReducer";
 
-const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionProducts }) => {
+const UserOrderOngoingCardDetailOrder = ({
+  status,
+  id,
+  setDetail,
+  transactionProducts,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -39,11 +51,17 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
     const schema = Yup.object().shape({
       image: Yup.mixed()
         .required("Please select an image")
-        .test("fileSize", "File size is too large", (value) => value && value.size <= 1048576)
+        .test(
+          "fileSize",
+          "File size is too large",
+          (value) => value && value.size <= 1048576
+        )
         .test(
           "fileType",
           "Invalid file format",
-          (value) => value && ["image/jpeg", "image/png", "image/gif"].includes(value.type)
+          (value) =>
+            value &&
+            ["image/jpeg", "image/png", "image/gif"].includes(value.type)
         ),
     });
 
@@ -74,7 +92,8 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
       confirmButtonText: "Yes, confirm order!",
     });
     if (result.isConfirmed) {
-      dispatch(userConfirm(item));
+      await dispatch(userConfirm(item));
+      await dispatch(getTransaction({}));
       // await dispatch(branchUserCancel(item));
       Swal.fire("Confirm!", "The product has been arrived.", "success");
     }
@@ -95,6 +114,7 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
     });
     if (result.isConfirmed) {
       await dispatch(userCancel(item));
+      await dispatch(getTransaction({}));
       // await dispatch(branchUserCancel(item));
       Swal.fire("Cancel!", "The product has been canceled.", "success");
     }
@@ -117,20 +137,28 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
 
   if (status === 0) {
     return (
-      <Flex direction="column" alignItems="center" justifyContent="center" mt={10} gap={3}>
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        mt={10}
+        gap={3}
+      >
         <Icon as={AiOutlineClockCircle} boxSize={12} color="gray.500" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           Waiting for Payment
         </Text>
         <Text color="gray.600" mt={2}>
-          Please complete your payment to continue, and upload the Payment information
+          Please complete your payment to continue, and upload the Payment
+          information
         </Text>
         <Button
           variant="outline"
           colorScheme="teal"
           mt={4}
           leftIcon={<Icon as={AiOutlineCloudUpload} />}
-          onClick={() => fileInputRef.current.click()}>
+          onClick={() => fileInputRef.current.click()}
+        >
           Upload
         </Button>
         {imgURL && (
@@ -140,7 +168,8 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
               src={imgURL}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              p={2}>
+              p={2}
+            >
               {isHovered && (
                 <AvatarBadge
                   onClick={handleDeleteUpload}
@@ -157,11 +186,21 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
         )}
         <Flex mt={4} gap={2}>
           {imgURL && (
-            <Button variant="solid" colorScheme="teal" onClick={handleConfirmPayment}>
+            <Button
+              variant="solid"
+              colorScheme="teal"
+              onClick={handleConfirmPayment}
+            >
               Confirm Payment
             </Button>
           )}
-          <Input type="file" display="none" ref={fileInputRef} id="upload-payment" onChange={handleUpload} />
+          <Input
+            type="file"
+            display="none"
+            ref={fileInputRef}
+            id="upload-payment"
+            onChange={handleUpload}
+          />
           <Button colorScheme="red" onClick={() => handleCancel(id)}>
             Cancel
           </Button>
@@ -171,7 +210,13 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
   }
   if (status === 1) {
     return (
-      <Flex direction="column" alignItems="center" justifyContent="center" h="10vh" mt={10}>
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        h="10vh"
+        mt={10}
+      >
         <Icon as={AiOutlineClockCircle} boxSize={12} color="gray.500" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           Awaiting Admin Confirmation
@@ -185,7 +230,13 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
 
   if (status === 2) {
     return (
-      <Flex direction="column" alignItems="center" justifyContent="center" h="10vh" mt={10}>
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        h="10vh"
+        mt={10}
+      >
         <Icon as={BiPackage} boxSize={12} color="gray.500" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           Your Order is Being Processed
@@ -199,7 +250,13 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
 
   if (status === 3) {
     return (
-      <Flex direction="column" alignItems="center" justifyContent="center" h="10vh" mt={10}>
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        h="10vh"
+        mt={10}
+      >
         <Icon as={LiaShippingFastSolid} boxSize={12} color="gray.500" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           Your Order is Being Shipped
@@ -213,7 +270,12 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
 
   if (status === 4) {
     return (
-      <Flex direction="column" alignItems="center" justifyContent="center" h="100%">
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        h="100%"
+      >
         <Icon as={AiOutlineCheckCircle} boxSize={12} color="green.400" />
         <Text fontSize="xl" fontWeight="bold" mt={4}>
           {confirmed ? "Are You Sure?" : "Confirm Your Order"}
@@ -233,7 +295,12 @@ const UserOrderOngoingCardDetailOrder = ({ status, id, setDetail, transactionPro
             </Button>
           </Flex>
         ) : (
-          <Button colorScheme="green" mt={4} leftIcon={<Icon as={AiOutlineCheckCircle} />} onClick={handleConfirm}>
+          <Button
+            colorScheme="green"
+            mt={4}
+            leftIcon={<Icon as={AiOutlineCheckCircle} />}
+            onClick={handleConfirm}
+          >
             Confirm Order
           </Button>
         )}

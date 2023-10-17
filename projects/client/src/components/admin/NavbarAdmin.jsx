@@ -10,7 +10,7 @@ const NavbarAdmin = (props) => {
   const handleLogout = async () => {
     const result = await Swal.fire({
       title: "Logout?",
-      text: "Good work Admin!",
+      text: "Happy Weekend Admin!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",

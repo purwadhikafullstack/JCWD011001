@@ -28,7 +28,9 @@ import {
 import Swal from "sweetalert2";
 import getImage from "../utils/getImage";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import UserLocation from "../components/landing/UserLocation";
+import { BsPlusSquareFill } from "react-icons/bs";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
@@ -59,7 +61,9 @@ const ProductDetail = () => {
   const getItemDetails = async (id) => {
     try {
       if (!id) return;
-      const response = await axios.get(`${URL_API}/product/item/detail/${id}/${store_id}`);
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${id}/${store_id}`
+      );
       await setBranchProduct(response.data.ProductBranch);
       await setSold(response.data.Item);
     } catch (error) {
@@ -119,7 +123,10 @@ const ProductDetail = () => {
         <Link>{product?.name}</Link>
       </Box>
       <Box>
-        <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 8 }}>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          gap={{ base: 4, md: 8 }}
+        >
           <Image
             src={getImage(product.product_img) || null}
             w={{ base: "100%", md: "45%" }}
@@ -172,14 +179,8 @@ const ProductDetail = () => {
                     aria-label="A tooltip"
                   >
                     <Box>
-                      <Flex
-                        mt={3}
-                        border={"1px"}
-                        w={"110px"}
-                        borderRadius={"30px"}
-                        borderColor={"gainsboro"}
-                      >
-                        <ButtonGroup>
+                      <Flex mt={3}>
+                        <ButtonGroup gap={"22px"}>
                           <IconButton
                             variant={"ghost"}
                             _hover={{
@@ -188,16 +189,17 @@ const ProductDetail = () => {
                             }}
                             rounded={"full"}
                             disabled={jumlah <= 1}
-                            icon={<AiOutlineMinus />}
+                            icon={<FaMinus />}
                             onClick={decrementQuantity}
                           ></IconButton>
                           <Text fontWeight={"bold"} fontSize={"24px"}>
                             {jumlah}
                           </Text>
                           <IconButton
-                            icon={<AiOutlinePlus />}
+                            icon={<FaPlus />}
                             rounded={"full"}
                             variant={"ghost"}
+                            size={"md"}
                             _hover={{
                               bgColor: "brand.hover",
                               color: "white",
@@ -208,13 +210,13 @@ const ProductDetail = () => {
                                 branchProduct?.quantity - sold?.quantity ||
                               (sold?.quantity ?? 0) === branchProduct?.quantity
                             }
-                            // isDisabled={quantity >= 20}
                             onClick={incrementQuantity}
                           ></IconButton>
                         </ButtonGroup>
                       </Flex>
                       <Button
                         mt={5}
+                        w={"180px"}
                         variant={"outline"}
                         colorScheme="teal"
                         leftIcon={<HiOutlineShoppingCart />}
