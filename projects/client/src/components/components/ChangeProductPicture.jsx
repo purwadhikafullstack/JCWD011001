@@ -23,13 +23,12 @@ const ChangeProductPicture = ({ isOpen, onClose, id }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [error, setError] = useState("");
 
-
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
 
     if (!file) {
       setProductPicture(null);
-      setError("No profile photo selected.");
+      setError("No product's image selected.");
       return;
     }
 

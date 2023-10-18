@@ -27,6 +27,7 @@ import {
 import Swal from "sweetalert2";
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsFillSendCheckFill } from "react-icons/bs";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const OrderUser = () => {
   const [render, setRender] = useState(false);
@@ -35,9 +36,7 @@ const OrderUser = () => {
 
   const getAllTransaction = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/admin/branch/transaction`
-      );
+      const response = await axios.get(`${URL_API}/admin/branch/transaction`);
       console.log("all tr", response);
       setAllTransaction(response.data.data);
     } catch (error) {
@@ -111,10 +110,7 @@ const OrderUser = () => {
     }
   };
   return (
-    <Box
-      ml={"48px"}
-      mt={{ base: "12px", lg: "24px" }}
-    >
+    <Box ml={"48px"} mt={{ base: "12px", lg: "24px" }}>
       <Text fontSize={"32px"}>User Order</Text>
       <TableContainer
         mt={"10px"}

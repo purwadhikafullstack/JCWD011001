@@ -31,11 +31,12 @@ import {
 } from "../../../redux/reducer/AdminReducer";
 import StockManagementHistory from "./StockManagementHistory";
 import { BiSearchAlt } from "react-icons/bi";
+import getImage from "../../../utils/getImage";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 export default function StockManagement() {
   const [detail, setDetail] = useState(0);
   const [itemDetail, setItemDetail] = useState({});
-  const PUBLIC_URL = "http://localhost:8000";
   const toast = useToast();
   const [stock, setStock] = useState([]);
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
@@ -43,13 +44,10 @@ export default function StockManagement() {
   const { branchAdmin } = useSelector((state) => state.AdminReducer);
   console.log("INFO MASSE", branchAdmin);
   const dispatch = useDispatch();
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   const fetchData = async () => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `http://localhost:8000/api/admin/product/branch?product_name=${name}`,
+      `${URL_API}/admin/product/branch?product_name=${name}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

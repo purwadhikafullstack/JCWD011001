@@ -16,13 +16,14 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import getImage from "../../utils/getImage";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 export default function ChangeImageProduct({ isOpen, onClose }) {
-  const PUBLIC_URL = "http://localhost:8000";
   const [product, setProduct] = useState([]);
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:8000/api/product");
+    const response = await axios.get(`${URL_API}/product`);
     console.log("respon", response.data);
     setProduct(response.data.data);
   };
@@ -30,9 +31,6 @@ export default function ChangeImageProduct({ isOpen, onClose }) {
   useEffect(() => {
     fetchData();
   }, []);
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   console.log("uproduct", product);
   return (
     <>
@@ -57,15 +55,6 @@ export default function ChangeImageProduct({ isOpen, onClose }) {
                     <Text>New Picture</Text>
                   </Box>
                 </Flex>
-                {/* <Input type="file" variant={"unstyled"} id="file"></Input> */}
-                {/* <Button
-                    w={"200px"}
-                    color={"white"}
-                    bgColor="#223256"
-                    _hover={{ bgColor: "teal", color: "#223256" }}
-                  > */}
-                {/* {isLoading ? <Spinner /> : "Change Profile"} */}
-                {/* </Button> */}
               </Box>
             </Box>
           </ModalBody>

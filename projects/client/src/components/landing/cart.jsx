@@ -43,7 +43,6 @@ import CartLogin from "./CartLogin";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
-  const PUBLIC_URL = "http://localhost:8000";
   const { login } = useSelector((state) => state.AuthReducer);
   const { item } = useSelector((state) => state.CartReducer);
   const { store_id } = useSelector((state) => state.ProductReducer);
@@ -51,9 +50,6 @@ export default function Cart() {
   const [idProduct, setIdProduct] = useState(0);
   const [branchProduct, setBranchProduct] = useState([]);
 
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   const getItemDetails = async (id) => {
     try {
       const response = await axios.get(
@@ -79,10 +75,6 @@ export default function Cart() {
       const itemQuantity = response.data.ProductBranch?.quantity;
       console.log("QUAN", itemQuantity);
       return false;
-      // if (products.quantity >= itemQuantity) {
-      //   return false;
-      // }
-      // return true;
     } catch (error) {
       console.log(error);
     }

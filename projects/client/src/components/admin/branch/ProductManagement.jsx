@@ -34,16 +34,14 @@ import {
   updateProduct,
 } from "../../../redux/reducer/ProductReducer";
 import ButtonAddProduct from "../../components/ButtonAddProduct";
-import { IoPencil, IoTrashOutline } from "react-icons/io5";
 import ButtonEditProduct from "../../components/ButtonEditProduct";
-import { RxCross1 } from "react-icons/rx";
 import { FaCheck, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { destroyProduct } from "../../../redux/reducer/AdminReducer";
 import { BiSearchAlt } from "react-icons/bi";
 import ButtonChangeProductPicture from "../../components/ButtonChangeProductPicture";
 import ButtonViewProductPicture from "../../components/ButtonViewProductPicture";
-import { Pagination } from "../../components/Pagination";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const ProductManagement = () => {
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
@@ -83,7 +81,7 @@ const ProductManagement = () => {
   const orderByParam = orderByPrice ? "price" : orderBy;
   const fetchData = async () => {
     const respon = await axios.get(
-      `http://localhost:8000/api/admin/product?name=${name}&limit=10&page=${page}&order=${order}&orderBy=${orderByParam}&category=${categories}`
+      `${URL_API}/admin/product?name=${name}&limit=10&page=${page}&order=${order}&orderBy=${orderByParam}&category=${categories}`
     );
     await setProduct(respon.data.data);
     await setTotalPage(respon.data.totalPage);
