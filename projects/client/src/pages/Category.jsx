@@ -36,9 +36,8 @@ const Category = () => {
 
   if (products.length < 1) {
     return (
-      <Box w="100%" p={{ base: 4, md: 6 }}>
+      <Box>
         <Navbar />
-
         <Center mt={4}>
           <Stack spacing={4} align="center">
             <Heading as="h2">Category</Heading>
@@ -62,7 +61,7 @@ const Category = () => {
     );
   }
   return (
-    <Box w="100%" p={{ base: 4, md: 6 }}>
+    <Box>
       <Navbar />
       <Center my={4}>
         <Heading mb={4}>Category {products[0]?.Category?.name || products[0]?.Product?.Category?.name}</Heading>

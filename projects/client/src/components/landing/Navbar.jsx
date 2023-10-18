@@ -16,13 +16,12 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Stack,
   Text,
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo_main.png";
 import LogoSmall from "../../assets/logo_small.png";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -35,13 +34,11 @@ import { HiMenu } from "react-icons/hi";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { item, cart } = useSelector((state) => state.CartReducer);
+  const { item } = useSelector((state) => state.CartReducer);
   const { store_id } = useSelector((state) => state.ProductReducer);
   const cartItem = item.reduce((total, item) => total + item.quantity, 0);
-  const items = cart.reduce((total, item) => total + item.quantity, 0);
 
   const login = localStorage.getItem("token");
-  const [cartItemCount, setCartItemCount] = useState(0);
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();

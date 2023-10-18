@@ -28,7 +28,7 @@ export default function UserProfile() {
   return (
     <>
       <Navbar />
-      <Box fontFamily={"montserrat"}>
+      <Box>
         <Stack px={"30px"}>
           <Text
             ml={{ base: "30px", lg: "96px" }}

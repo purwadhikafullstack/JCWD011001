@@ -112,19 +112,10 @@ const OrderUser = () => {
   };
   return (
     <Box
-      fontFamily={"montserrat"}
       ml={"48px"}
       mt={{ base: "12px", lg: "24px" }}
     >
       <Text fontSize={"32px"}>User Order</Text>
-      {/* <Button
-        mt={"10px"}
-        variant={""}
-        _hover={{ color: "brand.hover" }}
-        onClick={handleButtonClick}
-      >
-        Show All Transaction
-      </Button> */}
       <TableContainer
         mt={"10px"}
         ml={"-40px"}

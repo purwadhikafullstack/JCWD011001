@@ -64,7 +64,7 @@ export default function Signin() {
   return (
     <>
       <Navbar />
-      <Box fontFamily={"montserrat"}>
+      <Box>
         <Box
           m={{
             base: "50px auto",

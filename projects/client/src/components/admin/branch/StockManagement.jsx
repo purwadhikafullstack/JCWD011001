@@ -92,157 +92,166 @@ export default function StockManagement() {
 
   console.log("stocks", stock);
   return (
-    <>
-      <Box fontFamily={"montserrat"}>
-        <Box ml={{ base: "32px", lg: "48px" }}>
-          <Text mt={"24px"} fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>
+    <Box w={"full"}>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        bg={"white"}
+        borderBottom={1}
+        borderStyle={"solid"}
+        borderColor={"#D7F0AA"}
+        py={4}
+        px={8}
+      >
+        <Box>
+          <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
             Stock Management
           </Text>
-          <Flex>
-            <ButtonUpdateStock setModalClosedTrigger={setModalClosedTrigger} />
-            <InputGroup ml={"12px"}>
-              <InputLeftElement>
-                <BiSearchAlt color="#37630A" />
-              </InputLeftElement>
-              <Input
-                id="search"
-                w={{ base: "200px", lg: "300px" }}
-                onChange={handleSearch}
-                placeholder={"Search Product"}
-              />
-            </InputGroup>
-          </Flex>
-          <Divider mt={2} />
-          {stock &&
-            stock.map((item) => {
-              const active = item.isactive;
-              const newPrice =
-                item.Product?.price - item.Product?.admin_discount;
-              return (
-                <Box key={item.id}>
-                  <Card
-                    key={item.id}
-                    w={{ base: "680px", lg: "800px" }}
-                    mt={"20px"}
-                    boxShadow={"lg"}
-                    border={"2px"}
-                    borderColor={item.isactive ? "gray.100" : "red"} // Add conditional styling
-                  >
-                    <CardBody boxShadow={"lg"}>
-                      <Flex>
-                        <Image
-                          src={getImage(item.Product?.product_img)}
-                          alt="sayur"
-                          w={"200px"}
-                          h={"150px"}
-                          borderRadius="lg"
-                        />
-                        <Stack spacing="3">
-                          <Heading
-                            color={item.isactive ? "green" : "gray.400"}
-                            fontStyle={item.isactive ? "" : "italic"}
-                          >
-                            {item.isactive ? (
-                              <Flex>
-                                <Text>{item.Product?.name}</Text>
-                                {item.Product?.admin_discount > 0 && (
-                                  <Image
-                                    src="https://cdn.icon-icons.com/icons2/1138/PNG/512/1486395314-13-discount_80575.png"
-                                    w={"8%"}
-                                    ml={5}
-                                  />
-                                )}
-                              </Flex>
-                            ) : (
-                              "out of stock"
-                            )}
-                          </Heading>
-                          <Text
-                            fontWeight={"bold"}
-                            color={item.isactive ? "green" : "gray.400"}
-                            fontStyle={item.isactive ? "" : "italic"}
-                          >
-                            {item.isactive
-                              ? `Quantity : ${item.quantity}`
-                              : "Quantity : out of stock"}
-                          </Text>
-                          <Flex gap={2} fontSize={"16px"}>
-                            <Text
-                              textDecoration={
-                                item.isactive ? "" : "line-through"
-                              }
-                              fontWeight={"bold"}
-                            >
-                              Rp. {item.Product?.price}
-                            </Text>
-                            {item.Product?.admin_discount > 0 ? (
-                              <Badge colorScheme="green" rounded={"full"}>
-                                Rp. {item.Product?.admin_discount}
-                              </Badge>
-                            ) : (
-                              ""
-                            )}
-                          </Flex>
-                          <Text
-                            fontSize="2xl"
-                            color={item.isactive ? "green" : "gray.500"}
-                            fontWeight={"bold"}
-                          >
-                            {item.isactive ? `Rp. ${newPrice}` : "-"}
-                          </Text>
-                        </Stack>
-                        <Box right={10} top={50} position={"absolute"}>
-                          <Stack>
-                            {item.isactive ? (
-                              <IconButton
-                                color={"red"}
-                                mt={"12px"}
-                                variant={""}
-                                icon={
-                                  <RxCross1
-                                    size={"md"}
-                                    onClick={() => disable(item)}
-                                  />
-                                }
-                              />
-                            ) : (
-                              <Box>
-                                <Stack>
-                                  <IconButton
-                                    color={"green"}
-                                    variant={""}
-                                    mt={"12px"}
-                                    icon={
-                                      <FaCheck
-                                        size={"md"}
-                                        onClick={() => restore(item)}
-                                      />
-                                    }
-                                  />
-                                </Stack>
-                              </Box>
-                            )}
-                          </Stack>
-                          <IconButton
-                            color={"black"}
-                            variant={""}
-                            mt={"12px"}
-                            icon={
-                              <RiHistoryFill
-                                size={"md"}
-                                onClick={() => stockHistory(item)}
-                              />
-                            }
-                          />
-                        </Box>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                </Box>
-              );
-            })}
         </Box>
       </Box>
-    </>
+      <Box px={8}>
+        <Flex mt={4}>
+          <ButtonUpdateStock setModalClosedTrigger={setModalClosedTrigger} />
+          <InputGroup ml={"12px"}>
+            <InputLeftElement>
+              <BiSearchAlt color="#37630A" />
+            </InputLeftElement>
+            <Input
+              id="search"
+              w={{ base: "200px", lg: "300px" }}
+              onChange={handleSearch}
+              placeholder={"Search Product"}
+            />
+          </InputGroup>
+        </Flex>
+        <Divider mt={4} />
+        {stock &&
+          stock.map((item) => {
+            const active = item.isactive;
+            const newPrice = item.Product?.price - item.Product?.admin_discount;
+            return (
+              <Box key={item.id}>
+                <Card
+                  key={item.id}
+                  w={{ base: "680px", lg: "800px" }}
+                  mt={"20px"}
+                  boxShadow={"lg"}
+                  border={"2px"}
+                  borderColor={item.isactive ? "gray.100" : "red"} // Add conditional styling
+                >
+                  <CardBody boxShadow={"lg"}>
+                    <Flex>
+                      <Image
+                        src={getImage(item.Product?.product_img)}
+                        alt="sayur"
+                        w={"200px"}
+                        h={"150px"}
+                        borderRadius="lg"
+                      />
+                      <Stack spacing="3">
+                        <Heading
+                          color={item.isactive ? "green" : "gray.400"}
+                          fontStyle={item.isactive ? "" : "italic"}
+                        >
+                          {item.isactive ? (
+                            <Flex>
+                              <Text>{item.Product?.name}</Text>
+                              {item.Product?.admin_discount > 0 && (
+                                <Image
+                                  src="https://cdn.icon-icons.com/icons2/1138/PNG/512/1486395314-13-discount_80575.png"
+                                  w={"8%"}
+                                  ml={5}
+                                />
+                              )}
+                            </Flex>
+                          ) : (
+                            "out of stock"
+                          )}
+                        </Heading>
+                        <Text
+                          fontWeight={"bold"}
+                          color={item.isactive ? "green" : "gray.400"}
+                          fontStyle={item.isactive ? "" : "italic"}
+                        >
+                          {item.isactive
+                            ? `Quantity : ${item.quantity}`
+                            : "Quantity : out of stock"}
+                        </Text>
+                        <Flex gap={2} fontSize={"16px"}>
+                          <Text
+                            textDecoration={item.isactive ? "" : "line-through"}
+                            fontWeight={"bold"}
+                          >
+                            Rp. {item.Product?.price}
+                          </Text>
+                          {item.Product?.admin_discount > 0 ? (
+                            <Badge colorScheme="green" rounded={"full"}>
+                              Rp. {item.Product?.admin_discount}
+                            </Badge>
+                          ) : (
+                            ""
+                          )}
+                        </Flex>
+                        <Text
+                          fontSize="2xl"
+                          color={item.isactive ? "green" : "gray.500"}
+                          fontWeight={"bold"}
+                        >
+                          {item.isactive ? `Rp. ${newPrice}` : "-"}
+                        </Text>
+                      </Stack>
+                      <Box right={10} top={50} position={"absolute"}>
+                        <Stack>
+                          {item.isactive ? (
+                            <IconButton
+                              color={"red"}
+                              mt={"12px"}
+                              variant={""}
+                              icon={
+                                <RxCross1
+                                  size={"md"}
+                                  onClick={() => disable(item)}
+                                />
+                              }
+                            />
+                          ) : (
+                            <Box>
+                              <Stack>
+                                <IconButton
+                                  color={"green"}
+                                  variant={""}
+                                  mt={"12px"}
+                                  icon={
+                                    <FaCheck
+                                      size={"md"}
+                                      onClick={() => restore(item)}
+                                    />
+                                  }
+                                />
+                              </Stack>
+                            </Box>
+                          )}
+                        </Stack>
+                        <IconButton
+                          color={"black"}
+                          variant={""}
+                          mt={"12px"}
+                          icon={
+                            <RiHistoryFill
+                              size={"md"}
+                              onClick={() => stockHistory(item)}
+                            />
+                          }
+                        />
+                      </Box>
+                    </Flex>
+                  </CardBody>
+                </Card>
+              </Box>
+            );
+          })}
+      </Box>
+    </Box>
   );
 }

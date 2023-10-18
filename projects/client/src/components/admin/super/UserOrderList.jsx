@@ -4,6 +4,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Badge,
   Box,
   Button,
   Flex,
@@ -248,7 +249,7 @@ const UserOrderList = () => {
                   <Td>{dateFormatter(order.createdAt)}</Td>
                   {isLargerThan768 && (
                     <Td color={orderStatus[order.status].color}>
-                      {orderStatus[order.status].status}
+                      {orderStatus[order?.status]?.status}
                     </Td>
                   )}
                   <Td>

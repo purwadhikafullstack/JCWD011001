@@ -84,7 +84,7 @@ const BranchSalesReportUserDetail = ({ user, setSelectedUser, id, startDateState
   if (!user) return null;
   return (
     <Stack>
-      <Flex fontFamily={"montserrat"} mt={10} w={"full"}>
+      <Flex mt={10} w={"full"}>
         <Flex gap={{ base: "8px", md: "16px", lg: "24px" }}>
           <Text>Username: {user.User.name || "Hasn't Set"}</Text>
           <Text>Email: {user.User.email || "Hasn't Set"}</Text>

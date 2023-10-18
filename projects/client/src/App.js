@@ -32,6 +32,8 @@ import UserOrderOngoingCardDetails from "./components/landing/UserOrderOngoingCa
 import ResetPassword from "./pages/user/ResetPassword";
 import Contact from "./pages/user/Contact";
 import FrequentlyAskedQuestion from "./pages/user/FrequentlyAskedQuestion";
+import TermsAndConditions from "./pages/user/TermsAndConditions";
+import PrivacyAndPolicy from "./pages/user/PrivacyAndPolicy";
 
 function App() {
   const role = useSelector((state) => state.AdminReducer.branchAdmin.role_id);
@@ -82,6 +84,8 @@ function App() {
           <Route path="/category/*" element={<Category />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/frequently-asked-questions" element={<FrequentlyAskedQuestion />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-and-policy" element={<PrivacyAndPolicy />} />
         </>
       );
     }

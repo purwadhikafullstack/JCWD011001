@@ -122,7 +122,7 @@ const voucherController = {
               type: {
                 [Op.notLike]: "freedelivery",
               },
-              expired_date: {
+              expired: {
                 [Op.gte]: currentDate,
               },
             },

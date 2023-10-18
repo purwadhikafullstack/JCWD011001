@@ -42,9 +42,8 @@ const SalesReport = () => {
   }
 
   return (
-    <Box>
+    <Box w={"full"} minH={"100vh"}>
       <Box
-        h={"62px"}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
@@ -53,14 +52,19 @@ const SalesReport = () => {
         borderStyle={"solid"}
         borderColor={"#D7F0AA"}
         py={4}
-        px={8}>
+        px={8}
+      >
         <Box>
           <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
             Sales Report
           </Text>
         </Box>
       </Box>
-      <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} mr={"24px"}>
+      <Stack
+        ml={{ base: "24px", lg: "48px" }}
+        mt={{ base: "8px", lg: "24px" }}
+        mr={"24px"}
+      >
         <Table>
           <Thead>
             <Tr>
@@ -71,7 +75,12 @@ const SalesReport = () => {
           <Tbody>
             {stores &&
               stores.map((item, index) => (
-                <Tr key={index} onClick={() => handleClickStore(item)} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
+                <Tr
+                  key={index}
+                  onClick={() => handleClickStore(item)}
+                  _hover={{ bg: "gray.100" }}
+                  cursor={"pointer"}
+                >
                   <Td>{item.name}</Td>
                   <Td>{item.Admin.name}</Td>
                 </Tr>

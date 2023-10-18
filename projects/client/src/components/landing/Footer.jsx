@@ -40,12 +40,12 @@ const Footer = () => {
               FAQ
             </Text>
           </Link>
-          <Link>
+          <Link to={"/terms-and-conditions"} onClick={scrollToTop}>
             <Text mb={2} _hover={{ color: "#59981A" }}>
               Terms and Condition
             </Text>
           </Link>
-          <Link>
+          <Link to={"/privacy-and-policy"} onClick={scrollToTop}>
             <Text mb={2} _hover={{ color: "#59981A" }}>
               Privacy Policy
             </Text>

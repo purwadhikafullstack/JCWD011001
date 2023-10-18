@@ -12,7 +12,9 @@ export default function ButtonUpdateStock({ setModalClosedTrigger }) {
       <Box>
         <Button
           bg={"brand.main"}
-          _hover={{ bg: "brand.hover", color: "white" }}
+          color={"white"}
+          _hover={{ bg: "brand.hover" }}
+          _active={{ bg: "brand.active" }}
           onClick={onOpen}
         >
           Update stock

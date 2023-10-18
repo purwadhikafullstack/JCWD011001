@@ -67,8 +67,11 @@ const AddVoucher = ({ isOpen, onClose }) => {
       "Either Nominal or percent is required",
       function (value) {
         const { percent } = this.parent;
-        if (!value && !percent) {
-          return false;
+        if ((!value && !percent) || (value <= 0 && percent <= 0)) {
+          return this.createError({
+            message: "Either nominal or percent must have a value",
+            path: "nominal",
+          });
         }
         return true;
       }
@@ -78,8 +81,11 @@ const AddVoucher = ({ isOpen, onClose }) => {
       "Either Nominal or percent is required",
       function (value) {
         const { nominal } = this.parent;
-        if (!value && !nominal) {
-          return false;
+        if ((!value && !nominal) || (value <= 0 && nominal <= 0)) {
+          return this.createError({
+            message: "Either nominal or percent must have a value",
+            path: "percent",
+          });
         }
         return true;
       }
@@ -120,7 +126,7 @@ const AddVoucher = ({ isOpen, onClose }) => {
     !formik.isValid || formik.isSubmitting || !formik.dirty;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={"xl"}>
+    <Modal isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "xl" }}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>

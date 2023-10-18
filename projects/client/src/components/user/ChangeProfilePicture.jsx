@@ -81,7 +81,7 @@ const ChangeProfilePicture = ({ isOpen, onClose}) => {
         onClose();
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 300);
       } catch (error) {
         console.log("Error uploading profile photo:", error);
         toast({

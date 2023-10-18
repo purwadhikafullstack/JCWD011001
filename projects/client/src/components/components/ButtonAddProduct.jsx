@@ -18,9 +18,6 @@ export default function ButtonAddProduct({ setModalClosedTrigger }) {
           color={"white"}
           onClick={onOpen}
           rightIcon={<BsBagPlus />}
-          pos={"absolute"}
-          right={{ base: "40px", lg: 10 }}
-          top={{ base: 230, lg: 90 }}
         >
           Add Product
         </Button>

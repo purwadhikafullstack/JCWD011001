@@ -1,18 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Text, useDisclosure, Stack, IconButton, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  useDisclosure,
+  Stack,
+  IconButton,
+  useToast,
+} from "@chakra-ui/react";
 import Navbar from "../../components/landing/Navbar";
 import AddAddressModal from "../../components/user/AddAddressModal";
-import { IoAddOutline, IoTrashOutline, IoCreateOutline, IoStar, IoStarOutline } from "react-icons/io5";
+import {
+  IoAddOutline,
+  IoTrashOutline,
+  IoCreateOutline,
+  IoStar,
+  IoStarOutline,
+} from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { getAddress, getAddressById, setPrimaryAddress } from "../../redux/reducer/AddressReducer";
+import {
+  getAddress,
+  getAddressById,
+  setPrimaryAddress,
+} from "../../redux/reducer/AddressReducer";
 import DeleteAddressModal from "../../components/user/DeleteAddressModal";
 import EditAddressModal from "../../components/user/EditAddressModal";
 
 function Address() {
   const [addressToDeleteId, setAddressToDeleteId] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
-  const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
+  const {
+    isOpen: isOpenDelete,
+    onOpen: onOpenDelete,
+    onClose: onCloseDelete,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEdit,
+    onOpen: onOpenEdit,
+    onClose: onCloseEdit,
+  } = useDisclosure();
   const dispatch = useDispatch();
   const toast = useToast();
 
@@ -48,8 +74,16 @@ function Address() {
   return (
     <Box>
       <Navbar />
-      <Box w={"full"} py={"16px"} px={{ base: "28px", md: "48px", lg: "100px" }}>
-        <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+      <Box
+        w={"full"}
+        py={"16px"}
+        px={{ base: "28px", md: "48px", lg: "100px" }}
+      >
+        <Box
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
           <Text fontSize={{ base: "2xl", md: "4xl" }} fontWeight={"medium"}>
             Address
           </Text>
@@ -60,7 +94,8 @@ function Address() {
             bg={"brand.main"}
             color={"white"}
             _hover={{ bg: "brand.hover" }}
-            _active={{ bg: "brand.active" }}>
+            _active={{ bg: "brand.active" }}
+          >
             <IoAddOutline size={20} />
             Add Address
           </Button>
@@ -80,7 +115,8 @@ function Address() {
                 gap={4}
                 borderWidth="1px"
                 borderRadius="lg"
-                boxShadow="md">
+                boxShadow="md"
+              >
                 <Box display={"flex"} alignItems={"center"} gap={4}>
                   <Text>{address.address}</Text>
                 </Box>
@@ -128,7 +164,11 @@ function Address() {
         </Box>
       </Box>
       <AddAddressModal isOpen={isOpen} onClose={onClose} />
-      <DeleteAddressModal isOpen={isOpenDelete} onClose={onCloseDelete} address_id={addressToDeleteId} />
+      <DeleteAddressModal
+        isOpen={isOpenDelete}
+        onClose={onCloseDelete}
+        address_id={addressToDeleteId}
+      />
       <EditAddressModal
         isOpen={isOpenEdit}
         onClose={onCloseEdit}

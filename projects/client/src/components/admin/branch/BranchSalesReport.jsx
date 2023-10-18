@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
 import BranchSalesReportMonthStatistic from "./BranchSalesReportMonthStatistic";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -9,8 +21,6 @@ import BranchSalesReportTransaction from "./BranchSalesReportTransaction";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const BranchSalesReport = () => {
-  // const pathname = window.location.pathname.split("/");
-  // const id = pathname[pathname.length - 1];
   const [data, setData] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -46,54 +56,85 @@ const BranchSalesReport = () => {
   }, [storeData]);
 
   return (
-    <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} fontFamily={"montserrat"} mr={"24px"}>
-      <Box>
-        <Text fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>Sales Report {storeData.name}</Text>
+    <Box w={"full"} minH={"100vh"}>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        bg={"white"}
+        borderBottom={1}
+        borderStyle={"solid"}
+        borderColor={"#D7F0AA"}
+        py={4}
+        px={8}
+      >
+        <Box>
+          <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
+            Sales Report {storeData.name}
+          </Text>
+        </Box>
       </Box>
       <BranchSalesReportMonthStatistic data={data} />
-      <Flex gap={"8px"} mt={4}>
-        <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} w={"10%"} />
-        <Text mt={2}>to</Text>
-        <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} w={"10%"} />
-        <Button onClick={() => setOrder(order === "DESC" ? "ASC" : "DESC")} colorScheme="green">
-          {order}
-        </Button>{" "}
-      </Flex>
-      <Tabs isFitted variant={"solid-rounded"} mt={4} isLazy>
-        <TabList mb="1em">
-          <Tab _selected={{ color: "white", bg: "green.500" }}>User</Tab>
-          <Tab _selected={{ color: "white", bg: "green.500" }}>Product</Tab>
-          <Tab _selected={{ color: "white", bg: "green.500" }}>Transaction</Tab>
-        </TabList>
+      <Box px={8}>
+        <Flex gap={"8px"} mt={4}>
+          <Input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            w={{ base: "30%", md: "20%" }}
+          />
+          <Text mt={2}>to</Text>
+          <Input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            w={{ base: "30%", md: "20%" }}
+          />
+          <Button
+            onClick={() => setOrder(order === "DESC" ? "ASC" : "DESC")}
+            colorScheme="green"
+          >
+            {order}
+          </Button>{" "}
+        </Flex>
+        <Tabs isFitted variant={"solid-rounded"} mt={4} isLazy>
+          <TabList mb="1em">
+            <Tab _selected={{ color: "white", bg: "green.500" }}>User</Tab>
+            <Tab _selected={{ color: "white", bg: "green.500" }}>Product</Tab>
+            <Tab _selected={{ color: "white", bg: "green.500" }}>
+              Transaction
+            </Tab>
+          </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <BranchSalesReportUser
-              id={storeData.id}
-              orderState={{ order, setOrder }}
-              startDateState={{ startDate, setStartDate }}
-              endDateState={{ endDate, setEndDate }}
-            />
-          </TabPanel>
-          <TabPanel>
-            <BranchSalesReportProduct
-              id={storeData.id}
-              orderState={{ order, setOrder }}
-              startDateState={{ startDate, setStartDate }}
-              endDateState={{ endDate, setEndDate }}
-            />
-          </TabPanel>
-          <TabPanel>
-            <BranchSalesReportTransaction
-              id={storeData.id}
-              orderState={{ order, setOrder }}
-              startDateState={{ startDate, setStartDate }}
-              endDateState={{ endDate, setEndDate }}
-            />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Stack>
+          <TabPanels>
+            <TabPanel>
+              <BranchSalesReportUser
+                id={storeData.id}
+                orderState={{ order, setOrder }}
+                startDateState={{ startDate, setStartDate }}
+                endDateState={{ endDate, setEndDate }}
+              />
+            </TabPanel>
+            <TabPanel>
+              <BranchSalesReportProduct
+                id={storeData.id}
+                orderState={{ order, setOrder }}
+                startDateState={{ startDate, setStartDate }}
+                endDateState={{ endDate, setEndDate }}
+              />
+            </TabPanel>
+            <TabPanel>
+              <BranchSalesReportTransaction
+                id={storeData.id}
+                orderState={{ order, setOrder }}
+                startDateState={{ startDate, setStartDate }}
+                endDateState={{ endDate, setEndDate }}
+              />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
+    </Box>
   );
 };
 

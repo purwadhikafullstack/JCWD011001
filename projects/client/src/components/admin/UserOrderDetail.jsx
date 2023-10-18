@@ -15,7 +15,6 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearOrderItem,
   getUserTransactionItem,
 } from "../../redux/reducer/UserOrderReducer";
 import orderStatus from "../../utils/orderStatus";
@@ -30,7 +29,6 @@ const UserOrderDetail = ({ isOpen, onClose, orderId, storeId }) => {
 
   const handleClose = () => {
     onClose();
-    // dispatch(clearOrderItem());
   };
 
   useEffect(() => {

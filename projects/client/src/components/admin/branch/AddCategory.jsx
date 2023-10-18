@@ -18,7 +18,10 @@ import React from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { addCategory, getCategory } from "../../../redux/reducer/CategoryReducer";
+import {
+  addCategory,
+  getCategory,
+} from "../../../redux/reducer/CategoryReducer";
 
 const AddCategory = ({ isOpen, onClose }) => {
   const toast = useToast();
@@ -43,7 +46,6 @@ const AddCategory = ({ isOpen, onClose }) => {
       }),
   });
 
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -60,7 +62,8 @@ const AddCategory = ({ isOpen, onClose }) => {
     },
   });
 
-  const isButtonDisabled = !formik.isValid || formik.isSubmitting || !formik.dirty;
+  const isButtonDisabled =
+    !formik.isValid || formik.isSubmitting || !formik.dirty;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -74,7 +77,10 @@ const AddCategory = ({ isOpen, onClose }) => {
         <ModalCloseButton />
         <form onSubmit={formik.handleSubmit}>
           <ModalBody>
-            <FormControl isInvalid={formik.errors.name && formik.touched.name}>
+            <FormControl
+              isRequired
+              isInvalid={formik.errors.name && formik.touched.name}
+            >
               <FormLabel>Name</FormLabel>
               <Input
                 type="text"
@@ -87,7 +93,11 @@ const AddCategory = ({ isOpen, onClose }) => {
               <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={formik.errors.image && formik.touched.image}>
+            <FormControl
+              mt={4}
+              isRequired
+              isInvalid={formik.errors.image && formik.touched.image}
+            >
               <FormLabel>Image</FormLabel>
               <Input
                 type="file"
@@ -115,7 +125,8 @@ const AddCategory = ({ isOpen, onClose }) => {
               loadingText="Adding..."
               _hover={{ bgColor: "brand.hover" }}
               _active={{ bgColor: "brand.active" }}
-              isDisabled={isButtonDisabled}>
+              isDisabled={isButtonDisabled}
+            >
               Add Category
             </Button>
           </ModalFooter>

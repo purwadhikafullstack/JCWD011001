@@ -94,7 +94,15 @@ const ProductManagement = () => {
       fetchData();
       setModalClosedTrigger(false);
     }
-  }, [page, order, orderBy, orderByPrice, categories, modalClosedTrigger, name]);
+  }, [
+    page,
+    order,
+    orderBy,
+    orderByPrice,
+    categories,
+    modalClosedTrigger,
+    name,
+  ]);
 
   const handleSearch = () => {
     const name = document.getElementById("search").value;
@@ -138,148 +146,180 @@ const ProductManagement = () => {
 
   return (
     <Box>
-      <Stack>
-        <Box fontFamily={"montserrat"}>
-          <Text
-            ml={{ base: "24px", lg: "48px" }}
-            mt={{ base: "8px", lg: "24px" }}
-            fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        bg={"white"}
+        borderBottom={1}
+        borderStyle={"solid"}
+        borderColor={"#D7F0AA"}
+        py={4}
+        px={8}
+      >
+        <Box>
+          <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
             Product Management
           </Text>
-          <ButtonAddProduct setModalClosedTrigger={setModalClosedTrigger} />
-          <Flex justify={"space-around"} ml={{ base: "12px", lg: "48px" }}>
-            <Select placeholder="Sort By" value={order} onChange={(e) => setOrder(e.target.value)}>
-              <option value={"ASC"}>A-Z / (Low Price) - (High Price)</option>
-              <option value={"DESC"}>Z-A / (High Price) - (Low Price)</option>
-            </Select>
-            <Select
-              ml={{ base: "12px", lg: "48px" }}
-              placeholder="All Category"
-              value={categories}
-              onChange={(e) => setCategory(e.target.value)}>
-              {category &&
-                category.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-            </Select>
-            <InputGroup ml={{ base: "12px", lg: "48px" }}>
-              <InputLeftElement>
-                <BiSearchAlt color="#37630A" />
-              </InputLeftElement>
-              <Input
-                id="search"
-                w={{ base: "200px", lg: "300px" }}
-                onChange={handleSearch}
-                placeholder={"Search Product"}
-              />
-            </InputGroup>
-          </Flex>
-          <Button
-            mt={5}
-            ml={{ base: "12px", lg: "48px" }}
-            variant={"ghost"}
-            _hover={{ bg: "brand.hover", color: "white" }}
-            onClick={() => handleOrderByPrice()}>
-            {sortLabelText}
-          </Button>
-
-          <Divider mt={"10px"} />
-
-          <TableContainer mt={"10px"} fontSize={"11px"} fontWeight={"bold"}>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>Category</Th>
-                  <Th>Name</Th>
-                  <Th>Price</Th>
-                  <Th>Admin Discount</Th>
-                  <Th>Weight</Th>
-                  <Th>Product IMG</Th>
-                  <Th>Status</Th>
-                  <Th>Action</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {itemsToMap.map((item) => (
-                  <Tr key={item.id}>
-                    <Td>{item.Category?.name}</Td>
-                    <Td>{item.name}</Td>
-                    <Td>{item.price}</Td>
-                    <Td>{item.admin_discount}</Td>
-                    <Td>{item.weight} g</Td>
-                    <Td>
-                      <Flex>
-                        <ButtonChangeProductPicture item={item} setModalClosedTrigger={setModalClosedTrigger} />
-                        <ButtonViewProductPicture item={item} />
-                      </Flex>
-                    </Td>
-                    <Td textColor={item.isactive ? "black" : "red"}>{item.isactive ? "Enable" : "Disable"}</Td>
-                    <Td>
-                      <Flex>
-                        <ButtonEditProduct setModalClosedTrigger={setModalClosedTrigger} id={item.id} item={item} />
-                        {item.isactive ? (
-                          <Button variant={""} onClick={() => deactive(item)}>
-                            Disable
-                          </Button>
-                        ) : (
-                          <Box>
-                            <Flex>
-                              <IconButton
-                                color={"green"}
-                                variant={""}
-                                icon={<FaCheck onClick={() => restore(item)} />}
-                              />
-                              <IconButton
-                                color={"red"}
-                                variant={""}
-                                icon={<FaTrashCan onClick={() => handleDeleteProduct(item)} />}
-                              />
-                            </Flex>
-                          </Box>
-                        )}
-                      </Flex>
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot></Tfoot>
-            </Table>
-          </TableContainer>
-          <Box ml={{ base: "8em", lg: "380px" }} mt={"20px"}>
-            <Button
-              variant={"ghost"}
-              _hover={{ bg: "brand.hover", color: "white" }}
-              onClick={() => handlePrev()}
-              isDisabled={page === 1}>
-              Previous
-            </Button>
-            {pageNumbers.map((pageNumber) => (
-              <Button
-                key={pageNumber}
-                _hover={{ bg: "brand.hover", color: "white" }}
-                ml={"0.5em"}
-                mr={"0.5em"}
-                onClick={() => setPage(pageNumber)}
-                isActive={page === pageNumber}
-                bgColor={page === pageNumber ? "red" : "brand.main"}
-                color={page === pageNumber ? "black" : "black"}>
-                {pageNumber}
-              </Button>
-            ))}
-            <Button
-              variant={"ghost"}
-              _hover={{ bg: "brand.hover", color: "white" }}
-              // ml={"20em"}
-              onClick={() => handleNext()}
-              isDisabled={page === totalPage}>
-              Next
-            </Button>
-          </Box>
-          <Box></Box>
         </Box>
-      </Stack>
+        <Box>
+          <ButtonAddProduct setModalClosedTrigger={setModalClosedTrigger} />
+        </Box>
+      </Box>
+      <Flex
+        mt={4}
+        flexDir={{ base: "column", md: "row" }}
+        justifyContent={"space-between"}
+        wrap={{ md: "wrap", lg: "nowrap" }}
+        px={8}
+        gap={2}
+      >
+        <Select
+          placeholder="Sort By"
+          value={order}
+          onChange={(e) => setOrder(e.target.value)}
+        >
+          <option value={"ASC"}>A-Z / (Low Price) - (High Price)</option>
+          <option value={"DESC"}>Z-A / (High Price) - (Low Price)</option>
+        </Select>
+        <Select
+          placeholder="All Category"
+          value={categories}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          {category &&
+            category.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+        </Select>
+        <InputGroup>
+          <InputLeftElement>
+            <BiSearchAlt color="#37630A" />
+          </InputLeftElement>
+          <Input
+            id="search"
+            onChange={handleSearch}
+            placeholder={"Search Product"}
+          />
+        </InputGroup>
+      </Flex>
+      <Button
+        ml={8}
+        mt={5}
+        variant={"ghost"}
+        _hover={{ bg: "brand.hover", color: "white" }}
+        onClick={() => handleOrderByPrice()}
+      >
+        {sortLabelText}
+      </Button>
+      <Divider mt={"10px"} />
+      <TableContainer mt={"10px"} fontSize={"11px"} fontWeight={"bold"}>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Category</Th>
+              <Th>Name</Th>
+              <Th>Price</Th>
+              <Th>Admin Discount</Th>
+              <Th>Weight</Th>
+              <Th>Product IMG</Th>
+              <Th>Status</Th>
+              <Th>Action</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {itemsToMap.map((item) => (
+              <Tr key={item.id}>
+                <Td>{item.Category?.name}</Td>
+                <Td>{item.name}</Td>
+                <Td>{item.price}</Td>
+                <Td>{item.admin_discount}</Td>
+                <Td>{item.weight} g</Td>
+                <Td>
+                  <Flex>
+                    <ButtonChangeProductPicture
+                      item={item}
+                      setModalClosedTrigger={setModalClosedTrigger}
+                    />
+                    <ButtonViewProductPicture item={item} />
+                  </Flex>
+                </Td>
+                <Td textColor={item.isactive ? "black" : "red"}>
+                  {item.isactive ? "Enable" : "Disable"}
+                </Td>
+                <Td>
+                  <Flex>
+                    <ButtonEditProduct
+                      setModalClosedTrigger={setModalClosedTrigger}
+                      id={item.id}
+                      item={item}
+                    />
+                    {item.isactive ? (
+                      <Button variant={""} onClick={() => deactive(item)}>
+                        Disable
+                      </Button>
+                    ) : (
+                      <Box>
+                        <Flex>
+                          <IconButton
+                            color={"green"}
+                            variant={""}
+                            icon={<FaCheck onClick={() => restore(item)} />}
+                          />
+                          <IconButton
+                            color={"red"}
+                            variant={""}
+                            icon={
+                              <FaTrashCan
+                                onClick={() => handleDeleteProduct(item)}
+                              />
+                            }
+                          />
+                        </Flex>
+                      </Box>
+                    )}
+                  </Flex>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+          <Tfoot></Tfoot>
+        </Table>
+      </TableContainer>
+      <Box ml={{ base: "8em", lg: "380px" }} mt={"20px"}>
+        <Button
+          variant={"ghost"}
+          _hover={{ bg: "brand.hover", color: "white" }}
+          onClick={() => handlePrev()}
+          isDisabled={page === 1}
+        >
+          Previous
+        </Button>
+        {pageNumbers.map((pageNumber) => (
+          <Button
+            key={pageNumber}
+            _hover={{ bg: "brand.hover", color: "white" }}
+            ml={"0.5em"}
+            mr={"0.5em"}
+            onClick={() => setPage(pageNumber)}
+            isActive={page === pageNumber}
+            bgColor={page === pageNumber ? "red" : "brand.main"}
+            color={page === pageNumber ? "black" : "black"}
+          >
+            {pageNumber}
+          </Button>
+        ))}
+        <Button
+          variant={"ghost"}
+          _hover={{ bg: "brand.hover", color: "white" }}
+          onClick={() => handleNext()}
+          isDisabled={page === totalPage}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };

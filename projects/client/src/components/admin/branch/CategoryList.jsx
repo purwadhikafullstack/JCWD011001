@@ -38,6 +38,7 @@ const CategoryList = () => {
             p={4}
             boxShadow={"lg"}
             w={"200px"}
+            borderWidth={"1px"}
           >
             <Image
               src={getImage(category.category_img)}

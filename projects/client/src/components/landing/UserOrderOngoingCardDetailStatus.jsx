@@ -115,8 +115,8 @@ const UserOrderOngoingCardDetailOrder = ({
     if (result.isConfirmed) {
       await dispatch(userCancel(item));
       await dispatch(getTransaction({}));
-      // await dispatch(branchUserCancel(item));
       Swal.fire("Cancel!", "The product has been canceled.", "success");
+      setDetail(false);
     }
   };
 
@@ -151,6 +151,9 @@ const UserOrderOngoingCardDetailOrder = ({
         <Text color="gray.600" mt={2}>
           Please complete your payment to continue, and upload the Payment
           information
+        </Text>
+        <Text color="gray.600" mt={2}>
+          Send the payment to Rek: *-* / BCA CC: Grocer_Easy Team
         </Text>
         <Button
           variant="outline"

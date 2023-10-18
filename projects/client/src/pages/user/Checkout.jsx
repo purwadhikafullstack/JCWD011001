@@ -256,7 +256,7 @@ const Checkout = () => {
                   _active={{ bg: "brand.active" }}
                   mt={8}
                   isDisabled={isCheckoutDisabled}>
-                  Checkout
+                  Proceed to Payment
                 </Button>
                 {!deliveryPrice && (
                   <Text color="red.500" fontSize={"sm"} fontStyle={"italic"} mt={2}>

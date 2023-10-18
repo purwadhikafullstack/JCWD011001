@@ -6,8 +6,16 @@ const cartItem = db.Cartitem;
 const fs = require("fs").promises;
 const path = require("path");
 
-let includeStore = [{ model: Store, attributes: { exclude: ["createdAt", "updatedAt"] }, where: { isactive: true } }];
-const includeCategory = [{ model: Category, attributes: { exclude: ["createdAt", "updatedAt"] } }];
+let includeStore = [
+  {
+    model: Store,
+    attributes: { exclude: ["createdAt", "updatedAt"] },
+    where: { isactive: true },
+  },
+];
+const includeCategory = [
+  { model: Category, attributes: { exclude: ["createdAt", "updatedAt"] } },
+];
 const includeProduct = [
   {
     model: Product,
@@ -48,11 +56,14 @@ const productController = {
   },
   getProductStore: async (req, res) => {
     try {
-      const { store_id, page = 1, limit = 9, order = "ASC", orderBy = "name", category = "" } = req.query;
-
-      const pagination = setPagination(limit, page);
-      const totalProduct = await ProductStore.count({ where: { store_id, isactive: true } });
-      const totalPage = Math.ceil(totalProduct / +limit);
+      const {
+        store_id,
+        page = 1,
+        limit = 9,
+        order = "ASC",
+        orderBy = "name",
+        category = "",
+      } = req.query;
 
       const includeProduct = [
         {
@@ -62,6 +73,12 @@ const productController = {
           include: includeCategory,
         },
       ];
+      const pagination = setPagination(limit, page);
+      const totalProduct = await ProductStore.count({
+        where: { store_id, isactive: true },
+        include: includeProduct,
+      });
+      const totalPage = Math.ceil(totalProduct / +limit);
 
       if (category) includeProduct[0].where.category_id = category;
 
@@ -199,7 +216,9 @@ const productController = {
       if (!req.file) {
         return res.status(400).json({ message: "Product image is required" });
       }
-      const productExist = await Product.findOne({ where: { name, isactive: true } });
+      const productExist = await Product.findOne({
+        where: { name, isactive: true },
+      });
 
       if (productExist) {
         return res.status(400).json({ message: "Product already exists" });
@@ -223,13 +242,16 @@ const productController = {
       return res.status(200).json({ message: "Product added" });
     } catch (error) {
       console.error("Error creating product:", error);
-      return res.status(500).json({ message: "Failed to create product", error: error.message });
+      return res
+        .status(500)
+        .json({ message: "Failed to create product", error: error.message });
     }
   },
   updateProduct: async (req, res) => {
     try {
       const { id } = req.params;
-      let { newName, category_id, price, admin_discount, description, weight } = req.body;
+      let { newName, category_id, price, admin_discount, description, weight } =
+        req.body;
       const findProduct = await Product.findOne({ where: { id } });
       console.log("update", findProduct);
       console.log("nama baru", newName);
@@ -322,11 +344,21 @@ const productController = {
   getItemDetail: async (req, res) => {
     try {
       const { id, store_id } = req.params;
-      const cekItem = await cartItem.findOne({ where: { product_id: id, store_id } });
+      const cekItem = await cartItem.findOne({
+        where: { product_id: id, store_id },
+      });
       console.log("adaa", cekItem);
-      const cekProduct = await ProductStore.findOne({ where: { product_id: id, store_id } });
+      const cekProduct = await ProductStore.findOne({
+        where: { product_id: id, store_id },
+      });
       console.log("cek ", cekProduct);
-      return res.status(200).json({ message: "Successsss", Item: cekItem, ProductBranch: cekProduct });
+      return res
+        .status(200)
+        .json({
+          message: "Successsss",
+          Item: cekItem,
+          ProductBranch: cekProduct,
+        });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

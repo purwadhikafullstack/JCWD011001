@@ -41,7 +41,7 @@ const SalesReportSuper = ({ item, handleClickBack }) => {
   }, [storeData]);
 
   return (
-    <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} fontFamily={"montserrat"} mr={"24px"}>
+    <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} mr={"24px"}>
       <Box onClick={handleClickBack} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
         <Text fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>Sales Report {storeData.name}</Text>
       </Box>

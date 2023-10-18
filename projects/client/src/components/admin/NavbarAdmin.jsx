@@ -38,9 +38,9 @@ const NavbarAdmin = (props) => {
           align={"center"}
           display={"flex"}
           justifyContent={"space-between"}
-          px={"8"}
+          px={{ base: 4, md: 8 }}
         >
-          <Text fontSize={"2xl"} fontWeight={"bold"}>
+          <Text fontSize={{ base: "xl", lg: "2xl"}} fontWeight={"bold"}>
             {props.title}
           </Text>
           <Button

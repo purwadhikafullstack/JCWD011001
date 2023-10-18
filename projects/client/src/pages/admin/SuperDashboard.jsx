@@ -11,7 +11,6 @@ import NavbarAdmin from "../../components/admin/NavbarAdmin";
 import MenuDashboard from "../../components/admin/MenuDashboard";
 import AdminManagement from "../../components/admin/super/AdminManagement";
 import Transaction from "../../components/admin/super/Transaction";
-import StockHistory from "../../components/admin/super/StockHistory";
 import SalesReport from "../../components/admin/super/SalesReport";
 import HomeDashboard from "../../components/admin/super/HomeDashboard";
 
@@ -25,8 +24,6 @@ const SuperDashboard = () => {
         return <AdminManagement />;
       case "transaction":
         return <Transaction />;
-      case "stock":
-        return <StockHistory />;
       case "report":
         return <SalesReport />;
       default:
@@ -65,11 +62,6 @@ const SuperDashboard = () => {
               onClick={() => setActivePage("transaction")}
               icon={IoCartOutline}
               name="Transaction"
-            />
-            <MenuDashboard
-              onClick={() => setActivePage("stock")}
-              icon={IoGridOutline}
-              name="Stock History"
             />
             <MenuDashboard
               onClick={() => setActivePage("report")}

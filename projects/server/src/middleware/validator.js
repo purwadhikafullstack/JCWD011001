@@ -114,6 +114,37 @@ const createBranchAdmin = [
     }),
 ];
 
+const addVoucherValidator = [
+  body("name").notEmpty().withMessage("Name is required"),
+  body("description").notEmpty().withMessage("Description is required"),
+  body("type").notEmpty().withMessage("Type is required"),
+  body("expired").notEmpty().withMessage("Expired Date is required"),
+  body("nominal").custom((value, { req }) => {
+    const { percent } = req.body;
+    if (
+      (!value && !percent) ||
+      (parseFloat(value) <= 0 && parseFloat(percent) <= 0)
+    ) {
+      throw new Error(
+        "Either 'nominal' or 'percent' must have a positive value"
+      );
+    }
+    return true;
+  }),
+  body("percent").custom((value, { req }) => {
+    const { nominal } = req.body;
+    if (
+      (!value && !nominal) ||
+      (parseFloat(value) <= 0 && parseFloat(nominal) <= 0)
+    ) {
+      throw new Error(
+        "Either 'nominal' or 'percent' must have a positive value"
+      );
+    }
+    return true;
+  }),
+];
+
 const validateRegist = (req, res, next) => {
   const errors = validationResult(req);
   //   validationResult memiliki method isEmpty untuk mengembalikan nilai true/false
@@ -133,5 +164,6 @@ module.exports = {
   forgotPasswordValidator,
   resetPasswordValidator,
   createBranchAdmin,
+  addVoucherValidator,
   validateRegist,
 };

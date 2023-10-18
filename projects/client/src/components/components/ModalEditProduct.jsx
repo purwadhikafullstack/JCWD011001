@@ -76,7 +76,7 @@ export default function ModalEditProduct({ isOpen, onClose, id, item }) {
   const isButtonDisabled = !formik.isValid || formik.isSubmitting;
   return (
     <>
-      <Box fontFamily={"montserrat"}>
+      <Box>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>

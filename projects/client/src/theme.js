@@ -8,10 +8,10 @@ const theme = extendTheme({
       active: "#2D5406",
     },
   },
-  // fonts: {
-  //   heading: `'Montserrat', sans-serif`,
-  //   body: `'Montserrat', sans-serif`,
-  // },
+  fonts: {
+    heading: `'Roboto', sans-serif`,
+    body: `'Roboto', sans-serif`,
+  },
 });
 
 export default theme;

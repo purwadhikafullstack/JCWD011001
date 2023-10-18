@@ -29,7 +29,7 @@ import {
   setVoucherToUse,
 } from "../../redux/reducer/VoucherReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart, getItem } from "../../redux/reducer/CartReducer";
+import dateFormatter from "../../utils/dateFormatter";
 
 const TransactionVoucher = ({
   product_price,
@@ -45,9 +45,6 @@ const TransactionVoucher = ({
   const userVoucher = useSelector((state) => state.VoucherReducer.userVoucher);
   const deliveryVoucher = useSelector(
     (state) => state.VoucherReducer.deliveryVoucher
-  );
-  const { store_id } = useSelector(
-    (state) => state.ProductReducer
   );
   const item = useSelector((state) => state.CartReducer.item);
   const [selectedVoucherData, setSelectedVoucherData] = useState(null);
@@ -154,7 +151,7 @@ const TransactionVoucher = ({
             toast({
               title: "Failed",
               description: `Add more ${isProductExist.name} to your cart`,
-              status: "error",
+              status: "warning",
               duration: 3000,
               isClosable: true,
             });
@@ -240,7 +237,12 @@ const TransactionVoucher = ({
                 <Divider my={4} />
                 <Box color={"gray.500"}>
                   {selectedVoucherData ? (
-                    <Text>{selectedVoucherData.Voucherdetail.description}</Text>
+                    <>
+                      <Text mb={4}>
+                        {selectedVoucherData.Voucherdetail.description}
+                      </Text>
+                      <Text>Expired: {dateFormatter(selectedVoucherData.Voucherdetail.expired)}</Text>
+                    </>
                   ) : (
                     <Text>Select a voucher to see the description.</Text>
                   )}
