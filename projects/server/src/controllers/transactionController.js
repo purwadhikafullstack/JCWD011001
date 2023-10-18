@@ -84,6 +84,25 @@ const transactionController = {
         ...pagination,
         order: [[orderBy, order]],
       });
+      for (const transactions of transaction) {
+        const expirationDate = new Date(transactions.dataValues.expiredIn);
+        
+        // Check if expirationDate is a valid date (not null and not "1970-01-01T00:00:00.000Z")
+        if (!isNaN(expirationDate.getTime()) && expirationDate.getTime() !== 0) {
+          console.log("expiredIn from database:", expirationDate);
+          
+          const currentDate = new Date();
+          console.log("Current date:", currentDate);
+          
+          // Perform any other operations on this transaction here
+          if(currentDate >= expirationDate && transactions.status === 3){
+            await db.sequelize.transaction(async(t) => {
+              const result = await Transaction.update({status : 4},{where : {id: transactions.id}}, {transaction : t})
+            })
+            console.log("berhasil")
+          }
+        }
+      }
       res.status(200).json({ message: "Get Transaction Success", totalPage, data: transaction });
     } catch (error) {
       res.status(500).json({ message: "Get Transaction Failed", error: error.message });

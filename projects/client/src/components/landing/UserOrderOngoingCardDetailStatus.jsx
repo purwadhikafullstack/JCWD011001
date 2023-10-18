@@ -290,7 +290,11 @@ const UserOrderOngoingCardDetailOrder = ({
         </Text>
         {confirmed ? (
           <Flex mt={4}>
-            <Button colorScheme="red" mr={4} onClick={handleCancel}>
+            <Button
+              colorScheme="red"
+              mr={4}
+              onClick={() => setConfirmed(false)}
+            >
               No
             </Button>
             <Button colorScheme="green" onClick={() => buttonConfirm(id)}>
