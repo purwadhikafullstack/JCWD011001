@@ -1,6 +1,7 @@
 require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const { join } = require("path");
 
 const PORT = process.env.PORT || 8000;
@@ -8,8 +9,9 @@ const app = express();
 app.use(
   cors({
     origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
+      "http://localhost:3000",
+      // process.env.WHITELISTED_DOMAIN &&
+      //   process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );
@@ -17,10 +19,41 @@ app.use(
 app.use(express.json());
 
 //#region API ROUTES
+const db = require("../models");
+const {
+  authRouter,
+  productRouter,
+  storeRouter,
+  adminRouter,
+  cartRouter,
+  profileRouter,
+  categoryRouter,
+  transactionRouter,
+  addressRouter,
+  regionRouter,
+  voucherRouter,
+  reportRouter,
+  userOrderRouter,
+} = require("./router");
+// db.sequelize.sync({ alter: true });
 
 // ===========================
 // NOTE : Add your routes here
 
+app.use("/api/auth", authRouter);
+app.use("/api/product", productRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/store", storeRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api", profileRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/transaction", transactionRouter);
+app.use("/api/address", addressRouter);
+app.use("/api/region", regionRouter);
+app.use("/api/voucher", voucherRouter);
+app.use("/api/report", reportRouter);
+app.use("/api/order", userOrderRouter);
+app.use("/public", express.static(path.resolve(__dirname, "../public")));
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

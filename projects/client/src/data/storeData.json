@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "name": "Branch Mataram",
+      "address": "Jl. Majapahit, Pagesangan Barat, Kec. Mataram, Kota Mataram, Nusa Tenggara Barat 83115",
+      "working_hours": "08:00 - 21:00"
+    },
+    {
+      "id": 2,
+      "name": "Branch Makassar",
+      "address": "Jl. Urip Sumoharjo, Panaikang, Kec. Panakkukang, Kota Makassar, Sulawesi Selatan 90231",
+      "working_hours": "08:00 - 21:00"
+    },
+    {
+      "id": 3,
+      "name": "Branch Yogyakarta",
+      "address": "Jl. Colombo, Samirono, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281",
+      "working_hours": "08:00 - 21:00"
+    }
+]
