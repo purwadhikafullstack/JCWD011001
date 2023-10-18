@@ -56,7 +56,9 @@ export default function Cart() {
   };
   const getItemDetails = async (id) => {
     try {
-      const response = await axios.get(`${URL_API}/product/item/detail/${id}/${store_id}`);
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${id}/${store_id}`
+      );
       // console.log("data get item", response);
       // console.log("data get item productBranc", response.data.ProductBranch);
       setBranchProduct(response.data.ProductBranch);
@@ -70,7 +72,9 @@ export default function Cart() {
     console.log("masukk ", products);
     console.log("masukk ", products.product_id);
     try {
-      const response = await axios.get(`${URL_API}/product/item/detail/${products.product_id}/${store_id}}`);
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${products.product_id}/${store_id}}`
+      );
       console.log("apa respon ?", response);
       const itemQuantity = response.data.ProductBranch?.quantity;
       console.log("QUAN", itemQuantity);
@@ -119,7 +123,11 @@ export default function Cart() {
     if (result.isConfirmed) {
       await dispatch(deleteItemFromCart(products));
       await dispatch(deleteItemCart(products));
-      Swal.fire("Deleted!", "The item has been removed from the cart.", "success");
+      Swal.fire(
+        "Deleted!",
+        "The item has been removed from the cart.",
+        "success"
+      );
     }
     await dispatch(getItem(store_id));
     await dispatch(getCart());
@@ -155,7 +163,7 @@ export default function Cart() {
         <Box>
           <Stack>
             <Box
-              ml={{ base: "30px", lg: "100px" }}
+              ml={{ base: "50px", lg: "100px" }}
               mt={"48px"}
               fontSize={"2xl"}
               fontWeight={"bold"}
@@ -163,26 +171,30 @@ export default function Cart() {
               <Text>Cart</Text>
             </Box>
             <Divider colorScheme="blackAlpha"></Divider>
-            <Flex flexDir={{ base: "column", lg: "row" }}>
+            <Flex flexDir={{ base: "column", lg: "row" }} px={"50px"}>
               <Box>
                 {item.length === 0 ? (
-                  <Box ml={"100px"}>
+                  <Box ml={{ lg: "50px" }}>
                     <Text>You haven't shop today, click the button below</Text>
                     <Button
                       _hover={{ bg: "brand.hover", color: "white" }}
                       color={"black"}
                       onClick={() => navigate("/shop")}
-                      width={"800px"}
+                      // w={"100%"}
+                      width={{ base: "400px", md: "680px", lg: "800px" }}
                       mt={"32px"}
                       variant={""}
                       borderRadius={"10px"}
-                      rightIcon={<FaShopify />}>
+                      rightIcon={<FaShopify />}
+                    >
                       See our products
                     </Button>
                   </Box>
                 ) : (
                   item.map((products) => {
-                    return <OnGoingCart key={products.id} products={products} />;
+                    return (
+                      <OnGoingCart key={products.id} products={products} />
+                    );
                   })
                 )}
               </Box>

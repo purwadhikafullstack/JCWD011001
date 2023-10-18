@@ -17,14 +17,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductListItem from "./ProductListItem";
 import { Pagination } from "../components/Pagination";
-import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer";
+import {
+  getProduct,
+  getStoreProduct,
+} from "../../redux/reducer/ProductReducer";
 import SearchProducts from "../components/SearchProducts";
 import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 import { AiOutlineInbox } from "react-icons/ai";
 
 const ProductList = () => {
   const displayDirection = useBreakpointValue({ base: "column", md: "row" });
-  const maxBoxWidth = useBreakpointValue({ base: "100%", md: "80%", lg: "60%" });
+  const maxBoxWidth = useBreakpointValue({
+    base: "100%",
+    md: "80%",
+    lg: "60%",
+  });
   const products = useSelector((state) => state.ProductReducer.product);
   const { store, store_id } = useSelector((state) => state.ProductReducer);
   const [orderBy, setOrderBy] = useState("name");
@@ -36,7 +43,8 @@ const ProductList = () => {
 
   useEffect(() => {
     if (!location) dispatch(getProduct({ index, orderBy, order }));
-    if (location) dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
+    if (location)
+      dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order }));
   }, [index, lon, lat, store, store_id, location, orderBy, order]);
 
   const handleOrderBy = () => {
@@ -59,7 +67,9 @@ const ProductList = () => {
               <Button onClick={handleOrderBy} mr={2}>
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
-              <Button onClick={handleOrder}>{order === "ASC" ? "ASC" : "DESC"}</Button>
+              <Button onClick={handleOrder}>
+                {order === "ASC" ? "ASC" : "DESC"}
+              </Button>
             </Box>
           </Flex>
         </Stack>
@@ -77,7 +87,13 @@ const ProductList = () => {
   }
 
   return (
-    <Box maxW={maxBoxWidth} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+    <Box
+      maxW={maxBoxWidth}
+      w="100%"
+      py="40px"
+      px={{ base: "20px" }}
+      mx={"auto"}
+    >
       <Stack spacing={6} mb={10}>
         <Heading as="h2" textAlign="center">
           {store ? store : "Our Recent Product"}
@@ -89,17 +105,21 @@ const ProductList = () => {
               <Button onClick={handleOrderBy} mr={2}>
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
-              <Button onClick={handleOrder}>{order === "ASC" ? "ASC" : "DESC"}</Button>
+              <Button onClick={handleOrder}>
+                {order === "ASC" ? "ASC" : "DESC"}
+              </Button>
             </Box>
           </Flex>
         )}
       </Stack>
       <Flex
         direction="row"
+        ml={{ base: "12px", md: "16px" }}
         flexWrap="wrap"
         w="100%"
         gap={4}
-        justifyContent={{ base: "space-evenly", xl: "center", md: "center" }}>
+        justifyContent={{ base: "flex-start", xl: "center", md: "center" }}
+      >
         {products.map((product, index) => (
           <ProductListItem product={product} key={index} />
         ))}

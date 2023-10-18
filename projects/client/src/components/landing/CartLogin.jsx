@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Flex, Stack, Text, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Stack,
+  Text,
+  Image,
+} from "@chakra-ui/react";
 import React from "react";
 import Logo from "../../assets/logo_main.png";
 import { useNavigate } from "react-router-dom";
@@ -7,9 +15,9 @@ const CartLogin = () => {
   const navigate = useNavigate();
 
   return (
-    <Box h={"100vh"} w={"100%"}>
+    <Box h={"100vh"} w={"100%"} px={"10px"}>
       <Stack>
-        <Box w={"800px"} h={"200px"} m={"100px auto"} align={"center"}>
+        <Box h={"200px"} m={"100px auto"} align={"center"}>
           <Image src={Logo} />
           <Text fontSize={"3xl"} fontFamily={"initial"}>
             Please Login First
@@ -17,15 +25,15 @@ const CartLogin = () => {
           <Text fontSize={"xl"} fontFamily={"initial"}>
             for better shopping
           </Text>
-          <Box w={"270px"}></Box>
-          <Flex justifyContent={"space-around"} mt={"50px"}>
+          <Flex justifyContent={"space-around"} px={"8px"} mt={"50px"}>
             <Box>
               <Text>Don't have any account ? </Text>
               <Button
                 mt={5}
                 variant={"ghost"}
                 _hover={{ bgColor: "brand.hover", color: "white" }}
-                onClick={() => navigate("/register")}>
+                onClick={() => navigate("/register")}
+              >
                 Create One
               </Button>
             </Box>
@@ -40,7 +48,8 @@ const CartLogin = () => {
                 _hover={{ bgColor: "brand.hover", color: "white" }}
                 onClick={() => {
                   navigate("/signin");
-                }}>
+                }}
+              >
                 Sign in
               </Button>
             </Box>

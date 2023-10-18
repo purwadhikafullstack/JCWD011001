@@ -45,7 +45,9 @@ const ProductDetail = () => {
   const getItemDetails = async (id) => {
     try {
       if (!id) return;
-      const response = await axios.get(`${URL_API}/product/item/detail/${id}/${store_id}`);
+      const response = await axios.get(
+        `${URL_API}/product/item/detail/${id}/${store_id}`
+      );
       await setBranchProduct(response.data.ProductBranch);
       await setSold(response.data.Item);
     } catch (error) {
@@ -103,7 +105,10 @@ const ProductDetail = () => {
         <Link>{product?.name}</Link>
       </Box>
       <Box>
-        <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 8 }}>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          gap={{ base: 4, md: 8 }}
+        >
           <Image
             src={getImage(product.product_img) || null}
             w={{ base: "100%", md: "50%" }}
