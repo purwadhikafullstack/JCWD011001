@@ -15,7 +15,7 @@ const path = require("path");
 require("dotenv").config({
   path: path.resolve("../.env"),
 });
-
+const URL = process.env.WHITELISTED_DOMAIN;
 const transporter = require("../helpers/transporter");
 
 const createRefCode = (length = 8) => {
@@ -93,7 +93,7 @@ const authController = {
         const token = jwt.sign({ id: newUser.id, username: username, email: email }, process.env.JWT_KEY, {
           expiresIn: "1h",
         });
-        const redirect = `http://localhost:3000/verification/${token}`;
+        const redirect = `${URL}/verification/${token}`;
         const data = await fs.readFile(path.resolve(__dirname, "../emails/registerEmail.html"), "utf-8");
         const tempCompile = await handlebars.compile(data);
         const tempResult = tempCompile({ username, email, redirect });
@@ -200,9 +200,29 @@ const authController = {
     try {
       const {transaction_id} = req.params
       const findTransaction = await ts.findOne({where : {id:transaction_id}})
-      console.log("adaa", findTransaction)
+      console.log("isi transaction", findTransaction)
       await db.sequelize.transaction(async(t) => {
         const result = await ts.update({status : 6}, {where : {id: transaction_id}}, {transaction : t})
+
+        if (findTransaction.total_price >= 100000) {
+          console.log("masuk sini");
+          const sevenDaysFromNow = new Date();
+          sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+          const newVoucher = await Voucherdetail.create({
+            name: "Shop More, Save More",
+            description: "Special discount after spending more than Rp.100.000",
+            nominal: 20000,
+            percent: null,
+            type: "discount",
+            expired: sevenDaysFromNow,
+          });
+
+          await Uservoucher.create({
+            user_id: findTransaction.user_id,
+            voucherdetail_id: newVoucher.id,
+            isused: false,
+          }, {transaction : t});
+        };
       })
       return res.status(200).json({message : "AMAN DAHH", data : result})
     } catch (error) {

@@ -258,25 +258,6 @@ const transactionController = {
 
       await Uservoucher.update({ isused: true, transaction_id: newTransaction.id }, { where: { id: voucherIds } });
 
-      if (total_price >= 100000) {
-        const sevenDaysFromNow = new Date();
-        sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
-        const newVoucher = await Voucherdetail.create({
-          name: "Shop More, Save More",
-          description: "Special discount after spending more than Rp.100.000",
-          nominal: 5000,
-          percent: null,
-          type: "discount",
-          expired: sevenDaysFromNow,
-        });
-
-        await Uservoucher.create({
-          user_id: id,
-          voucherdetail_id: newVoucher.id,
-          isused: false,
-        });
-      }
-
       await createFreeShippingVoucher(id);
       await Cartitem.destroy({ where: { cart_id: cart.id, store_id: store_id } });
       await cart.update({ total_price: 0 });

@@ -9,6 +9,7 @@ const path = require("path");
 require("dotenv").config({
   path: path.resolve("../.env"),
 });
+const URL = process.env.WHITELISTED_DOMAIN;
 
 const profileController = {
     patchChangeName : async (req, res) => {
@@ -93,7 +94,7 @@ const profileController = {
             const username = checkEmail.username;
             const userEmail = checkEmail.email;
             const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "1h" });
-            const redirect = `http://localhost:3000/reset-password/${token}`;
+            const redirect = `${URL}/reset-password/${token}`;
 
             const data = await fs.readFile(path.resolve(__dirname, "../emails/resetPassword.html"), "utf-8");
 

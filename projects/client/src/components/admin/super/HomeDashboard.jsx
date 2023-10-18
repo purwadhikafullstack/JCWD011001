@@ -1,6 +1,7 @@
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react'
 import ChartSuper from './ChartSuper';
+import SalesReportStatistic from './SalesReportStatistic';
 
 const HomeDashboard = () => {
   return (
@@ -23,6 +24,7 @@ const HomeDashboard = () => {
         </Box>
       </Box>
       <Box w={"full"}>
+        <SalesReportStatistic />
         <ChartSuper />
       </Box>
     </Box>

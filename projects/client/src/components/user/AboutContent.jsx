@@ -69,7 +69,7 @@ const AboutContent = () => {
                   boxShadow={"lg"}
                 >
                   <Center>
-                    <Image src={item.img} w={"100px"} h={"100px"} />
+                    <Image src={item.img} w={"150px"} h={"150px"} />
                   </Center>
                   <Text fontWeight={"bold"} fontSize={"lg"}>
                     {item.title}
@@ -114,7 +114,7 @@ const AboutContent = () => {
                   boxShadow={"lg"}
                 >
                   <Center>
-                    <Image src={item.image} w={"100px"} h={"100px"} />
+                    <Image src={item.image} w={"200px"} h={"200px"} />
                   </Center>
                   <Text fontWeight={"bold"} fontSize={"lg"}>
                     {item.name}

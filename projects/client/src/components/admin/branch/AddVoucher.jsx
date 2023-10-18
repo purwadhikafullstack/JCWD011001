@@ -62,34 +62,6 @@ const AddVoucher = ({ isOpen, onClose }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
-    nominal: Yup.string().test(
-      "is-nominal-or-percent",
-      "Either Nominal or percent is required",
-      function (value) {
-        const { percent } = this.parent;
-        if ((!value && !percent) || (value <= 0 && percent <= 0)) {
-          return this.createError({
-            message: "Either nominal or percent must have a value",
-            path: "nominal",
-          });
-        }
-        return true;
-      }
-    ),
-    percent: Yup.string().test(
-      "is-nominal-or-percent",
-      "Either Nominal or percent is required",
-      function (value) {
-        const { nominal } = this.parent;
-        if ((!value && !nominal) || (value <= 0 && nominal <= 0)) {
-          return this.createError({
-            message: "Either nominal or percent must have a value",
-            path: "percent",
-          });
-        }
-        return true;
-      }
-    ),
     type: Yup.string().required("Voucher Type is required"),
     expired: Yup.string().required("Expired Date is required"),
   });
@@ -182,55 +154,6 @@ const AddVoucher = ({ isOpen, onClose }) => {
                 <FormErrorMessage>{formik.errors.product_id}</FormErrorMessage>
               </Select>
             </FormControl>
-            <Flex gap={4}>
-              <FormControl
-                isInvalid={formik.errors.nominal && formik.touched.nominal}
-              >
-                <FormLabel mt={4}>Nominal</FormLabel>
-                <Input
-                  type="text"
-                  name="nominal"
-                  inputMode="numeric"
-                  value={formik.values.nominal}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <FormErrorMessage>{formik.errors.nominal}</FormErrorMessage>
-              </FormControl>
-              <FormControl
-                isInvalid={formik.errors.percent && formik.touched.percent}
-              >
-                <FormLabel mt={4}>Percentage</FormLabel>
-                <Input
-                  type="text"
-                  name="percent"
-                  inputMode="numeric"
-                  value={formik.values.percent}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <FormErrorMessage>{formik.errors.percent}</FormErrorMessage>
-              </FormControl>
-              <FormControl
-                isInvalid={
-                  formik.errors.minimum_payment &&
-                  formik.touched.minimum_payment
-                }
-              >
-                <FormLabel mt={4}>Min. Payment</FormLabel>
-                <Input
-                  type="text"
-                  name="minimum_payment"
-                  inputMode="numeric"
-                  value={formik.values.minimum_payment}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <FormErrorMessage>
-                  {formik.errors.minimum_payment}
-                </FormErrorMessage>
-              </FormControl>
-            </Flex>
             <FormControl
               isRequired
               isInvalid={formik.errors.type && formik.touched.type}
@@ -249,6 +172,58 @@ const AddVoucher = ({ isOpen, onClose }) => {
               </Select>
               <FormErrorMessage>{formik.errors.type}</FormErrorMessage>
             </FormControl>
+            <Flex gap={4}>
+              <FormControl
+                isInvalid={formik.errors.nominal && formik.touched.nominal}
+                isDisabled={formik.values.type === "buy1get1"}
+              >
+                <FormLabel mt={4}>Nominal</FormLabel>
+                <Input
+                  type="text"
+                  name="nominal"
+                  inputMode="numeric"
+                  value={formik.values.nominal}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <FormErrorMessage>{formik.errors.nominal}</FormErrorMessage>
+              </FormControl>
+              <FormControl
+                isInvalid={formik.errors.percent && formik.touched.percent}
+                isDisabled={formik.values.type === "buy1get1"}
+              >
+                <FormLabel mt={4}>Percentage</FormLabel>
+                <Input
+                  type="text"
+                  name="percent"
+                  inputMode="numeric"
+                  value={formik.values.percent}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <FormErrorMessage>{formik.errors.percent}</FormErrorMessage>
+              </FormControl>
+              <FormControl
+                isInvalid={
+                  formik.errors.minimum_payment &&
+                  formik.touched.minimum_payment
+                }
+                isDisabled={formik.values.type === "buy1get1"}
+              >
+                <FormLabel mt={4}>Min. Payment</FormLabel>
+                <Input
+                  type="text"
+                  name="minimum_payment"
+                  inputMode="numeric"
+                  value={formik.values.minimum_payment}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <FormErrorMessage>
+                  {formik.errors.minimum_payment}
+                </FormErrorMessage>
+              </FormControl>
+            </Flex>
             <FormControl
               isRequired
               isInvalid={formik.errors.expired && formik.touched.expired}
