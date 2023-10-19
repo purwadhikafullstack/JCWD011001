@@ -58,7 +58,6 @@ const ProductManagement = () => {
   const { category } = useSelector((state) => state.CategoryReducer);
   const [dataLength, setDataLength] = useState(0);
   const [limits, setLimits] = useState(0);
-  console.log("SELECT", categories);
 
   const handleNext = () => {
     setPage(page + 1);
@@ -76,7 +75,6 @@ const ProductManagement = () => {
     return pageNumbers;
   };
   const pageNumbers = generatePageNumbers(totalPage);
-  console.log("total page", totalPage);
   const dispatch = useDispatch();
   const orderByParam = orderByPrice ? "price" : orderBy;
   const fetchData = async () => {

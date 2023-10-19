@@ -192,9 +192,7 @@ export const fetchStore = () => {
 
 export const destroyProduct = (product, Swal) => {
   return async (dispatch) => {
-    console.log("destroy ", product);
     const productId = product.id;
-    console.log("id destroy reducer", productId);
     try {
       const result = await axios.delete(`${URL_API}/admin/product/${productId}`);
       Swal.fire({
@@ -211,7 +209,6 @@ export const destroyProduct = (product, Swal) => {
 export const stockUpdate = (values, Swal) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
-    console.log("update reducer ", values);
     try {
       await axios.post(
         `${URL_API}/admin/branch/stock`,
@@ -239,7 +236,6 @@ export const disableProduct = (values, Swal, toast) => {
   return async () => {
     try {
       const id = values.id;
-      console.log("delete values", id);
       const data = await axios.patch(`${URL_API}/admin/delete/${id}`, {});
       Swal.fire({
         icon: "error",
@@ -262,7 +258,6 @@ export const enableProduct = (values, Swal, toast) => {
   return async () => {
     try {
       const id = values.id;
-      console.log("enable values", id);
       const data = await axios.patch(`${URL_API}/admin/enable/${id}`, {});
       Swal.fire({
         icon: "success",

@@ -56,8 +56,7 @@ const Navbar = () => {
       confirmButtonText: "Yes, Logout!",
     });
     if (result.isConfirmed) {
-      dispatch(logoutAuth(toast));
-      Swal.fire("See you!", "We will miss you.", "success");
+      dispatch(logoutAuth(toast, Swal, navigate));
     }
   };
 

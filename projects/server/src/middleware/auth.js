@@ -24,13 +24,6 @@ const verifyToken = async (req, res, next) => {
 
 const verifyName = async (req, res, next) => {
     const {id,username} = req.user
-    const {newName, currentName} = req.body
-    if(newName === currentName){
-        return res.status(200).json({message : "Please select other username"})
-    }
-    if(username !== currentName){
-        return res.status(500).json({message : "Invalid Username"})
-    }
     const isUsernameExist = await user.findOne({
         where : { 
             id 
@@ -44,14 +37,6 @@ const verifyName = async (req, res, next) => {
 const verifyEmail = async (req, res, next) => {
     const {id,email} = req.user
     const {currentEmail, newEmail} = req.body
-    if(currentEmail === newEmail){
-        return res.status(500).json({
-            message : "Please select other email"
-        })
-    }
-    if(email !== currentEmail){
-        return res.status(500).json({message : "Invalid email address"})
-    }
     const isEmailExist = await user.findOne({
         where : {
             id

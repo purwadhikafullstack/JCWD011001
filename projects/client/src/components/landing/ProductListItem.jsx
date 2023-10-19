@@ -18,7 +18,6 @@ const ProductListItem = ({ product }) => {
   const [isDiscount, setIsDiscount] = useState(false);
   const navigate = useNavigate();
   const [productDetail, setProductDetail] = useState({});
-  console.log("PROD", product);
 
   useEffect(() => {
     if (product?.admin_discount > 0 || product.Product?.admin_discount > 0) {

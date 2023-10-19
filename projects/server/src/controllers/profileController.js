@@ -11,11 +11,17 @@ require("dotenv").config({
 });
 const URL = process.env.WHITELISTED_DOMAIN;
 
+
 const profileController = {
     patchChangeName : async (req, res) => {
         try {
             const {id} = req.user
-            const {currentName, newName} = req.body
+            const {newName} = req.body
+            const findUser = await user.findOne({where : {id}})
+            console.log("ini nama", findUser)
+            if(newName === findUser.username){
+                return res.status(500).json({message : "Please select other username"})
+            }
             await db.sequelize.transaction( async (t) => {
                 const findName = await user.update({ username: newName }, { where : {id}}, {transaction : t})
                 const findUser = await user.findOne({where : {id}})
@@ -31,7 +37,8 @@ const profileController = {
             const {currentGender, chooseGender} = req.body
             await db.sequelize.transaction (async (t) => {
                 const result = await user.update({gender : chooseGender}, {where : {id}}, {transaction : t})
-                return res.status(200).json({message : "Success"})
+                const findUser = await user.findOne({where : {id}})
+                return res.status(200).json({message : "Success", data: findUser})
             })
         } catch (error) {
             return res.status(500).json({message : "Failed, Butuh Oplas", error : error.message})
@@ -44,7 +51,8 @@ const profileController = {
             await db.sequelize.transaction (async (t) => {
                 const result = await user.update({birthdate : newBirthdate}, 
                     {where : {id}}, {transaction : t})
-                    return res.status(200).json({message : "Success", data : result})
+                    const findUser = await user.findOne({where : {id}})
+                    return res.status(200).json({message : "Success", data : result, find : findUser})
             })
         } catch (error) {
             return res.status(500).json({message : "Failed", error : error.message})
@@ -52,11 +60,34 @@ const profileController = {
     },
     pacthChangeEmail : async (req, res) => {
         try {
-            const {id} = req.user
-            const {currentEmail, newEmail} = req.body
+            const {id,username} = req.user
+            const {newEmail} = req.body
+            const findUser = await user.findOne({where : {id}})
+            console.log("ini email", findUser)
+            if(newEmail === findUser.email){
+                return res.status(500).json({
+                    message : "Please select other email"
+                })
+            }
             await db.sequelize.transaction (async (t) => {
-                const result = await user.update({email : newEmail}, {where : {id}}, {transaction : t})
-                return res.status(200).json({message : "Email successfully change", data : result})
+                const result = await user.update({email : newEmail, isverify : false}, {where : {id}}, {transaction : t})
+                let payload = {
+                    id : id,
+                    username : username,
+                    email : newEmail,
+                }
+                const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn : "10h"})
+                const redirect = `${URL}/verification/${token}`
+                const data = await fs.readFile(path.resolve(__dirname, "../emails/changeEmail.html"), "utf-8")
+                const tempCompile = await handlebars.compile(data);
+                const tempResult = tempCompile({username, newEmail, redirect})
+                await transporter.sendMail({
+                    to : newEmail,
+                    subject : "Change Email",
+                    html : tempResult
+                })
+                const findUser = await user.findOne({where : {id}})
+                return res.status(200).json({message : "Email successfully change", data : findUser, token:token})
             })
         } catch (error) {
             return res.status(500).json({message : "Failed", error : error.message})

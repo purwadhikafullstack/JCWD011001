@@ -4,6 +4,7 @@ import {
   Center,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -20,18 +21,17 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import CloseButton from "./CloseButton";
+import ChangeButton from "./ChangeButton";
 
 const ChangeEmailSchema = Yup.object().shape({
-  currentEmail: Yup.string()
-    .email("Invalid email address format")
-    .required("Email is required"),
   newEmail: Yup.string()
     .email("Invalid email address format")
     .required("Email is required"),
 });
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
-export default function ModalChangeEmail({ isOpen, onClose }) {
+export default function ModalChangeEmail({ isOpen, onClose, user }) {
   const toast = useToast();
   const navigate = useNavigate();
   function toHome() {
@@ -60,9 +60,9 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
         "Please to verify your new email on inbox/spam and login again",
         "success"
       );
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 2000);
     } catch (error) {
       console.log(error);
       toast({
@@ -76,11 +76,13 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
   };
   const formik = useFormik({
     initialValues: {
-      currentEmail: "",
-      newEmail: "",
+      // currentEmail: "",
+      newEmail: user.email || "",
     },
     validationSchema: ChangeEmailSchema,
     onSubmit: (values) => {
+      // console.log("ini masuk");
+      console.log("masuk", values);
       emailChange(values);
     },
   });
@@ -95,43 +97,18 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
             <Stack>
               <form onSubmit={formik.handleSubmit}>
                 <FormControl
-                  isInvalid={
-                    formik.touched.currentEmail && formik.errors.currentEmail
-                  }
-                >
-                  <Input
-                    required
-                    placeholder="Current Email"
-                    variant={"flushed"}
-                    borderColor={"black"}
-                    w={"350px"}
-                    mt={"20px"}
-                    ml={"25px"}
-                    id="currentEmail"
-                    name="currentEmail"
-                    type="email"
-                    value={formik.values.currentEmail}
-                    onChange={formik.handleChange}
-                  ></Input>
-                  <Center>
-                    {formik.touched.currentEmail &&
-                      formik.errors.currentEmail && (
-                        <FormErrorMessage>
-                          {formik.errors.currentEmail}
-                        </FormErrorMessage>
-                      )}
-                  </Center>
-                </FormControl>
-                <FormControl
+                  isRequired
                   isInvalid={formik.touched.newEmail && formik.errors.newEmail}
                 >
+                  <FormLabel ml={"25px"} mt={"15px"}>
+                    Email Address
+                  </FormLabel>
                   <Input
                     required
                     placeholder="New Email"
                     variant={"flushed"}
                     borderColor={"black"}
                     w={"350px"}
-                    mt={"20px"}
                     ml={"25px"}
                     id="newEmail"
                     name="newEmail"
@@ -146,25 +123,8 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
                   )}
                 </FormControl>
                 <ModalFooter>
-                  <Button
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    onClick={onClose}
-                    colorScheme="red"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    ml={"20px"}
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    type="submit"
-                    colorScheme="yellow"
-                  >
-                    Change
-                  </Button>
+                  <CloseButton onClose={onClose} />
+                  <ChangeButton />
                 </ModalFooter>
               </form>
             </Stack>
