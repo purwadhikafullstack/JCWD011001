@@ -19,6 +19,10 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import CloseButton from "./CloseButton";
+import ChangeButton from "./ChangeButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducer/AuthReducer";
 
 const GenderSchema = Yup.object().shape({
   gender: Yup.string().required("Gender is required"),
@@ -27,12 +31,13 @@ const GenderSchema = Yup.object().shape({
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function ModalChangeGender({ isOpen, onClose }) {
   const toast = useToast();
+  const dispatch = useDispatch();
   const choosenGender = async (values) => {
     const token = localStorage.getItem("token");
     try {
       const { currentGender } = values;
       const respon = await axios.patch(
-        `${URL_API}/auth/gender`,
+        `${URL_API}/profile/gender`,
         {
           currentGender: currentGender,
           chooseGender: values.gender,
@@ -43,12 +48,9 @@ export default function ModalChangeGender({ isOpen, onClose }) {
           },
         }
       );
-      console.log("gender", respon);
+      dispatch(setUser(respon.data?.data));
       onClose();
       await Swal.fire("Success!", "Gender has chosen", "success");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
     } catch (error) {
       console.log(error);
       toast({
@@ -91,25 +93,8 @@ export default function ModalChangeGender({ isOpen, onClose }) {
                   <option>Female</option>
                 </Select>
                 <ModalFooter>
-                  <Button
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    onClick={onClose}
-                    colorScheme="red"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    ml={"20px"}
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    type="submit"
-                    colorScheme="yellow"
-                  >
-                    Change
-                  </Button>
+                  <CloseButton onClose={onClose} />
+                  <ChangeButton />
                 </ModalFooter>
               </form>
             </Stack>

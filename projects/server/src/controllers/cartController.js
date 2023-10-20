@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const db = require("../../models");
+const db = require("../models");
 const product = db.Product;
 const cart = db.Cart;
 const items = db.Cartitem;
@@ -20,7 +20,6 @@ const cartController = {
       const { id } = req.user;
       const { total_price, cartId, productId , store_id,quantity } = req.body;
       const checkCart = await cart.findOne({ where: { user_id: id } });
-      console.log("check cart", checkCart)
       const checkProduct = await product.findOne({ where: { id: productId } });
       const newPrice = checkProduct.price - checkProduct.admin_discount;
       const totalPrice = (checkCart.total_price += newPrice);
@@ -57,7 +56,6 @@ const cartController = {
       const { id } = req.user;
       const { total_price, cartId, productId , store_id } = req.body;
       const checkCart = await cart.findOne({ where: { user_id: id } });
-      console.log("check cart", checkCart);
       const checkProduct = await product.findOne({ where: { id: productId } });
       const newPrice = checkProduct.price - checkProduct.admin_discount;
       const totalPrice = (checkCart.total_price += newPrice);
@@ -109,7 +107,6 @@ const cartController = {
             checkItem.quantity -= 1;
           }
           checkItem.save();
-          console.log("quantity decrement ", checkItem.quantity);
           return res.status(200).json({ message: "Success" });
         }
       });
@@ -121,13 +118,9 @@ const cartController = {
     try {
       const { id } = req.user;
       const { productId, store_id } = req.params;
-      console.log("id delete ", productId);
       const checkCart = await cart.findOne({ where: { user_id: id } });
-      console.log("checkcart", checkCart);
       const checkProduct = await product.findOne({ where: { id: productId } });
-      console.log("check product", checkProduct);
       const checkItem = await items.findOne({ where: { product_id: checkProduct.id, store_id } });
-      console.log("check item", checkItem);
       const newPrice = checkItem.quantity * checkItem.price;
       const finalPrice = checkCart.total_price - newPrice;
       await db.sequelize.transaction(async (t) => {
@@ -164,7 +157,6 @@ const cartController = {
         },
         where: { cart_id: findCart.id, store_id: store_id },
       });
-      console.log("item", findCartsItems);
       let totalPrices = 0;
       for (const findCartsItem of findCartsItems) {
         totalPrices += findCartsItem.quantity * findCartsItem.price;

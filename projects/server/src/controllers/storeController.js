@@ -1,5 +1,5 @@
 const { Sequelize, Op, where } = require("sequelize");
-const db = require("../../models");
+const db = require("../models");
 const Store = db.Store;
 
 const storeDistance = (lat1, lon1, lat2, lon2) => {

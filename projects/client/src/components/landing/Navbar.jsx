@@ -56,8 +56,7 @@ const Navbar = () => {
       confirmButtonText: "Yes, Logout!",
     });
     if (result.isConfirmed) {
-      dispatch(logoutAuth(toast));
-      Swal.fire("See you!", "We will miss you.", "success");
+      dispatch(logoutAuth(toast, Swal, navigate));
     }
   };
 
@@ -78,12 +77,18 @@ const Navbar = () => {
         minH={"60px"}
         borderBottom={1}
         borderStyle={"solid"}
-        borderColor={"#D7F0AA"}>
+        borderColor={"#D7F0AA"}
+      >
         <Box>
           <Flex justifyContent={"flex-start"} align={"center"}>
             <Box display={isMobile ? "none" : "block"}>
               <Link to={"/"}>
-                <Image mr={8} src={Logo} h={"28px"} _hover={{ filter: "brightness(70%)", transition: "300ms" }} />
+                <Image
+                  mr={8}
+                  src={Logo}
+                  h={"28px"}
+                  _hover={{ filter: "brightness(70%)", transition: "300ms" }}
+                />
               </Link>
             </Box>
             {isMobile ? (
@@ -109,14 +114,22 @@ const Navbar = () => {
         </Box>
         <Box display={isMobile ? "block" : "none"}>
           <Link to={"/"}>
-            <Image src={LogoSmall} h={"28px"} _hover={{ filter: "brightness(70%)", transition: "300ms" }} />
+            <Image
+              src={LogoSmall}
+              h={"28px"}
+              _hover={{ filter: "brightness(70%)", transition: "300ms" }}
+            />
           </Link>
         </Box>
         <Box>
           <Flex justifyContent={"flex-end"} align={"center"} gap={4}>
             <Link to={"/cart"} ml={4}>
               <Flex alignItems={"center"} position="relative">
-                <HiOutlineShoppingCart fontSize={24} cursor={"pointer"} color={"gray.800"} />
+                <HiOutlineShoppingCart
+                  fontSize={24}
+                  cursor={"pointer"}
+                  color={"gray.800"}
+                />
                 <Box
                   position="absolute"
                   top="-8px"
@@ -127,15 +140,22 @@ const Navbar = () => {
                   width={`${(cartItem || 0).toString().length * 10 + 8}px`}
                   display="flex"
                   alignItems="center"
-                  justifyContent="center">
+                  justifyContent="center"
+                >
                   <Text fontSize={"xs"}>{cartItem || 0}</Text>
                 </Box>
               </Flex>
             </Link>
-            <Flex alignItems={"center"} ml={{ base: 2, md: 4}}>
+            <Flex alignItems={"center"} ml={{ base: 2, md: 4 }}>
               {login ? (
                 <Menu>
-                  <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                    minW={0}
+                  >
                     <Avatar
                       size={"sm"}
                       name={user.name}
@@ -165,11 +185,23 @@ const Navbar = () => {
                 </Menu>
               ) : (
                 <Menu>
-                  <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                    minW={0}
+                  >
                     <Avatar size={"sm"} />
                   </MenuButton>
                   <MenuList>
-                    <Box display={"flex"} flexDir={"column"} px={4} py={2} gap={4}>
+                    <Box
+                      display={"flex"}
+                      flexDir={"column"}
+                      px={4}
+                      py={2}
+                      gap={4}
+                    >
                       <Center>
                         <Text fontWeight={"medium"} color={"brand.main"}>
                           Welcome to GrocerEasy
@@ -189,7 +221,8 @@ const Navbar = () => {
                           navigate("/signin");
                         }}
                         _hover={{ bg: "gray.100" }}
-                        _active={{ bg: "gray.200" }}>
+                        _active={{ bg: "gray.200" }}
+                      >
                         {" "}
                         Sign In
                       </Button>
@@ -204,7 +237,8 @@ const Navbar = () => {
                         _active={{ bg: "brand.active" }}
                         onClick={() => {
                           navigate("/register");
-                        }}>
+                        }}
+                      >
                         Register
                       </Button>
                     </Box>

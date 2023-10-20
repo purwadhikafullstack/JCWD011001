@@ -5,7 +5,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
-const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransactionProducts }) => {
+const UserOrderOngoingCard = ({
+  item,
+  setDetail,
+  setTransactionDetail,
+  setTransactionProducts,
+}) => {
   const orderStatusArray = [
     { status: "Awaiting Payment", color: "red" },
     { status: "Wait for Confirmation", color: "orange" },
@@ -57,9 +62,9 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
   };
 
   const handleClick = async () => {
-    await setDetail(true);
     setTransactionDetail(item);
     setTransactionProducts(products);
+    await setDetail(true);
   };
 
   useEffect(() => {
@@ -75,13 +80,15 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
       p={4}
       justifyContent={{ base: "space-evenly", md: "space-between" }}
       _hover={{ bg: "gray.100", cursor: "pointer" }}
-      onClick={handleClick}>
+      onClick={handleClick}
+    >
       <Box>
         <Text
           fontSize={{ base: "lg", md: "xl" }}
           fontWeight={"semibold"}
           textDecoration={"underline"}
-          textTransform={"uppercase"}>
+          textTransform={"uppercase"}
+        >
           Order#{item.user_id}
           {item.id}
         </Text>
@@ -96,10 +103,15 @@ const UserOrderOngoingCard = ({ item, setDetail, setTransactionDetail, setTransa
           borderRadius={"2xl"}
           px={3}
           py={1}
-          fontSize={{ base: "9px", md: "md" }}>
+          fontSize={{ base: "9px", md: "md" }}
+        >
           {orderStatusArray[item.status].status}
         </Badge>
-        {item.message && <Text fontSize={{ base: "sm", md: "md" }}>Message: {item.message}</Text>}
+        {item.message && (
+          <Text fontSize={{ base: "sm", md: "md" }}>
+            Message: {item.message}
+          </Text>
+        )}
       </Box>
       <Box ml={"auto"}>
         <Box fontSize={{ base: "sm", md: "md" }}>Total Price Detail</Box>

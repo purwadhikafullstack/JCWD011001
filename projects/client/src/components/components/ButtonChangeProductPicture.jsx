@@ -10,11 +10,7 @@ export default function ButtonChangeProductPicture({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isHovered, setIsHovered] = useState(false);
-  const PUBLIC_URL = "http://localhost:8000";
 
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   const handleModalClose = () => {
     setModalClosedTrigger(true); // Set the trigger when the modal is closed
     onClose();
@@ -22,17 +18,6 @@ export default function ButtonChangeProductPicture({
   return (
     <>
       <Box>
-        {/* <Avatar
-          size={{ base: "xl", lg: "2xl" }}
-          // name={user.username}
-          src={getImage(item.product_img)}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          style={{
-            cursor: "pointer",
-          }}
-        > */}
-
         <Button
           variant={""}
           size={{ base: "xl", lg: "2xl" }}
@@ -42,25 +27,6 @@ export default function ButtonChangeProductPicture({
         >
           Change
         </Button>
-        {/* <IconButton
-          onClick={onOpen}
-          variant={""}
-          borderRadius={"30px"}
-          _hover={{ bg: "gray.300", borderRadius: "30px" }}
-          icon={<IoPencil />}
-        /> */}
-        {/* {isHovered && (
-          <AvatarBadge
-            onClick={onOpen}
-            as={IconButton}
-            size="lg"
-            bottom="5px"
-            colorScheme="gray"
-            aria-label="Edit Image"
-            icon={<IoPencil />}
-          />
-        )} */}
-        {/* </Avatar> */}
         <ChangeProductPicture
           isOpen={isOpen}
           onOpen={onOpen}

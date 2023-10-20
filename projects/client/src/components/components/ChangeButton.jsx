@@ -1,7 +1,7 @@
-import { Button } from '@chakra-ui/react';
-import React from 'react'
+import { Button, Spinner } from "@chakra-ui/react";
+import React from "react";
 
-const ChangeButton = () => {
+const ChangeButton = ({ isLoading }) => {
   return (
     <Button
       ml={"20px"}
@@ -14,9 +14,9 @@ const ChangeButton = () => {
       _hover={{ bg: "brand.hover" }}
       _active={{ bg: "brand.active" }}
     >
-      Change
+      {isLoading ? <Spinner /> : "Change "}
     </Button>
   );
-}
+};
 
-export default ChangeButton
+export default ChangeButton;

@@ -43,7 +43,6 @@ import CartLogin from "./CartLogin";
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function Cart() {
-  const PUBLIC_URL = "http://localhost:8000";
   const { login } = useSelector((state) => state.AuthReducer);
   const { item } = useSelector((state) => state.CartReducer);
   const { store_id } = useSelector((state) => state.ProductReducer);
@@ -51,38 +50,24 @@ export default function Cart() {
   const [idProduct, setIdProduct] = useState(0);
   const [branchProduct, setBranchProduct] = useState([]);
 
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   const getItemDetails = async (id) => {
     try {
       const response = await axios.get(
         `${URL_API}/product/item/detail/${id}/${store_id}`
       );
-      // console.log("data get item", response);
-      // console.log("data get item productBranc", response.data.ProductBranch);
       setBranchProduct(response.data.ProductBranch);
-      // console.log("data get item", response.data.Item);
       setSold(response.data.Item);
     } catch (error) {
       console.log(error);
     }
   };
   const cekQuantity = async (products) => {
-    console.log("masukk ", products);
-    console.log("masukk ", products.product_id);
     try {
       const response = await axios.get(
         `${URL_API}/product/item/detail/${products.product_id}/${store_id}}`
       );
-      console.log("apa respon ?", response);
       const itemQuantity = response.data.ProductBranch?.quantity;
-      console.log("QUAN", itemQuantity);
       return false;
-      // if (products.quantity >= itemQuantity) {
-      //   return false;
-      // }
-      // return true;
     } catch (error) {
       console.log(error);
     }
@@ -91,10 +76,8 @@ export default function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const inCart = async (products) => {
-    console.log("in", products);
     await dispatch(addToCart(products));
     await dispatch(addQuantity(products));
-    console.log("store depan ", products.store_id);
     await dispatch(getItem(store_id));
     await dispatch(getCart());
     // await getItemDetails(products.Product?.id);
@@ -109,7 +92,6 @@ export default function Cart() {
   };
 
   const destroy = async (products) => {
-    console.log("delete", products);
     await dispatch(deleteItemCart(products));
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -136,7 +118,6 @@ export default function Cart() {
     if (item && item.length > 0) {
       await item.forEach((items) => {
         if (items.Product) {
-          // console.log("haha", items.Product.id);
           getItemDetails(items.Product.id);
         }
       });

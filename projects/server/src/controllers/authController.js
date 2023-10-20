@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const db = require("../../models");
+const db = require("../models");
 const User = db.User;
 const Admin = db.Admin;
 const Cart = db.Cart;
@@ -13,9 +13,9 @@ const handlebars = require("handlebars");
 const fs = require("fs").promises;
 const path = require("path");
 require("dotenv").config({
-  path: path.resolve("../.env"),
+  path: path.resolve("../../.env"),
 });
-
+const URL = process.env.WHITELISTED_DOMAIN;
 const transporter = require("../helpers/transporter");
 
 const createRefCode = (length = 8) => {
@@ -28,6 +28,43 @@ const createRefCode = (length = 8) => {
   }
 
   return refCode;
+};
+
+const createFreeShippingVoucher = async (id) => {
+  try {
+    const successfulTransactionsCount = await ts.count({
+      where: {
+        user_id: id,
+        status: 6,
+      },
+    });
+    if (
+      successfulTransactionsCount % 5 === 0 &&
+      successfulTransactionsCount > 0
+    ) {
+        const sevenDaysFromNow = new Date();
+        sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+        const newVoucher = await Voucherdetail.create({
+          name: "Free Delivery Voucher",
+          description:
+            "Free delivery voucher after your five successful transactions",
+          nominal: 0,
+          percent: 100,
+          type: "freedelivery",
+          expired: sevenDaysFromNow,
+        });
+
+        await Uservoucher.create({
+          user_id: id,
+          voucherdetail_id: newVoucher.id,
+          isused: false,
+        });
+
+        console.log("Free Shipping Voucher created for user:", id);
+      }
+  } catch (error) {
+    console.error("Failed to create Free Shipping Voucher:", error);
+  }
 };
 
 const authController = {
@@ -93,17 +130,15 @@ const authController = {
         const token = jwt.sign({ id: newUser.id, username: username, email: email }, process.env.JWT_KEY, {
           expiresIn: "1h",
         });
-        const redirect = `http://localhost:3000/verification/${token}`;
+        const redirect = `${URL}/verification/${token}`;
         const data = await fs.readFile(path.resolve(__dirname, "../emails/registerEmail.html"), "utf-8");
         const tempCompile = await handlebars.compile(data);
         const tempResult = tempCompile({ username, email, redirect });
-        console.log("ini");
         await transporter.sendMail({
           to: email,
           subject: "Verification Account",
           html: tempResult,
         });
-        console.log("habis ini");
         res.status(200).json({ message: "Register Success", data: newUser });
       });
     } catch (err) {
@@ -200,9 +235,29 @@ const authController = {
     try {
       const {transaction_id} = req.params
       const findTransaction = await ts.findOne({where : {id:transaction_id}})
-      console.log("adaa", findTransaction)
       await db.sequelize.transaction(async(t) => {
         const result = await ts.update({status : 6}, {where : {id: transaction_id}}, {transaction : t})
+
+        if (findTransaction.total_price >= 100000) {
+          const sevenDaysFromNow = new Date();
+          sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+          const newVoucher = await Voucherdetail.create({
+            name: "Shop More, Save More",
+            description: "Special discount after spending more than Rp.100.000",
+            nominal: 20000,
+            percent: null,
+            type: "discount",
+            expired: sevenDaysFromNow,
+          });
+
+          await Uservoucher.create({
+            user_id: findTransaction.user_id,
+            voucherdetail_id: newVoucher.id,
+            isused: false,
+          }, {transaction : t});
+        };
+
+        createFreeShippingVoucher(findTransaction.user_id);
       })
       return res.status(200).json({message : "AMAN DAHH", data : result})
     } catch (error) {

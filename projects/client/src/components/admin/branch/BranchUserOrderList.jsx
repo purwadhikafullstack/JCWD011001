@@ -125,7 +125,6 @@ const BranchUserOrderList = () => {
     );
   };
   const handleCancel = async (item) => {
-    console.log("cancel", item);
     // dispatch(userCancel(item));
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -145,7 +144,6 @@ const BranchUserOrderList = () => {
     }
   };
   const buttonConfirm = async (item) => {
-    console.log("confirm awal ", item);
     // dispatch(userCancel(item));
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -158,7 +156,6 @@ const BranchUserOrderList = () => {
     });
     if (result.isConfirmed) {
       dispatch(branchUserConfirm(item));
-      console.log("confirm ", item);
       Swal.fire("Cancel!", "Order Confirm.", "success");
       dispatch(
         getBranchUserOrder({ index, startDate, endDate, orderBy, order })
@@ -296,8 +293,8 @@ const BranchUserOrderList = () => {
               {branchUserOrder.map((order) => (
                 <Tr key={order.id}>
                   <Td>
-                    {order.id}
                     {order.user_id}
+                    {order.id}
                   </Td>
                   {isLargerThan768 && <Td>{order.name}</Td>}
                   {isLargerThan768 && <Td>{dateFormatter(order.createdAt)}</Td>}

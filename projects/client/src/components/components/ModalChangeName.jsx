@@ -22,9 +22,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducer/AuthReducer";
 import Swal from "sweetalert2";
+import ChangeButton from "./ChangeButton";
+import CloseButton from "./CloseButton";
 
 const ChangeUsernameSchema = Yup.object().shape({
-  currentName: Yup.string().required("Name is required"),
   newName: Yup.string()
     .matches(
       /^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z]).*$/,
@@ -34,7 +35,7 @@ const ChangeUsernameSchema = Yup.object().shape({
 });
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
-export default function ModalChangeName({ isOpen, onClose }) {
+export default function ModalChangeName({ isOpen, onClose, user }) {
   const navigate = useNavigate();
   function toHome() {
     navigate("/");
@@ -44,11 +45,10 @@ export default function ModalChangeName({ isOpen, onClose }) {
 
   const change = async (values, newValues) => {
     const token = localStorage.getItem("token");
-    console.log(token);
     const { currentName, newName } = values;
     try {
       const respon = await axios.patch(
-        `${URL_API}/auth/name`,
+        `${URL_API}/profile/name`,
         {
           currentName: currentName,
           newName: newName,
@@ -59,22 +59,14 @@ export default function ModalChangeName({ isOpen, onClose }) {
           },
         }
       );
-      console.log("ini respon changeusername", respon.data?.data);
       dispatch(setUser(respon.data?.data));
       onClose();
-      await Swal.fire(
-        "Success!",
-        "Please logout first if you wanna change again",
-        "success"
-      );
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      await Swal.fire("Success!", "Username successfully change", "success");
     } catch (error) {
       console.log(error);
       toast({
         title: "Error",
-        description: error?.response?.data?.message,
+        description: error.response?.data.message,
         status: "error",
         duration: 1000,
         isClosable: true,
@@ -83,11 +75,11 @@ export default function ModalChangeName({ isOpen, onClose }) {
   };
   const formik = useFormik({
     initialValues: {
-      currentName: "",
-      newName: "",
+      newName: user.username || "",
     },
     validationSchema: ChangeUsernameSchema,
     onSubmit: (values) => {
+      console.log("ini masuk");
       change(values);
       onClose();
     },
@@ -102,33 +94,6 @@ export default function ModalChangeName({ isOpen, onClose }) {
           <ModalBody>
             <Stack>
               <form onSubmit={formik.handleSubmit}>
-                <FormControl
-                  isInvalid={
-                    formik.touched.currentName && formik.errors.currentName
-                  }
-                >
-                  <Input
-                    required
-                    placeholder="Current Username"
-                    variant={"flushed"}
-                    borderColor={"black"}
-                    w={"350px"}
-                    ml={"25px"}
-                    id="currentName"
-                    name="currentName"
-                    type="currentName"
-                    value={formik.values.currentName}
-                    onChange={formik.handleChange}
-                  ></Input>
-                  <Center>
-                    {formik.touched.currentName &&
-                      formik.errors.currentName && (
-                        <FormErrorMessage>
-                          {formik.errors.currentName}
-                        </FormErrorMessage>
-                      )}
-                  </Center>
-                </FormControl>
                 <FormControl
                   isInvalid={formik.touched.newName && formik.errors.newName}
                 >
@@ -155,25 +120,8 @@ export default function ModalChangeName({ isOpen, onClose }) {
                   </Center>
                 </FormControl>
                 <ModalFooter>
-                  <Button
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    onClick={onClose}
-                    colorScheme="red"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    ml={"20px"}
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    type="submit"
-                    colorScheme="yellow"
-                  >
-                    Change
-                  </Button>
+                  <CloseButton onClose={onClose} />
+                  <ChangeButton />
                 </ModalFooter>
               </form>
             </Stack>

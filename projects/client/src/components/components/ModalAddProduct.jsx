@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../redux/reducer/CategoryReducer";
 import { addProduct } from "../../redux/reducer/ProductReducer";
 import Swal from "sweetalert2";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const addProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -38,11 +39,14 @@ const addProductSchema = Yup.object().shape({
       "File size is too large",
       (value) => !value || value.size <= 1048576
     )
-    .test(
-      "fileType",
-      "Invalid file format",
-      (value) => !value || /\/(jpg|png|gif)$/i.test(value.type)
-    ),
+    .test("fileType", "Invalid file format", (value) => {
+      if (!value) {
+        return true;
+      }
+      const supportedFormats = ["jpg", "jpeg", "png", "gif"];
+      const fileExtension = value.name.split(".").pop().toLowerCase();
+      return supportedFormats.includes(fileExtension);
+    }),
   weigth: Yup.number().required("Weight is Required"),
 });
 export default function ModalAddProduct({ isOpen, onClose }) {
@@ -51,7 +55,7 @@ export default function ModalAddProduct({ isOpen, onClose }) {
   const toast = useToast();
   const { category } = useSelector((state) => state.CategoryReducer);
   const fetchData = async () => {
-    const respon = await axios.get("http://localhost:8000/api/store/branch");
+    const respon = await axios.get(`${URL_API}/store/branch`);
     console.log("sroe,", respon.data);
     setStore(respon.data.data);
   };

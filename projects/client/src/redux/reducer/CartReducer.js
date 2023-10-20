@@ -22,7 +22,6 @@ export const CartReducer = createSlice({
     },
     addToCart: (state, action) => {
       const { id, quantity } = action.payload;
-      console.log("masuk", action.payload)
       const existCartItemIndex = state.cart.findIndex((item) => item.id === id);
 
       if (existCartItemIndex !== -1) {
@@ -49,9 +48,7 @@ export const CartReducer = createSlice({
       }
     },
     deleteItemCart: (state, action) => {
-      console.log("dele", action.payload);
       const { id } = action.payload;
-      console.log("isi del", id);
       const existCart = state.cart.findIndex((item) => item.id === id);
       if (existCart !== -1) {
         state.totalHarga -= action.payload.price * state.cart[existCart].quantity;
@@ -95,9 +92,6 @@ export const getCart = () => {
 
 export const addCart = (products,store_id, quantity, Swal) => {
   return async (dispatch) => {
-    console.log("PRODUCSR", products)
-    console.log("KENAPA", store_id)
-    console.log("quantity", quantity)
     const dataProduct = products.Product || products;
     const discount = products.price - products.admin_discount
     const total_price = discount * quantity;

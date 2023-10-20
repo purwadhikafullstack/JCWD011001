@@ -117,9 +117,13 @@ const Checkout = () => {
         minH={"60px"}
         borderBottom={1}
         borderStyle={"solid"}
-        borderColor={"#D7F0AA"}>
+        borderColor={"#D7F0AA"}
+      >
         <Box>
-          <Flex justifyContent={{ base: "center", md: "flex-start" }} align={"center"}>
+          <Flex
+            justifyContent={{ base: "center", md: "flex-start" }}
+            align={"center"}
+          >
             <Image
               onClick={onOpen}
               src={Logo}
@@ -133,7 +137,11 @@ const Checkout = () => {
           </Flex>
         </Box>
       </Box>
-      <Box w={"full"} py={"16px"} px={{ base: "28px", md: "48px", lg: "100px" }}>
+      <Box
+        w={"full"}
+        py={"16px"}
+        px={{ base: "28px", md: "48px", lg: "100px" }}
+      >
         <Text fontSize={{ base: "2xl", md: "4xl" }} fontWeight={"medium"}>
           Checkout
         </Text>
@@ -148,21 +156,49 @@ const Checkout = () => {
                 <Divider my={2} />
                 <Text fontWeight={"medium"}>{nameExist}</Text>
                 <Text my={2}>{user.phone}</Text>
-                <Text>{defaultAddress ? defaultAddress.address : <Spinner size="sm" />}</Text>
-                <Text mt={2} fontSize={"sm"} fontStyle={"italic"} color={"gray.500"}>
+                <Text>
+                  {defaultAddress ? (
+                    defaultAddress.address
+                  ) : (
+                    <Flex gap={2}>
+                      <Spinner size="sm" />
+                      <Text fontSize={"sm"} color={"gray.500"} fontStyle={"italic"}>Please set your default address</Text>
+                    </Flex>
+                  )}
+                </Text>
+                <Text
+                  mt={2}
+                  fontSize={"sm"}
+                  fontStyle={"italic"}
+                  color={"gray.500"}
+                >
                   *your order will be delivered to your default address
                 </Text>
                 <Divider my={4} />
                 <Text fontWeight={"bold"} mb={2} color={"brand.main"}>
                   Courier Option:
                 </Text>
-                <Select placeholder="Select delivery option" onChange={(e) => setDeliveryDetail(e.target.value)}>
+                <Select
+                  placeholder="Select delivery option"
+                  onChange={(e) => setDeliveryDetail(e.target.value)}
+                  isDisabled={defaultAddress ? false : true}
+                >
                   <option value={"jne"}>JNE</option>
                   <option value={"tiki"}>TIKI</option>
                   <option value={"pos"}>POS</option>
                 </Select>
+                {!defaultAddress && (
+                  <Text
+                    fontSize={"sm"}
+                    fontStyle={"italic"}
+                    mt={2}
+                    color={"red"}
+                  >
+                    *Please set your default address
+                  </Text>
+                )}
                 {deliveryDetail === null ? (
-                  <div className="spinner"></div>
+                  <Box></Box>
                 ) : deliveryDetail ? (
                   <DeliveryDetail
                     deliveryDetail={deliveryDetail}
@@ -200,7 +236,8 @@ const Checkout = () => {
               rounded={"lg"}
               border={"1px"}
               borderColor={"gray.200"}
-              boxShadow={"lg"}>
+              boxShadow={"lg"}
+            >
               <Box w={"full"} p={4}>
                 <Button
                   onClick={onOpenVoucher}
@@ -211,7 +248,8 @@ const Checkout = () => {
                   borderColor={"brand.main"}
                   rounded={"lg"}
                   _hover={{ bg: "gray.100" }}
-                  _active={{ bg: "gray.300" }}>
+                  _active={{ bg: "gray.300" }}
+                >
                   Use Voucher
                 </Button>
               </Box>
@@ -255,11 +293,17 @@ const Checkout = () => {
                   _hover={{ bg: "brand.hover" }}
                   _active={{ bg: "brand.active" }}
                   mt={8}
-                  isDisabled={isCheckoutDisabled}>
+                  isDisabled={isCheckoutDisabled}
+                >
                   Proceed to Payment
                 </Button>
                 {!deliveryPrice && (
-                  <Text color="red.500" fontSize={"sm"} fontStyle={"italic"} mt={2}>
+                  <Text
+                    color="red.500"
+                    fontSize={"sm"}
+                    fontStyle={"italic"}
+                    mt={2}
+                  >
                     *Please select a delivery option to proceed
                   </Text>
                 )}

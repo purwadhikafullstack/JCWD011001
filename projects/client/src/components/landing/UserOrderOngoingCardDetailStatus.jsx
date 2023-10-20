@@ -81,7 +81,6 @@ const UserOrderOngoingCardDetailOrder = ({
     if (confirmed) console.log("masuk ke confirm order");
   };
   const buttonConfirm = async (item) => {
-    console.log("confirm didepan", item);
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Confirm your order ? ",
@@ -94,14 +93,12 @@ const UserOrderOngoingCardDetailOrder = ({
     if (result.isConfirmed) {
       await dispatch(userConfirm(item));
       await dispatch(getTransaction({}));
-      // await dispatch(branchUserCancel(item));
       Swal.fire("Confirm!", "The product has been arrived.", "success");
     }
   };
 
   const handleCancel = async (item) => {
     // setConfirmed(false);
-    console.log("cancel", item);
 
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -290,7 +287,11 @@ const UserOrderOngoingCardDetailOrder = ({
         </Text>
         {confirmed ? (
           <Flex mt={4}>
-            <Button colorScheme="red" mr={4} onClick={handleCancel}>
+            <Button
+              colorScheme="red"
+              mr={4}
+              onClick={() => setConfirmed(false)}
+            >
               No
             </Button>
             <Button colorScheme="green" onClick={() => buttonConfirm(id)}>

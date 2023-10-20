@@ -1,4 +1,4 @@
-const db = require("../../models");
+const db = require("../models");
 const { Op } = require("sequelize");
 const Voucherdetail = db.Voucherdetail;
 const Uservoucher = db.Uservoucher;
@@ -22,7 +22,9 @@ const voucherController = {
       const currentDate = new Date();
 
       if (expirationDate <= currentDate) {
-        return res.status(400).json({ message: "Expired date must be in the future" });
+        return res
+          .status(400)
+          .json({ message: "Expired date must be in the future" });
       }
 
       const voucherExist = await Voucherdetail.findOne({
@@ -87,7 +89,7 @@ const voucherController = {
         where: {
           isactive: true,
           name: {
-            [Op.notLike]: "Referral Voucher",
+            [Op.not]: ["Referral Voucher", "Shop More, Save More"],
           },
           type: {
             [Op.notLike]: "freedelivery",

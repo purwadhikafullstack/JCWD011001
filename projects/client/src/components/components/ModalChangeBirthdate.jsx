@@ -19,6 +19,10 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import CloseButton from "./CloseButton";
+import ChangeButton from "./ChangeButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducer/AuthReducer";
 
 const birthSchema = Yup.object().shape({
   birthdate: Yup.date().required("Date is required"),
@@ -27,12 +31,13 @@ const birthSchema = Yup.object().shape({
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function ModalChangeBirthdate({ isOpen, onClose }) {
   const toast = useToast();
+  const dispatch = useDispatch();
   const chooseBirthdate = async (values) => {
     const token = localStorage.getItem("token");
     try {
       const { currentBirthdate } = values;
       const respon = await axios.patch(
-        `${URL_API}/auth/birthdate`,
+        `${URL_API}/profile/birthdate`,
         {
           currentBirthdate: currentBirthdate,
           newBirthdate: values.birthdate,
@@ -43,15 +48,9 @@ export default function ModalChangeBirthdate({ isOpen, onClose }) {
           },
         }
       );
+      dispatch(setUser(respon.data?.find));
       onClose();
-      await Swal.fire(
-        "Success!",
-        "Please logout first if you wanna change again",
-        "success"
-      );
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      await Swal.fire("Success!", "Birthdate successfully change", "success");
     } catch (error) {
       console.log(error);
       toast({
@@ -107,25 +106,8 @@ export default function ModalChangeBirthdate({ isOpen, onClose }) {
                   </Center>
                 </FormControl>
                 <ModalFooter>
-                  <Button
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    onClick={onClose}
-                    colorScheme="red"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    ml={"20px"}
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    type="submit"
-                    colorScheme="yellow"
-                  >
-                    Change
-                  </Button>
+                  <CloseButton onClose={onClose} />
+                  <ChangeButton />
                 </ModalFooter>
               </form>
             </Stack>

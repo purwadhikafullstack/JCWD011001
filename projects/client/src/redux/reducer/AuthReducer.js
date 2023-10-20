@@ -30,23 +30,16 @@ export const AuthReducer = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      // console.log("isi", action.payload);
-      const { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby } = action.payload;
-      state.user = { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby };
+      const { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby, isverify } = action.payload;
+      state.user = { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby, isverify };
       state.login = true;
     },
     loginSuccess: (state, action) => {
-      // state.user = {...action.payload};
       state.login = true;
-      // localStorage.setItem("token", action.payload);
     },
     logoutSuccess: (state) => {
-      // state.user = initialState.user;
       state.login = false;
       state.user = {};
-      setTimeout(() => {
-        document.location.href = "/";
-      }, 1000);
     },
     setLocation: (state, action) => {
       state.location = action.payload;
@@ -58,17 +51,15 @@ export const AuthReducer = createSlice({
   },
 });
 
-export const logoutAuth = (toast) => {
+export const logoutAuth = (toast, Swal, navigate) => {
   return async (dispatch) => {
     try {
       localStorage.removeItem("token");
+      await Swal.fire("See you!", "We will miss you.", "success")
+      .then(() => {
+        document.location.href = "/"
+      });;
       dispatch(logoutSuccess());
-      toast({
-        title: "Logout Success",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
     } catch (error) {
       console.log(error);
     }
@@ -192,10 +183,7 @@ export const setUserLocation = (latitude, longitude) => {
 };
 export const userCancel = (item) => {
   return async (dispatch) => {
-    console.log("user cancel reducer masuk ", item);
-    console.log("id ts", item);
     const transaction_id = item;
-    console.log("inimi", transaction_id);
     try {
       const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`);
     } catch (error) {
@@ -205,9 +193,7 @@ export const userCancel = (item) => {
 };
 export const userConfirm = (item) => {
   return async (dispatch) => {
-    console.log("user confirm reducer masuk", item);
     const transaction_id = item;
-    console.log("cocok ?", transaction_id);
     try {
       const response = await axios.patch(`${URL_API}/auth/transaction/confirm/${transaction_id}`);
     } catch (error) {

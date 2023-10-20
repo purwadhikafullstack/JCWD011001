@@ -31,32 +31,28 @@ import {
 } from "../../../redux/reducer/AdminReducer";
 import StockManagementHistory from "./StockManagementHistory";
 import { BiSearchAlt } from "react-icons/bi";
+import getImage from "../../../utils/getImage";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 export default function StockManagement() {
   const [detail, setDetail] = useState(0);
   const [itemDetail, setItemDetail] = useState({});
-  const PUBLIC_URL = "http://localhost:8000";
   const toast = useToast();
   const [stock, setStock] = useState([]);
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
   const [name, setName] = useState("");
   const { branchAdmin } = useSelector((state) => state.AdminReducer);
-  console.log("INFO MASSE", branchAdmin);
   const dispatch = useDispatch();
-  const getImage = (image) => {
-    return `${PUBLIC_URL}/${image}`;
-  };
   const fetchData = async () => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `http://localhost:8000/api/admin/product/branch?product_name=${name}`,
+      `${URL_API}/admin/product/branch?product_name=${name}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log("niii", response);
     await setStock(response.data.datas);
   };
   const handleSearch = () => {
@@ -64,12 +60,10 @@ export default function StockManagement() {
     setName(name);
   };
   const disable = async (item) => {
-    console.log("disbale ", item);
     await dispatch(disableProduct(item, Swal, toast));
     await fetchData();
   };
   const restore = async (item) => {
-    console.log("resote, ", item);
     await dispatch(enableProduct(item, Swal, toast));
     await fetchData();
   };
@@ -90,7 +84,6 @@ export default function StockManagement() {
       <StockManagementHistory setDetail={setDetail} itemDetail={itemDetail} />
     );
 
-  console.log("stocks", stock);
   return (
     <Box w={"full"}>
       <Box

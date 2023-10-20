@@ -4,6 +4,7 @@ import {
   Center,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -20,20 +21,24 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import CloseButton from "./CloseButton";
+import ChangeButton from "./ChangeButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducer/AuthReducer";
+import { useState } from "react";
 
 const ChangeEmailSchema = Yup.object().shape({
-  currentEmail: Yup.string()
-    .email("Invalid email address format")
-    .required("Email is required"),
   newEmail: Yup.string()
     .email("Invalid email address format")
     .required("Email is required"),
 });
 
 const URL_API = process.env.REACT_APP_API_BASE_URL;
-export default function ModalChangeEmail({ isOpen, onClose }) {
+export default function ModalChangeEmail({ isOpen, onClose, user }) {
   const toast = useToast();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
   function toHome() {
     navigate("/");
   }
@@ -41,8 +46,9 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
     const token = localStorage.getItem("token");
     const { currentEmail, newEmail } = values;
     try {
+      setLoading(true);
       const respon = await axios.patch(
-        `${URL_API}/auth/email`,
+        `${URL_API}/profile/email`,
         {
           currentEmail: currentEmail,
           newEmail: newEmail,
@@ -53,16 +59,13 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
           },
         }
       );
-      console.log(respon);
+      dispatch(setUser(respon.data?.data));
       onClose();
       await Swal.fire(
         "Success!",
-        "Please to verify your new email on inbox/spam and login again",
+        "Please to verify your new email on inbox/spam",
         "success"
       );
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     } catch (error) {
       console.log(error);
       toast({
@@ -72,15 +75,19 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setLoading(false);
     }
   };
   const formik = useFormik({
     initialValues: {
-      currentEmail: "",
-      newEmail: "",
+      // currentEmail: "",
+      newEmail: user.email || "",
     },
     validationSchema: ChangeEmailSchema,
     onSubmit: (values) => {
+      // console.log("ini masuk");
+      console.log("masuk", values);
       emailChange(values);
     },
   });
@@ -95,43 +102,18 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
             <Stack>
               <form onSubmit={formik.handleSubmit}>
                 <FormControl
-                  isInvalid={
-                    formik.touched.currentEmail && formik.errors.currentEmail
-                  }
-                >
-                  <Input
-                    required
-                    placeholder="Current Email"
-                    variant={"flushed"}
-                    borderColor={"black"}
-                    w={"350px"}
-                    mt={"20px"}
-                    ml={"25px"}
-                    id="currentEmail"
-                    name="currentEmail"
-                    type="email"
-                    value={formik.values.currentEmail}
-                    onChange={formik.handleChange}
-                  ></Input>
-                  <Center>
-                    {formik.touched.currentEmail &&
-                      formik.errors.currentEmail && (
-                        <FormErrorMessage>
-                          {formik.errors.currentEmail}
-                        </FormErrorMessage>
-                      )}
-                  </Center>
-                </FormControl>
-                <FormControl
+                  isRequired
                   isInvalid={formik.touched.newEmail && formik.errors.newEmail}
                 >
+                  <FormLabel ml={"25px"} mt={"15px"}>
+                    Email Address
+                  </FormLabel>
                   <Input
                     required
                     placeholder="New Email"
                     variant={"flushed"}
                     borderColor={"black"}
                     w={"350px"}
-                    mt={"20px"}
                     ml={"25px"}
                     id="newEmail"
                     name="newEmail"
@@ -146,25 +128,8 @@ export default function ModalChangeEmail({ isOpen, onClose }) {
                   )}
                 </FormControl>
                 <ModalFooter>
-                  <Button
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    onClick={onClose}
-                    colorScheme="red"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    ml={"20px"}
-                    mt={"20px"}
-                    w={"150px"}
-                    borderRadius={"50px"}
-                    type="submit"
-                    colorScheme="yellow"
-                  >
-                    Change
-                  </Button>
+                  <CloseButton onClose={onClose} />
+                  <ChangeButton isLoading={isLoading} />
                 </ModalFooter>
               </form>
             </Stack>

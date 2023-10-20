@@ -40,16 +40,13 @@ export default function OnGoingCart({ products }) {
     // await getItemDetails(products.Product?.id);
   };
   const inCart = async (products) => {
-    console.log("in", products);
     await dispatch(addToCart(products));
     await dispatch(addQuantity(products));
-    console.log("store depan ", products.store_id);
     await dispatch(getItem(store_id));
     await dispatch(getCart());
     // await getItemDetails(products.Product?.id);
   };
   const destroy = async (products) => {
-    console.log("delete", products);
     await dispatch(deleteItemCart(products));
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -73,15 +70,11 @@ export default function OnGoingCart({ products }) {
     await dispatch(getCart());
   };
   const cekQuantity = async (products) => {
-    console.log("masukk ", products);
-    console.log("masukk ", products.product_id);
     try {
       const response = await axios.get(
         `${URL_API}/product/item/detail/${products.product_id}/${store_id}}`
       );
-      console.log("apa respon ?", response);
       const itemQuantity = response.data.ProductBranch?.quantity;
-      console.log("QUAN", itemQuantity);
       if (products.quantity >= itemQuantity) {
         setSold(true);
         return;

@@ -7,7 +7,6 @@ import getImage from "../../utils/getImage";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const ItemCart = ({ products, setTotalWeight, totalWeight }) => {
-  // console.log(products);
 
   return (
     <Box>

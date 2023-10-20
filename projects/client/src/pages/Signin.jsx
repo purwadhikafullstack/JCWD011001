@@ -136,27 +136,19 @@ export default function Signin() {
                     onChange={formik.handleChange}
                   ></Input>
                   <InputRightElement>
-                    <Button
-                      size={"md"}
-                      onClick={showPassword}
-                      variant={"unstyled"}
-                    >
+                    <Button onClick={showPassword} variant={"unstyled"}>
                       {show ? (
                         <AiFillEye
-                          size={{
-                            base: "8px",
-                            sm: "12px",
-                            md: "16px",
-                            lg: "24px",
+                          style={{
+                            width: "40px",
+                            height: "35px",
                           }}
                         />
                       ) : (
                         <AiFillEyeInvisible
-                          size={{
-                            base: "8px",
-                            sm: "12px",
-                            md: "16px",
-                            lg: "40px",
+                          style={{
+                            width: "40px",
+                            height: "35px",
                           }}
                         />
                       )}
