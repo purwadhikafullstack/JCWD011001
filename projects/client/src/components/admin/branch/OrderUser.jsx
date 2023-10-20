@@ -52,7 +52,6 @@ const OrderUser = () => {
   //   getAllTransaction();
   // };
   const buttonConfirm = async (item) => {
-    console.log("confirm awal ", item);
     // dispatch(userCancel(item));
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -65,14 +64,12 @@ const OrderUser = () => {
     });
     if (result.isConfirmed) {
       dispatch(branchUserConfirm(item));
-      console.log("confirm ", item);
       Swal.fire("Cancel!", "Order Confirm.", "success");
       setRender(true);
       getAllTransaction();
     }
   };
   const handleCancel = async (item) => {
-    console.log("cancel", item);
     // dispatch(userCancel(item));
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -91,7 +88,6 @@ const OrderUser = () => {
     }
   };
   const buttonSend = async (item) => {
-    console.log("send ", item);
     // dispatch(userCancel(item));
     const result = await Swal.fire({
       title: "Are you sure?",

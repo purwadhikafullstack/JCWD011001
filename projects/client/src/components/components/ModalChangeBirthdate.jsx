@@ -37,7 +37,7 @@ export default function ModalChangeBirthdate({ isOpen, onClose }) {
     try {
       const { currentBirthdate } = values;
       const respon = await axios.patch(
-        `${URL_API}/auth/birthdate`,
+        `${URL_API}/profile/birthdate`,
         {
           currentBirthdate: currentBirthdate,
           newBirthdate: values.birthdate,
@@ -50,11 +50,7 @@ export default function ModalChangeBirthdate({ isOpen, onClose }) {
       );
       dispatch(setUser(respon.data?.find));
       onClose();
-      await Swal.fire(
-        "Success!",
-        "Please logout first if you wanna change again",
-        "success"
-      );
+      await Swal.fire("Success!", "Birthdate successfully change", "success");
     } catch (error) {
       console.log(error);
       toast({

@@ -64,10 +64,6 @@ export default function ModalEditProduct({ isOpen, onClose, id, item }) {
     },
     validationSchema: editProductSchema,
     onSubmit: (values) => {
-      // const productImg = document.getElementById("product_img").files[0];
-      // const formData = new FormData();
-      // formData.append("product_img", productImg);
-      console.log("vvalues", values);
       dispatch(updateProduct(values, toast, Swal));
       onClose();
       formik.resetForm();

@@ -243,9 +243,7 @@ const adminController = {
   deleteProduct: async (req, res) => {
     try {
       const { productId } = req.params;
-      console.log("id destroy", productId);
       const checkProduct = await Product.findOne({ where: { id: productId } });
-      console.log("id product destroy", checkProduct);
       await db.sequelize.transaction(async (t) => {
         const response = await Product.destroy({ where: { id: productId } }, { transaction: t });
       });
@@ -260,20 +258,15 @@ const adminController = {
       const {productId, quantity, description} = req.body
       // let description = "Update Stock"
       const findStore = await Store.findOne({where : {admin_id : req.user.id}})
-      console.log("dapat adminnya", findStore)
       const existingProductStore = await productStore.findOne({
         where: { product_id: productId, store_id: findStore.id },
       });
-      console.log("existing product", existingProductStore);
       const existingStoresHistory = await stockHistory.findOne({
         where: { product_id: productId, store_id: findStore.id },
       });
-      console.log("update sampai sini", existingStoresHistory)
       if (existingProductStore) {
         let quantityUpdate;
         quantityUpdate = existingProductStore.quantity + quantity;
-        console.log("apa inii ??", quantity)
-        console.log("ini tambahan", quantityUpdate)
         existingProductStore.quantity = quantityUpdate;
         await existingProductStore.save();
         await db.sequelize.transaction(async (t) => {
@@ -349,7 +342,6 @@ const adminController = {
         "$Product.name$": { [Op.like]: `%${product_name || ""}%` },
       };
       const store = await Store.findOne({ where: { admin_id: req.user.id } });
-      console.log("adakajhh", store)
       if (!store) {
         return res.status(404).json({ message: "Store not found for the user." });
       }
@@ -382,7 +374,6 @@ const adminController = {
           exclude: ["createdAt", "updatedAt"],
         },
       });
-      console.log("checkUser ", checkUser);
       return res.status(200).json({ message: "Success", data: checkUser });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -464,7 +455,6 @@ const adminController = {
     try {
       const { transaction_id } = req.params;
       const findTransaction = await trans.findOne({ where: { id: transaction_id } });
-      console.log("Got it", findTransaction);
 
       await db.sequelize.transaction(async (t) => {
         const result = await trans.update({ status: 3 }, { where: { id: transaction_id } }, { transaction: t });
@@ -510,11 +500,9 @@ const adminController = {
   }
 };
 const updateStatus = async (transaction_id) => {
-  console.log("masuk update status 4");
   await db.sequelize.transaction(async (t) => {
     const result = await trans.update({ status: 4 }, { where: { id: transaction_id } }, { transaction: t });
   });
-  // console.log(`Status updated to 4 for transaction ${transaction_id}`);
 };
 
 module.exports = adminController;

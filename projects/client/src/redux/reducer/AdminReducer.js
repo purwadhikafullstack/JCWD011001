@@ -278,10 +278,7 @@ export const enableProduct = (values, Swal, toast) => {
 };
 export const branchUserCancel = (item) => {
   return async (dispatch) => {
-    console.log("user cancel reducer masuk ", item);
-    console.log("id dari branch", item.id);
     const transaction_id = item.id;
-    console.log("inimi", transaction_id);
     try {
       const response = await axios.patch(`${URL_API}/admin/branch/cancel/${transaction_id}`);
     } catch (error) {
@@ -291,10 +288,7 @@ export const branchUserCancel = (item) => {
 }
 export const branchUserConfirm = (item) => {
   return async(dispatch) => {
-    console.log("user confirm reducer masuk ", item)
-    console.log("id dari branch", item.id)
     const transaction_id = item.id
-    console.log("inimi", transaction_id)
     try { 
       const response = await axios.patch(`${URL_API}/admin/branch/confirm/${transaction_id}`)
     } catch (error) {
@@ -304,10 +298,7 @@ export const branchUserConfirm = (item) => {
 }
 export const branchSendOrder = (item) => {
   return async(dispatch) => {
-    console.log("user send reducer masuk ", item)
-    console.log("id dari branch", item.id)
     const transaction_id = item.id
-    console.log("inimi", transaction_id)
     try { 
       const response = await axios.patch(`${URL_API}/admin/branch/send/${transaction_id}`)
     } catch (error) {

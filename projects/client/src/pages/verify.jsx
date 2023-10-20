@@ -27,7 +27,8 @@ export default function Verify() {
         isClosable: true,
       });
       // document.location.href("/");
-      navigate("/");
+      await navigate("/");
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast({

@@ -136,8 +136,6 @@ export const getProductSearch = ({ category, name, store_id }) => {
 
 export const addProduct = (values, productImg, Swal, toast) => {
   return async (dispatch) => {
-    console.log("prodcut", values);
-    console.log("prodcut image", productImg);
     try {
       const formData = new FormData();
       formData.append("name", values.name);
@@ -176,7 +174,6 @@ export const addProduct = (values, productImg, Swal, toast) => {
 export const updateProduct = (values, toast, Swal) => {
   return async () => {
     const id = values.id;
-    console.log("edit ", values);
     const { newName, categoryId, price, admin_discount, description, weigth } = values;
     try {
       const data = await axios.patch(`${URL_API}/product/${id}`, {
@@ -213,7 +210,6 @@ export const deleteProduct = (values, Swal, toast) => {
   return async () => {
     try {
       const id = values.id;
-      console.log("delete values", id);
       const data = await axios.patch(`${URL_API}/product/delete/${id}`, {});
       Swal.fire({
         icon: "error",
@@ -236,7 +232,6 @@ export const restoreProduct = (values, Swal) => {
   return async () => {
     try {
       const id = values.id;
-      console.log("id restore", id);
       const data = await axios.patch(`${URL_API}/product/restore/${id}`, {});
       Swal.fire({
         icon: "success",

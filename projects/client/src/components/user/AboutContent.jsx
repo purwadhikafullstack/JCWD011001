@@ -3,6 +3,7 @@ import React from "react";
 import Logo from "../../assets/logo_main.png";
 import WhyChooseData from "../../data/whyChooseData";
 import TeamData from "../../data/teamData";
+import { Link } from "react-router-dom";
 
 const AboutContent = () => {
   const appName = (
@@ -23,7 +24,12 @@ const AboutContent = () => {
           />
         </Center>
         <Text>
-          Welcome to {appName}, your ultimate destination for hassle-free grocery shopping! At {appName}, we understand the importance of your time and the convenience of having your everyday essentials delivered right to your doorstep. Our innovative grocery app is designed to make your life easier, providing you with a seamless online shopping experience that caters to all your daily needs.
+          Welcome to {appName}, your ultimate destination for hassle-free
+          grocery shopping! At {appName}, we understand the importance of your
+          time and the convenience of having your everyday essentials delivered
+          right to your doorstep. Our innovative grocery app is designed to make
+          your life easier, providing you with a seamless online shopping
+          experience that caters to all your daily needs.
         </Text>
         <Box mt={8}>
           <Text
@@ -35,7 +41,11 @@ const AboutContent = () => {
             Our Vision
           </Text>
           <Text>
-            At {appName}, our vision is to revolutionize the way you shop for groceries. We strive to offer a comprehensive range of products, from fresh produce to household necessities, ensuring that you have access to high-quality items without the hassle of navigating crowded stores or waiting in long queues.
+            At {appName}, our vision is to revolutionize the way you shop for
+            groceries. We strive to offer a comprehensive range of products,
+            from fresh produce to household necessities, ensuring that you have
+            access to high-quality items without the hassle of navigating
+            crowded stores or waiting in long queues.
           </Text>
         </Box>
         <Box mt={8}>
@@ -89,7 +99,12 @@ const AboutContent = () => {
             Developed By
           </Text>
           <Text mb={4}>
-            {appName} is proudly developed by a passionate team of experts dedicated to enhancing your shopping experience. With a deep understanding of technology and a commitment to customer satisfaction, our developers work tirelessly to ensure the app is user-friendly, secure, and always up-to-date with the latest features.
+            {appName} is proudly developed by a passionate team of experts
+            dedicated to enhancing your shopping experience. With a deep
+            understanding of technology and a commitment to customer
+            satisfaction, our developers work tirelessly to ensure the app is
+            user-friendly, secure, and always up-to-date with the latest
+            features.
           </Text>
           <Box
             display={"flex"}
@@ -120,6 +135,12 @@ const AboutContent = () => {
                     {item.name}
                   </Text>
                   <Text>{item.role}</Text>
+                  <Link
+                    to={"https://www.linkedin.com/in/muhafdalmaulanasaid/"}
+                    target="_blank"
+                  >
+                    <Text color={"blue.400"}>{item.linked}</Text>
+                  </Link>
                 </Box>
               ))}
           </Box>
@@ -134,10 +155,15 @@ const AboutContent = () => {
             Our Presence
           </Text>
           <Text mb={4}>
-            Currently, {appName} operates across three cities in Indonesia: Mataram, Makassar, and Yogyakarta. Our established presence in these locations allows us to serve a wide customer base, bringing convenience and quality to households in these areas.
+            Currently, {appName} operates across three cities in Indonesia:
+            Mataram, Makassar, and Yogyakarta. Our established presence in these
+            locations allows us to serve a wide customer base, bringing
+            convenience and quality to households in these areas.
           </Text>
           <Text>
-            Join us in simplifying your grocery shopping experience today and discover the joy of stress-free, efficient shopping. Thank you for choosing us to be your trusted grocery partner.
+            Join us in simplifying your grocery shopping experience today and
+            discover the joy of stress-free, efficient shopping. Thank you for
+            choosing us to be your trusted grocery partner.
           </Text>
         </Box>
       </Box>

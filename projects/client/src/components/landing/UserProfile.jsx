@@ -3,11 +3,14 @@ import {
   AvatarBadge,
   Box,
   Center,
+  Button,
   Divider,
   Flex,
   IconButton,
   Stack,
   Text,
+  Spinner,
+  useToast,
   useDisclosure,
 } from "@chakra-ui/react";
 import Navbar from "./Navbar";
@@ -20,11 +23,46 @@ import ButtonChangeBirthdate from "../components/ButtonChangeBirthdate";
 import { IoPencil } from "react-icons/io5";
 import ChangeProfilePicture from "../user/ChangeProfilePicture";
 import getImage from "../../utils/getImage";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+const URL_API = process.env.REACT_APP_API_BASE_URL;
+console.log("URL_API", URL_API);
 export default function UserProfile() {
   const { user } = useSelector((state) => state.AuthReducer);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setLoading] = useState(false);
+  const toast = useToast();
+
+  const resend = async (values) => {
+    console.log("resend", values);
+    const token = localStorage.getItem("token");
+    try {
+      setLoading(true);
+      const respon = await axios.patch(
+        `${URL_API}/profile/resend/verification`,
+        {
+          newEmail: values,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(respon);
+      toast({
+        title: "Success",
+        description: "check your email",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -71,6 +109,38 @@ export default function UserProfile() {
               </Flex>
             </Box>
             <Box mt={"30px"}>
+              <Flex
+                justifyContent={user.isverify ? "flex-end" : "space-between"}
+              >
+                {user.isverify ? (
+                  ""
+                ) : (
+                  <Button
+                    variant="outline"
+                    _hover={{ bgColor: "brand.hover", color: "white" }}
+                    onClick={() => resend(user.email)}
+                  >
+                    {isLoading ? (
+                      <>
+                        sending <Spinner />
+                      </>
+                    ) : (
+                      "resend verification"
+                    )}
+                  </Button>
+                )}
+                {user.isverify ? (
+                  <Text fontStyle={"italic"} color={"green"}>
+                    email address is verified
+                  </Text>
+                ) : (
+                  <Text fontStyle={"italic"} color={"red"}>
+                    please verify your email, check your inbox or spam
+                  </Text>
+                )}
+              </Flex>
+            </Box>
+            <Box mt={"30px"}>
               <Flex justifyContent={"space-between"}>
                 <Text>Gender</Text>
                 <Text>{user.gender}</Text>
@@ -82,6 +152,12 @@ export default function UserProfile() {
                 {user.birthdate
                   ? new Date(user.birthdate).toLocaleDateString()
                   : ""}
+              </Flex>
+            </Box>
+            <Box mt={"30px"}>
+              <Flex justifyContent={"space-between"}>
+                <Text>Referal Code</Text>
+                <Text>{user.refcode}</Text>
               </Flex>
             </Box>
             <Box bgColor={"blackAlpha.800"}>

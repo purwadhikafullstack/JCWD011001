@@ -23,7 +23,6 @@ const StockManagementHistory = ({ setDetail, itemDetail }) => {
     let query = `&page=${index}`;
     if (startDate) query += `&startDate=${startDate}`;
     if (endDate) query += `&endDate=${endDate}`;
-    console.log("query", query);
     const { data } = await axios.get(
       `${URL_API}/store/stock/?store_id=${store_id}&product_id=${product_id}${query}`,
       {

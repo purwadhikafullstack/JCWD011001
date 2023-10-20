@@ -24,14 +24,12 @@ export default function ChangeImageProduct({ isOpen, onClose }) {
 
   const fetchData = async () => {
     const response = await axios.get(`${URL_API}/product`);
-    console.log("respon", response.data);
     setProduct(response.data.data);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-  console.log("uproduct", product);
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>

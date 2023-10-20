@@ -23,6 +23,9 @@ import * as Yup from "yup";
 import Swal from "sweetalert2";
 import CloseButton from "./CloseButton";
 import ChangeButton from "./ChangeButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducer/AuthReducer";
+import { useState } from "react";
 
 const ChangeEmailSchema = Yup.object().shape({
   newEmail: Yup.string()
@@ -33,7 +36,9 @@ const ChangeEmailSchema = Yup.object().shape({
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 export default function ModalChangeEmail({ isOpen, onClose, user }) {
   const toast = useToast();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
   function toHome() {
     navigate("/");
   }
@@ -41,8 +46,9 @@ export default function ModalChangeEmail({ isOpen, onClose, user }) {
     const token = localStorage.getItem("token");
     const { currentEmail, newEmail } = values;
     try {
+      setLoading(true);
       const respon = await axios.patch(
-        `${URL_API}/auth/email`,
+        `${URL_API}/profile/email`,
         {
           currentEmail: currentEmail,
           newEmail: newEmail,
@@ -53,16 +59,13 @@ export default function ModalChangeEmail({ isOpen, onClose, user }) {
           },
         }
       );
-      console.log(respon);
+      dispatch(setUser(respon.data?.data));
       onClose();
       await Swal.fire(
         "Success!",
-        "Please to verify your new email on inbox/spam and login again",
+        "Please to verify your new email on inbox/spam",
         "success"
       );
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 2000);
     } catch (error) {
       console.log(error);
       toast({
@@ -72,6 +75,8 @@ export default function ModalChangeEmail({ isOpen, onClose, user }) {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setLoading(false);
     }
   };
   const formik = useFormik({
@@ -124,7 +129,7 @@ export default function ModalChangeEmail({ isOpen, onClose, user }) {
                 </FormControl>
                 <ModalFooter>
                   <CloseButton onClose={onClose} />
-                  <ChangeButton />
+                  <ChangeButton isLoading={isLoading} />
                 </ModalFooter>
               </form>
             </Stack>

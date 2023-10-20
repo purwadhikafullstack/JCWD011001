@@ -37,7 +37,7 @@ export default function ModalChangeGender({ isOpen, onClose }) {
     try {
       const { currentGender } = values;
       const respon = await axios.patch(
-        `${URL_API}/auth/gender`,
+        `${URL_API}/profile/gender`,
         {
           currentGender: currentGender,
           chooseGender: values.gender,

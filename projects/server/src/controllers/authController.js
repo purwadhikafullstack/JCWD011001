@@ -134,13 +134,11 @@ const authController = {
         const data = await fs.readFile(path.resolve(__dirname, "../emails/registerEmail.html"), "utf-8");
         const tempCompile = await handlebars.compile(data);
         const tempResult = tempCompile({ username, email, redirect });
-        console.log("ini");
         await transporter.sendMail({
           to: email,
           subject: "Verification Account",
           html: tempResult,
         });
-        console.log("habis ini");
         res.status(200).json({ message: "Register Success", data: newUser });
       });
     } catch (err) {
@@ -237,7 +235,6 @@ const authController = {
     try {
       const {transaction_id} = req.params
       const findTransaction = await ts.findOne({where : {id:transaction_id}})
-      console.log("isi transaction", findTransaction)
       await db.sequelize.transaction(async(t) => {
         const result = await ts.update({status : 6}, {where : {id: transaction_id}}, {transaction : t})
 

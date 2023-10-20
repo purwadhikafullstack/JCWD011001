@@ -253,12 +253,9 @@ const productController = {
       let { newName, category_id, price, admin_discount, description, weight } =
         req.body;
       const findProduct = await Product.findOne({ where: { id } });
-      console.log("update", findProduct);
-      console.log("nama baru", newName);
       if (newName === findProduct.name) {
         return res.status(500).json({ message: "Product name already exist" });
       }
-      console.log("id", id);
       await db.sequelize.transaction(async (t) => {
         await Product.update(
           {
@@ -282,9 +279,7 @@ const productController = {
     try {
       const { id } = req.params;
       const oldPicture = await Product.findOne({ where: { id } });
-      console.log("dapat ", oldPicture);
       if (oldPicture.product_img) {
-        console.log("ada");
         fs.unlink(path.resolve(__dirname, `../../${oldPicture.product_img}`), (err) => {
           return res.status(500).json({ message: err.message });
         });
@@ -307,7 +302,6 @@ const productController = {
     try {
       const { id } = req.params;
       const findProduct = await Product.findOne({ where: { id } });
-      console.log("delete", findProduct);
       await db.sequelize.transaction(async (t) => {
         await Product.update(
           {
@@ -326,7 +320,6 @@ const productController = {
     try {
       const { id } = req.params;
       const findProduct = await Product.findOne({ where: { id } });
-      console.log("active ", findProduct);
       await db.sequelize.transaction(async (t) => {
         await Product.update(
           {
@@ -347,11 +340,9 @@ const productController = {
       const cekItem = await cartItem.findOne({
         where: { product_id: id, store_id },
       });
-      console.log("adaa", cekItem);
       const cekProduct = await ProductStore.findOne({
         where: { product_id: id, store_id },
       });
-      console.log("cek ", cekProduct);
       return res
         .status(200)
         .json({

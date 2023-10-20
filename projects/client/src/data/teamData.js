@@ -7,6 +7,7 @@ const TeamData = [
         name: 'Muh. Afdal Maulana Said',
         role: 'Full Stack Developer',
         image: Afdal,
+        linked : "LinkedIn"
     },
     {
         name: 'Jason',

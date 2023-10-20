@@ -29,7 +29,6 @@ const transactionController = {
         },
       });
       const totalPage = Math.ceil(totalTransaction / +limit);
-      console.log("order", orderBy);
       const transaction = await Transaction.findAll({
         where: {
           user_id: req.user.id,
@@ -44,19 +43,12 @@ const transactionController = {
       for (const transactions of transaction) {
         const expirationDate = new Date(transactions.dataValues.expiredIn);
         
-        // Check if expirationDate is a valid date (not null and not "1970-01-01T00:00:00.000Z")
         if (!isNaN(expirationDate.getTime()) && expirationDate.getTime() !== 0) {
-          console.log("expiredIn from database:", expirationDate);
-          
           const currentDate = new Date();
-          console.log("Current date:", currentDate);
-          
-          // Perform any other operations on this transaction here
           if(currentDate >= expirationDate && transactions.status === 3){
             await db.sequelize.transaction(async(t) => {
               const result = await Transaction.update({status : 4},{where : {id: transactions.id}}, {transaction : t})
             })
-            console.log("berhasil")
           }
         }
       }
@@ -226,7 +218,6 @@ const transactionController = {
   },
   uploadProduct: async (req, res) => {
     const { id } = req.user;
-    console.log(1);
     try {
       const { id_transaction } = req.body;
       console.log(id_transaction);

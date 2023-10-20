@@ -11,13 +11,13 @@ require("dotenv").config({
 });
 const URL = process.env.WHITELISTED_DOMAIN;
 
+
 const profileController = {
     patchChangeName : async (req, res) => {
         try {
             const {id} = req.user
             const {newName} = req.body
             const findUser = await user.findOne({where : {id}})
-            console.log("ini nama", findUser)
             if(newName === findUser.username){
                 return res.status(500).json({message : "Please select other username"})
             }
@@ -62,7 +62,6 @@ const profileController = {
             const {id,username} = req.user
             const {newEmail} = req.body
             const findUser = await user.findOne({where : {id}})
-            console.log("ini email", findUser)
             if(newEmail === findUser.email){
                 return res.status(500).json({
                     message : "Please select other email"
@@ -75,7 +74,7 @@ const profileController = {
                     username : username,
                     email : newEmail,
                 }
-                const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn : "10h"})
+                const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn : "22h"})
                 const redirect = `${URL}/verification/${token}`
                 const data = await fs.readFile(path.resolve(__dirname, "../emails/changeEmail.html"), "utf-8")
                 const tempCompile = await handlebars.compile(data);
@@ -185,6 +184,34 @@ const profileController = {
             });
         } catch (error) {
             res.status(500).json({ message: "Failed to change avatar", error: error.message });
+        }
+    },
+    resendVerification : async(req, res) => {
+        try {
+            const {id,username} = req.user
+            const {newEmail} = req.body
+            console.log("NEW", newEmail)
+            await db.sequelize.transaction (async (t) => {
+                let payload = {
+                    id : id,
+                    username : username,
+                    email : newEmail,
+                }
+                const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn : "22h"})
+                const redirect = `${URL}/verification/${token}`
+                const data = await fs.readFile(path.resolve(__dirname, "../emails/changeEmail.html"), "utf-8")
+                const tempCompile = await handlebars.compile(data);
+                const tempResult = tempCompile({username, newEmail, redirect})
+                await transporter.sendMail({
+                    to : newEmail,
+                    subject : "Resend Verification Change Email",
+                    html : tempResult
+                })
+                const findUser = await user.findOne({where : {id}})
+                return res.status(200).json({message : "Email successfully change", data : findUser, token:token})
+            })
+        } catch (error) {
+            return res.status(500).json({message : "Failed", error : error.message})
         }
     }
 }

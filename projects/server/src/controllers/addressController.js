@@ -135,7 +135,6 @@ const addressController = {
   },
   getDefaultAddress: async (req, res) => {
     try {
-      console.log("1");
       const { id } = req.user;
       console.log(req.user.id);
       const result = await UserAddress.findOne({

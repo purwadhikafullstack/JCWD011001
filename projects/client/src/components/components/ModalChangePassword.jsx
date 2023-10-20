@@ -53,14 +53,11 @@ export default function ModalChangePassword({ isOpen, onClose }) {
   const changePassword = async (values) => {
     const token = localStorage.getItem("token");
     try {
-      await axios.patch(
-        `${URL_API}/auth/password`, values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.patch(`${URL_API}/profile/password`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       onClose();
       await Swal.fire("Success!", "Your password has been change", "success");
     } catch (error) {

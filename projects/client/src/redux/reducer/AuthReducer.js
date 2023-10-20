@@ -30,18 +30,14 @@ export const AuthReducer = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      // console.log("isi", action.payload);
-      const { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby } = action.payload;
-      state.user = { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby };
+      const { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby, isverify } = action.payload;
+      state.user = { id, username, name, birthdate, email, phone, gender, profileimg, refcode, refby, isverify };
       state.login = true;
     },
     loginSuccess: (state, action) => {
-      // state.user = {...action.payload};
       state.login = true;
-      // localStorage.setItem("token", action.payload);
     },
     logoutSuccess: (state) => {
-      // state.user = initialState.user;
       state.login = false;
       state.user = {};
     },

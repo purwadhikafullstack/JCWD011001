@@ -42,7 +42,6 @@ export default function StockManagement() {
   const [modalClosedTrigger, setModalClosedTrigger] = useState(false);
   const [name, setName] = useState("");
   const { branchAdmin } = useSelector((state) => state.AdminReducer);
-  console.log("INFO MASSE", branchAdmin);
   const dispatch = useDispatch();
   const fetchData = async () => {
     const token = localStorage.getItem("token");
@@ -54,7 +53,6 @@ export default function StockManagement() {
         },
       }
     );
-    console.log("niii", response);
     await setStock(response.data.datas);
   };
   const handleSearch = () => {
@@ -62,12 +60,10 @@ export default function StockManagement() {
     setName(name);
   };
   const disable = async (item) => {
-    console.log("disbale ", item);
     await dispatch(disableProduct(item, Swal, toast));
     await fetchData();
   };
   const restore = async (item) => {
-    console.log("resote, ", item);
     await dispatch(enableProduct(item, Swal, toast));
     await fetchData();
   };
@@ -88,7 +84,6 @@ export default function StockManagement() {
       <StockManagementHistory setDetail={setDetail} itemDetail={itemDetail} />
     );
 
-  console.log("stocks", stock);
   return (
     <Box w={"full"}>
       <Box
