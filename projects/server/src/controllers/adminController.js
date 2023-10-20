@@ -60,12 +60,32 @@ const adminController = {
           ],
         },
       });
-      if (!checkLogin || !checkBranch) {
-        return res.status(404).json({ message: "Branch admin not found" });
-      }
-
       if (!checkLogin.isactive) {
         return res.status(401).json({ message: "Admin is not active" });
+      }
+
+      if (checkLogin.role_id === 1) {
+        let payload = {
+          id: checkLogin.id,
+          name: checkLogin.name,
+          email: checkLogin.email,
+          role: checkLogin.role_id,
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_KEY, {
+          expiresIn: "24h",
+        });
+
+        return res.status(200).json({
+          message: "Login success",
+          Account: checkLogin,
+          BranchData: {},
+          token: token,
+        });
+      }
+
+      if (!checkLogin || !checkBranch) {
+        return res.status(404).json({ message: "Admin not found" });
       }
 
       const passwordValid = await bcrypt.compare(password, checkLogin.password);
@@ -76,7 +96,6 @@ const adminController = {
 
       let payload = {
         id: checkLogin.id,
-        store_id: checkBranch.id,
         name: checkLogin.name,
         email: checkLogin.email,
         role: checkLogin.role_id,

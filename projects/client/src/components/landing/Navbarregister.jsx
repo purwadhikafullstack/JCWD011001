@@ -25,13 +25,14 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "../../redux/reducer/AuthReducer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbarregister = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
@@ -68,6 +69,7 @@ const Navbarregister = () => {
         setSubmitLoading(true);
         await dispatch(registerUser(values, toast));
         setSubmitLoading(false);
+        navigate("/");
       } catch (error) {
         console.error(error);
       }

@@ -135,11 +135,8 @@ const AboutContent = () => {
                     {item.name}
                   </Text>
                   <Text>{item.role}</Text>
-                  <Link
-                    to={"https://www.linkedin.com/in/muhafdalmaulanasaid/"}
-                    target="_blank"
-                  >
-                    <Text color={"blue.400"}>{item.linked}</Text>
+                  <Link to={item.linked} target="_blank">
+                    <Text color={"blue.400"}>LinkedIn</Text>
                   </Link>
                 </Box>
               ))}
