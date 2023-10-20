@@ -42,9 +42,10 @@ const SalesReportSuper = ({ item, handleClickBack }) => {
 
   return (
     <Stack ml={{ base: "24px", lg: "48px" }} mt={{ base: "8px", lg: "24px" }} mr={"24px"}>
-      <Box onClick={handleClickBack} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
+      <Flex gap={2} alignItems={"center"}>
+        <Button onClick={handleClickBack} colorScheme="green">Back</Button>
         <Text fontSize={{ sm: "24px", md: "32px", lg: "48px" }}>Sales Report {storeData.name}</Text>
-      </Box>
+      </Flex>
       <BranchSalesReportMonthStatistic data={data} />
       <Flex gap={"8px"} mt={4}>
         <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} w={"10%"} />
