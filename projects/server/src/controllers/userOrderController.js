@@ -1,5 +1,5 @@
 const { Sequelize, Op } = require("sequelize");
-const db = require("../../models");
+const db = require("../models");
 const { Transaction, Product, Transactionitem, Store, User } = db;
 
 const setPagination = (limit, page) => {

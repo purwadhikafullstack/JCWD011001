@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const db = require("../../models");
+const db = require("../models");
 const User = db.User;
 const Admin = db.Admin;
 const Cart = db.Cart;
@@ -13,7 +13,7 @@ const handlebars = require("handlebars");
 const fs = require("fs").promises;
 const path = require("path");
 require("dotenv").config({
-  path: path.resolve("../.env"),
+  path: path.resolve("../../.env"),
 });
 const URL = process.env.WHITELISTED_DOMAIN;
 const transporter = require("../helpers/transporter");

@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const db = require("../../models");
+const db = require("../models");
 const product = db.Product;
 const cart = db.Cart;
 const items = db.Cartitem;

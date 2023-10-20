@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const db = require("../../models");
+const db = require("../models");
 const { check } = require("express-validator");
 const { Product, Category, Store, ProductStore } = db;
 const cartItem = db.Cartitem;

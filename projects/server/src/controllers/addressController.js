@@ -1,4 +1,4 @@
-const db = require("../../models");
+const db = require("../models");
 const UserAddress = db.Useraddress;
 
 const addressController = {
