@@ -296,8 +296,8 @@ const BranchUserOrderList = () => {
               {branchUserOrder.map((order) => (
                 <Tr key={order.id}>
                   <Td>
-                    {order.id}
                     {order.user_id}
+                    {order.id}
                   </Td>
                   {isLargerThan768 && <Td>{order.name}</Td>}
                   {isLargerThan768 && <Td>{dateFormatter(order.createdAt)}</Td>}

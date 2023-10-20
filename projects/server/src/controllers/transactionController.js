@@ -2,49 +2,6 @@ const { Sequelize, Op } = require("sequelize");
 const db = require("../../models");
 const { Transaction, Product, ProductStore, Transactionitem, Cart, Cartitem, Voucherdetail, Uservoucher, Storestockhistory } = db;
 
-const createFreeShippingVoucher = async (userId) => {
-  try {
-    const successfulTransactionsCount = await Transaction.count({
-      where: {
-        user_id: userId,
-        status: 6,
-      },
-    });
-    if (successfulTransactionsCount % 5 === 0 && successfulTransactionsCount > 0) {
-      const existingVoucher = await Uservoucher.findOne({
-        where: {
-          user_id: userId,
-          isused: false,
-        },
-        include: Voucherdetail,
-      });
-
-      if (!existingVoucher) {
-        const sevenDaysFromNow = new Date();
-        sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
-        const newVoucher = await Voucherdetail.create({
-          name: "Free Delivery Voucher",
-          description: "Free delivery voucher after your five successful transactions",
-          nominal: 0,
-          percent: 100,
-          type: "freedelivery",
-          expired: sevenDaysFromNow,
-        });
-
-        await Uservoucher.create({
-          user_id: userId,
-          voucherdetail_id: newVoucher.id,
-          isused: false,
-        });
-
-        console.log("Free Shipping Voucher created for user:", userId);
-      }
-    }
-  } catch (error) {
-    console.error("Failed to create Free Shipping Voucher:", error);
-  }
-};
-
 const setPagination = (limit, page) => {
   const offset = (page - 1) * +limit;
   return { limit: parseInt(limit), offset };
@@ -258,7 +215,6 @@ const transactionController = {
 
       await Uservoucher.update({ isused: true, transaction_id: newTransaction.id }, { where: { id: voucherIds } });
 
-      await createFreeShippingVoucher(id);
       await Cartitem.destroy({ where: { cart_id: cart.id, store_id: store_id } });
       await cart.update({ total_price: 0 });
       await cart.save();

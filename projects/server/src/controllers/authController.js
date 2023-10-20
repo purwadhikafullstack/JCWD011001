@@ -30,6 +30,43 @@ const createRefCode = (length = 8) => {
   return refCode;
 };
 
+const createFreeShippingVoucher = async (id) => {
+  try {
+    const successfulTransactionsCount = await ts.count({
+      where: {
+        user_id: id,
+        status: 6,
+      },
+    });
+    if (
+      successfulTransactionsCount % 5 === 0 &&
+      successfulTransactionsCount > 0
+    ) {
+        const sevenDaysFromNow = new Date();
+        sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+        const newVoucher = await Voucherdetail.create({
+          name: "Free Delivery Voucher",
+          description:
+            "Free delivery voucher after your five successful transactions",
+          nominal: 0,
+          percent: 100,
+          type: "freedelivery",
+          expired: sevenDaysFromNow,
+        });
+
+        await Uservoucher.create({
+          user_id: id,
+          voucherdetail_id: newVoucher.id,
+          isused: false,
+        });
+
+        console.log("Free Shipping Voucher created for user:", id);
+      }
+  } catch (error) {
+    console.error("Failed to create Free Shipping Voucher:", error);
+  }
+};
+
 const authController = {
   register: async (req, res) => {
     try {
@@ -205,7 +242,6 @@ const authController = {
         const result = await ts.update({status : 6}, {where : {id: transaction_id}}, {transaction : t})
 
         if (findTransaction.total_price >= 100000) {
-          console.log("masuk sini");
           const sevenDaysFromNow = new Date();
           sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
           const newVoucher = await Voucherdetail.create({
@@ -223,6 +259,8 @@ const authController = {
             isused: false,
           }, {transaction : t});
         };
+
+        createFreeShippingVoucher(findTransaction.user_id);
       })
       return res.status(200).json({message : "AMAN DAHH", data : result})
     } catch (error) {

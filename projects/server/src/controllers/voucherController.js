@@ -87,7 +87,7 @@ const voucherController = {
         where: {
           isactive: true,
           name: {
-            [Op.notLike]: "Referral Voucher",
+            [Op.not]: ["Referral Voucher", "Shop More, Save More"],
           },
           type: {
             [Op.notLike]: "freedelivery",

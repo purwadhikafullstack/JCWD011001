@@ -167,7 +167,6 @@ const AddVoucher = ({ isOpen, onClose }) => {
                 onBlur={formik.handleBlur}
               >
                 <option value="discount">Discount</option>
-                <option value="freedelivery">Free Delivery</option>
                 <option value="buy1get1">Buy One get One</option>
               </Select>
               <FormErrorMessage>{formik.errors.type}</FormErrorMessage>

@@ -139,7 +139,7 @@ const addressController = {
       const { id } = req.user;
       console.log(req.user.id);
       const result = await UserAddress.findOne({
-        where: { user_id: id, isdefault: 1 },
+        where: { user_id: id, isdefault: 1, isactive: true },
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
       return res.status(200).json({
