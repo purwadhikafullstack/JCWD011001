@@ -141,38 +141,6 @@ export default function UserProfile() {
               </Flex>
             </Box>
             <Box mt={"30px"}>
-              <Flex
-                justifyContent={user.isverify ? "flex-end" : "space-between"}
-              >
-                {user.isverify ? (
-                  ""
-                ) : (
-                  <Button
-                    variant="outline"
-                    _hover={{ bgColor: "brand.hover", color: "white" }}
-                    onClick={() => resend(user.email)}
-                  >
-                    {isLoading ? (
-                      <>
-                        sending <Spinner />
-                      </>
-                    ) : (
-                      "resend verification"
-                    )}
-                  </Button>
-                )}
-                {user.isverify ? (
-                  <Text fontStyle={"italic"} color={"green"}>
-                    email address is verified
-                  </Text>
-                ) : (
-                  <Text fontStyle={"italic"} color={"red"}>
-                    please verify your email, check your inbox or spam
-                  </Text>
-                )}
-              </Flex>
-            </Box>
-            <Box mt={"30px"}>
               <Flex justifyContent={"space-between"}>
                 <Text>Gender</Text>
                 <Text>{user.gender}</Text>
