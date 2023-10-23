@@ -323,9 +323,7 @@ const adminController = {
     try {
       const { productId, quantity, description } = req.body;
       // let description = "Update Stock"
-      const findStore = await Store.findOne({
-        where: { admin_id: req.user.id },
-      });
+      const findStore = await Store.findOne({where : {admin_id : req.user.id}})
       const existingProductStore = await productStore.findOne({
         where: { product_id: productId, store_id: findStore.id },
       });
@@ -561,9 +559,7 @@ const adminController = {
   sendUserOrder: async (req, res) => {
     try {
       const { transaction_id } = req.params;
-      const findTransaction = await trans.findOne({
-        where: { id: transaction_id },
-      });
+      const findTransaction = await trans.findOne({ where: { id: transaction_id } });
 
       await db.sequelize.transaction(async (t) => {
         const result = await trans.update(
