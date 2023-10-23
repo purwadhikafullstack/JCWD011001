@@ -103,7 +103,7 @@ export default function StockManagement() {
           </Text>
         </Box>
       </Box>
-      <Box px={8}>
+      <Box px={3}>
         <Flex mt={4}>
           <ButtonUpdateStock setModalClosedTrigger={setModalClosedTrigger} />
           <InputGroup ml={"12px"}>
@@ -127,7 +127,7 @@ export default function StockManagement() {
               <Box key={item.id}>
                 <Card
                   key={item.id}
-                  w={{ base: "680px", lg: "800px" }}
+                  w={{ base: "480px", lg: "800px" }}
                   mt={"20px"}
                   boxShadow={"lg"}
                   border={"2px"}
@@ -138,7 +138,7 @@ export default function StockManagement() {
                       <Image
                         src={getImage(item.Product?.product_img)}
                         alt="sayur"
-                        w={"200px"}
+                        w={{ base: "120px", lg: "200px" }}
                         h={"150px"}
                         borderRadius="lg"
                       />
@@ -149,7 +149,9 @@ export default function StockManagement() {
                         >
                           {item.isactive ? (
                             <Flex>
-                              <Text>{item.Product?.name}</Text>
+                              <Text fontSize={{ base: "18px", lg: "24px" }}>
+                                {item.Product?.name}
+                              </Text>
                               {item.Product?.admin_discount > 0 && (
                                 <Image
                                   src="https://cdn.icon-icons.com/icons2/1138/PNG/512/1486395314-13-discount_80575.png"

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   ButtonGroup,
   Card,
   CardBody,
@@ -23,7 +24,7 @@ import {
 } from "../../redux/reducer/CartReducer";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
-import { IoTrashOutline } from "react-icons/io5";
+import { BsFillTrashFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
@@ -55,7 +56,6 @@ export default function OnGoingCart({ products }) {
       confirmButtonText: "Delete",
       cancelButtonColor: "#d33",
       icon: "warning",
-      dangerMode: true,
     });
     if (result.isConfirmed) {
       await dispatch(deleteItemFromCart(products));
@@ -116,7 +116,14 @@ export default function OnGoingCart({ products }) {
               <IconButton
                 color={"blackAlpha.600"}
                 variant={""}
-                icon={<IoTrashOutline size={{ base: "", lg: "md" }} />}
+                icon={
+                  <BsFillTrashFill
+                    style={{
+                      width: "40px",
+                      height: "30px",
+                    }}
+                  />
+                }
                 onClick={() => destroy(products)}
               />
             </Box>
