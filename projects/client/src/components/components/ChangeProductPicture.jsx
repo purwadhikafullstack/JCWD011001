@@ -78,7 +78,7 @@ const ChangeProductPicture = ({ isOpen, onClose, id }) => {
       await axios.patch(`${URL_API}/product/picture/${id}`, formData);
       toast({
         title: "Success",
-        description: "Profile photo updated successfully",
+        description: "Product image updated successfully",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -88,7 +88,7 @@ const ChangeProductPicture = ({ isOpen, onClose, id }) => {
       //     window.location.reload();
       //   }, 1000);
     } catch (error) {
-      console.log("Error uploading profile photo:", error);
+      console.log("Error uploading product image:", error);
       toast({
         title: "Failed",
         description: error?.response?.data?.message,

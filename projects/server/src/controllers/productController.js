@@ -73,9 +73,13 @@ const productController = {
           include: includeCategory,
         },
       ];
+
+      const where = { isactive: true, store_id };
+      if (category) where.category_id = category;
+
       const pagination = setPagination(limit, page);
       const totalProduct = await ProductStore.count({
-        where: { store_id, isactive: true },
+        where,
         include: includeProduct,
       });
       const totalPage = Math.ceil(totalProduct / +limit);
