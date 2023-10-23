@@ -162,7 +162,7 @@ export default function Cart() {
                       color={"black"}
                       onClick={() => navigate("/shop")}
                       // w={"100%"}
-                      width={{ base: "400px", md: "680px", lg: "800px" }}
+                      width={{ base: "350px", md: "680px", lg: "800px" }}
                       mt={"32px"}
                       variant={""}
                       borderRadius={"10px"}

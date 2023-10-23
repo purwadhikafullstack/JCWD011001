@@ -56,7 +56,6 @@ export default function ModalAddProduct({ isOpen, onClose }) {
   const { category } = useSelector((state) => state.CategoryReducer);
   const fetchData = async () => {
     const respon = await axios.get(`${URL_API}/store/branch`);
-    console.log("sroe,", respon.data);
     setStore(respon.data.data);
   };
 

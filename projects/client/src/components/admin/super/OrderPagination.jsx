@@ -36,8 +36,14 @@ export const OrderPagination = ({ page, index, setIndex }) => {
           fontSize={"sm"}
           fontWeight={700}
           color={"white"}
-          bg={"#37630A"}
+          bg={"#59981A"}
           rounded={"lg"}
+          _hover={{
+            bg: "brand.hover",
+          }}
+          _active={{
+            bg: "brand.main",
+          }}
         >
           {pageNum}
         </Button>
@@ -49,20 +55,20 @@ export const OrderPagination = ({ page, index, setIndex }) => {
 
   const pageButtons = renderPageButtons();
   return (
-    <Flex justifyContent="center" marginTop="20px">
+    <Flex justifyContent="center" py={4} gap={2}>
       <Button
         onClick={handlePreviousPage}
         display={"inline-flex"}
         fontSize={"sm"}
         fontWeight={700}
         color={"white"}
-        bg={"#37630A"}
+        bg={"brand.main"}
         rounded={"lg"}
         _hover={{
-          bg: "#457811",
+          bg: "brand.hover",
         }}
         _active={{
-          bg: "#2D5406",
+          bg: "brand.active",
         }}
       >
         Previous
@@ -74,13 +80,13 @@ export const OrderPagination = ({ page, index, setIndex }) => {
         fontSize={"sm"}
         fontWeight={700}
         color={"white"}
-        bg={"#37630A"}
+        bg={"brand.main"}
         rounded={"lg"}
         _hover={{
-          bg: "#457811",
+          bg: "brand.hover",
         }}
         _active={{
-          bg: "#2D5406",
+          bg: "brand.active",
         }}
       >
         Next

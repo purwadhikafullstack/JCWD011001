@@ -285,12 +285,13 @@ const ProductManagement = () => {
         </Table>
       </TableContainer>
       {totalPage > 1 && (
-        <Box ml={{ base: "8em", lg: "380px" }} mt={"20px"}>
+        <Box ml={{ base: "0px", sm: "30px", lg: "360px" }} mt={"20px"}>
           <Button
             variant={"ghost"}
             _hover={{ bg: "brand.hover", color: "white" }}
             onClick={() => handlePrev()}
             isDisabled={page === 1}
+            w={"80px"}
           >
             Previous
           </Button>
@@ -298,8 +299,8 @@ const ProductManagement = () => {
             <Button
               key={pageNumber}
               _hover={{ bg: "brand.hover", color: "white" }}
-              ml={"0.5em"}
-              mr={"0.5em"}
+              ml={"0.2em"}
+              mr={"0.2em"}
               onClick={() => setPage(pageNumber)}
               isActive={page === pageNumber}
               bgColor={page === pageNumber ? "red" : "brand.main"}
@@ -312,6 +313,7 @@ const ProductManagement = () => {
             variant={"ghost"}
             _hover={{ bg: "brand.hover", color: "white" }}
             onClick={() => handleNext()}
+            w={"50px"}
             isDisabled={page === totalPage}
           >
             Next

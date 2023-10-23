@@ -65,6 +65,13 @@ const adminController = {
       }
 
       if (checkLogin.role_id === 1) {
+        const passwordValid = await bcrypt.compare(
+          password,
+          checkLogin.password
+        );
+        if (!passwordValid)
+          return res.status(404).json({ message: "Incorrect password" });
+
         let payload = {
           id: checkLogin.id,
           name: checkLogin.name,
@@ -106,14 +113,12 @@ const adminController = {
         expiresIn: "24h",
       });
 
-      return res
-        .status(200)
-        .json({
-          message: "Login success",
-          Account: checkLogin,
-          BranchData: checkBranch,
-          token: token,
-        });
+      return res.status(200).json({
+        message: "Login success",
+        Account: checkLogin,
+        BranchData: checkBranch,
+        token: token,
+      });
     } catch (error) {
       return res
         .status(500)
@@ -129,9 +134,7 @@ const adminController = {
         where: { [Sequelize.Op.or]: [{ name }, { email }, {}] },
       });
       if (findAdmin)
-        return res
-          .status(400)
-          .json({ message: "Name or Email already exists" });
+        return res.status(400).json({ message: "Name or Email already exists" });
 
       const branchAdminExist = await Store.findOne({
         where: { location: branch, isactive: true },
@@ -320,9 +323,7 @@ const adminController = {
     try {
       const { productId, quantity, description } = req.body;
       // let description = "Update Stock"
-      const findStore = await Store.findOne({
-        where: { admin_id: req.user.id },
-      });
+      const findStore = await Store.findOne({where : {admin_id : req.user.id}})
       const existingProductStore = await productStore.findOne({
         where: { product_id: productId, store_id: findStore.id },
       });
@@ -558,9 +559,7 @@ const adminController = {
   sendUserOrder: async (req, res) => {
     try {
       const { transaction_id } = req.params;
-      const findTransaction = await trans.findOne({
-        where: { id: transaction_id },
-      });
+      const findTransaction = await trans.findOne({ where: { id: transaction_id } });
 
       await db.sequelize.transaction(async (t) => {
         const result = await trans.update(

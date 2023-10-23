@@ -49,7 +49,7 @@ export default function Transactions() {
         //   md: "600px",
         //   lg: "800px",
         // }}
-        ml={{ base: "50px", md: "30px", lg: "100px" }}
+        ml={{ base: "10px", md: "30px", lg: "90px" }}
         mt={"32px"}
         position={"sticky"}
         top={"20px"}

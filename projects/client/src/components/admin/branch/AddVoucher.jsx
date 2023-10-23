@@ -19,45 +19,24 @@ import {
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addVoucher,
   getAdminVoucher,
 } from "../../../redux/reducer/VoucherReducer";
 import axios from "axios";
+import { getProduct } from "../../../redux/reducer/AdminReducer";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
 
 const AddVoucher = ({ isOpen, onClose }) => {
   const toast = useToast();
   const dispatch = useDispatch();
-  const [product, setProduct] = useState([]);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const { product } = useSelector((state) => state.AdminReducer);
 
   useEffect(() => {
-    fetchProduct();
+    dispatch(getProduct());
   }, []);
-
-  const fetchProduct = async () => {
-    try {
-      const response = await axios.get(`${URL_API}/admin/product`);
-      setProduct(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const productData = () => {
-    const sortedStateData = product.sort((a, b) => {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    });
-
-    return sortedStateData.map((product) => (
-      <option key={product.id} value={product.id}>
-        {product.name}
-      </option>
-    ));
-  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -88,14 +67,19 @@ const AddVoucher = ({ isOpen, onClose }) => {
     },
   });
 
+  useEffect(() => {
+    setIsFormValid(
+      formik.values.type === "buy1get1" ||
+        (formik.values.type === "discount" &&
+          (formik.values.percent > 0 || formik.values.nominal > 0))
+    );
+  }, [formik.values]);
+
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
     const selectedDateWithTime = `${selectedDate}T23:59`;
     formik.setFieldValue("expired", selectedDateWithTime);
   };
-
-  const isButtonDisabled =
-    !formik.isValid || formik.isSubmitting || !formik.dirty;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "xl" }}>
@@ -150,7 +134,13 @@ const AddVoucher = ({ isOpen, onClose }) => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               >
-                {productData()}
+                {product.map((item) => {
+                  return item.isactive ? (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ) : null;
+                })}
                 <FormErrorMessage>{formik.errors.product_id}</FormErrorMessage>
               </Select>
             </FormControl>
@@ -223,6 +213,9 @@ const AddVoucher = ({ isOpen, onClose }) => {
                 </FormErrorMessage>
               </FormControl>
             </Flex>
+            {(formik.values.type === "discount" && formik.values.percent <= 0 && formik.values.nominal <= 0) && (
+              <Text fontSize={"sm"} fontStyle={"italic"} mt={2} color={"red"}>*Either Nominal or Percentage must be filled</Text>
+            )}
             <FormControl
               isRequired
               isInvalid={formik.errors.expired && formik.touched.expired}
@@ -252,7 +245,7 @@ const AddVoucher = ({ isOpen, onClose }) => {
               loadingText="Adding..."
               _hover={{ bgColor: "brand.hover" }}
               _active={{ bgColor: "brand.active" }}
-              isDisabled={isButtonDisabled}
+              isDisabled={!isFormValid}
             >
               Add Voucher
             </Button>
