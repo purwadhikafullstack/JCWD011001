@@ -28,8 +28,8 @@ const Category = () => {
   };
 
   useEffect(() => {
-    if (!location) dispatch(getProduct({ category: id, orderBy, order }));
-    if (location) dispatch(getStoreProduct({ location, lon, lat, orderBy, order, category: id }));
+    if (!location) dispatch(getProduct({ category: id, orderBy, order, index }));
+    if (location) dispatch(getStoreProduct({ location, lon, lat, orderBy, order, category: id, index }));
   }, [index, orderBy, order, location]);
 
   console.log(products);
