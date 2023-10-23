@@ -19,8 +19,7 @@ const BranchSalesReportMonthStatistic = ({ data }) => {
       <StatGroup>
         <Box
           w={"full"}
-          px={8}
-          py={8}
+          p={8}
           gap={4}
           display={"flex"}
           justifyContent={"space-between"}
@@ -28,13 +27,13 @@ const BranchSalesReportMonthStatistic = ({ data }) => {
           flexWrap={"wrap"}
         >
           <Stat>
-            <Box w={{ base: "150px", md: "200px" }}>
+            <Box w={"200px"}>
               <StatLabel>Total User Buy</StatLabel>
               <StatNumber color={"brand.main"}>{data.totalUserBuy}</StatNumber>
             </Box>
           </Stat>
           <Stat>
-            <Box w={{ base: "150px", md: "200px" }}>
+            <Box w={"200px"}>
               <StatLabel>Total Product Bought</StatLabel>
               <StatNumber color={"brand.main"}>
                 {data.totalProductBuy || 0}
@@ -42,7 +41,7 @@ const BranchSalesReportMonthStatistic = ({ data }) => {
             </Box>
           </Stat>
           <Stat>
-            <Box w={{ base: "150px", md: "200px" }}>
+            <Box w={"200px"}>
               <StatLabel>Most Popular Product</StatLabel>
               <StatNumber color={"brand.main"}>
                 {data.mostSoldProduct?.Product.name || "None"}
@@ -50,7 +49,7 @@ const BranchSalesReportMonthStatistic = ({ data }) => {
             </Box>
           </Stat>
           <Stat>
-            <Box w={{ base: "150px", md: "200px" }}>
+            <Box w={"200px"}>
               <StatLabel>Total Sales</StatLabel>
               <StatNumber color={"brand.main"}>
                 {priceFormatter(data.data)}

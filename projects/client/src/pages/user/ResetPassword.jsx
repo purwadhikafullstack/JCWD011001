@@ -29,7 +29,12 @@ const ResetPassword = () => {
   const handleClickConfirm = () => setShowConfirm(!showConfirm);
 
   const resetPasswordSchema = Yup.object().shape({
-    newPassword: Yup.string().required("Password is required"),
+    newPassword: Yup.string()
+      .required("Password is required")
+      .matches(
+        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+      ),
     confirmPassword: Yup.string()
       .required("Confirm Password is required")
       .oneOf([Yup.ref("newPassword"), null], "Password must match"),
@@ -61,7 +66,7 @@ const ResetPassword = () => {
         isClosable: true,
       });
     } finally {
-        formik.setSubmitting(false);
+      formik.setSubmitting(false);
     }
   };
 

@@ -25,8 +25,7 @@ const SalesReportStatistic = () => {
       <StatGroup>
         <Box
           w={"full"}
-          px={8}
-          py={8}
+          p={8}
           gap={4}
           display={"flex"}
           justifyContent={"space-between"}
