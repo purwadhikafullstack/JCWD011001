@@ -1,4 +1,14 @@
-import { Box, Button, Center, Flex, Heading, Icon, Spinner, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Icon,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/landing/Navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,9 +38,21 @@ const Category = () => {
   };
 
   useEffect(() => {
-    if (!location) dispatch(getProduct({ category: id, orderBy, order }));
-    if (location) dispatch(getStoreProduct({ location, lon, lat, orderBy, order, category: id }));
-  }, [index, orderBy, order, location]);
+    if (!location)
+      dispatch(getProduct({ category: id, orderBy, order, index }));
+    if (location)
+      dispatch(
+        getStoreProduct({
+          location,
+          lon,
+          lat,
+          orderBy,
+          order,
+          category: id,
+          index,
+        })
+      );
+  }, [index, orderBy, order, location, store]);
 
   console.log(products);
 
@@ -64,7 +86,10 @@ const Category = () => {
     <Box>
       <Navbar />
       <Center my={4}>
-        <Heading mb={4}>Category {products[0]?.Category?.name || products[0]?.Product?.Category?.name}</Heading>
+        <Heading mb={4}>
+          Category{" "}
+          {products[0]?.Category?.name || products[0]?.Product?.Category?.name}
+        </Heading>
       </Center>
       <Center>
         <Flex gap={2} mb={4}>
@@ -76,7 +101,12 @@ const Category = () => {
           </Button>
         </Flex>
       </Center>
-      <Flex gap={{ base: 4, md: 8 }} w="100%" justifyContent="center" flexWrap="wrap">
+      <Flex
+        gap={{ base: 4, md: 8 }}
+        w="100%"
+        justifyContent="center"
+        flexWrap="wrap"
+      >
         {products.map((product) => (
           <ProductListItem product={product} key={product.id} />
         ))}

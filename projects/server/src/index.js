@@ -53,7 +53,15 @@ app.use("/api/region", regionRouter);
 app.use("/api/voucher", voucherRouter);
 app.use("/api/report", reportRouter);
 app.use("/api/order", userOrderRouter);
-app.use("/public", express.static(path.resolve(__dirname, "../public")));
+// app.use("/public", express.static(path.resolve(__dirname, "../public")));
+if (__dirname.split("/").includes("www")) {
+  app.use(
+    "/public",
+    express.static(path.resolve(__dirname, "../../../public"))
+  );
+} else {
+  app.use("/public", express.static(path.resolve(__dirname, "../public")));
+}
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

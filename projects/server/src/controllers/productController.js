@@ -13,9 +13,7 @@ let includeStore = [
     where: { isactive: true },
   },
 ];
-const includeCategory = [
-  { model: Category, attributes: { exclude: ["createdAt", "updatedAt"] } },
-];
+const includeCategory = [{ model: Category, attributes: { exclude: ["createdAt", "updatedAt"] } }];
 const includeProduct = [
   {
     model: Product,
@@ -56,31 +54,26 @@ const productController = {
   },
   getProductStore: async (req, res) => {
     try {
-      const {
-        store_id,
-        page = 1,
-        limit = 9,
-        order = "ASC",
-        orderBy = "name",
-        category = "",
-      } = req.query;
+      const { store_id, page = 1, limit = 9, order = "ASC", orderBy = "name", category = "" } = req.query;
+
+      const where = { isactive: true };
+      if (category) where.category_id = category;
 
       const includeProduct = [
         {
           model: Product,
           attributes: { exclude: ["createdAt", "updatedAt"] },
-          where: { isactive: true },
+          where,
           include: includeCategory,
         },
       ];
+
       const pagination = setPagination(limit, page);
       const totalProduct = await ProductStore.count({
-        where: { store_id, isactive: true },
+        where: { isactive: true, store_id },
         include: includeProduct,
       });
       const totalPage = Math.ceil(totalProduct / +limit);
-
-      if (category) includeProduct[0].where.category_id = category;
 
       const storeProducts = await ProductStore.findAll({
         attributes: {
@@ -242,16 +235,13 @@ const productController = {
       return res.status(200).json({ message: "Product added" });
     } catch (error) {
       console.error("Error creating product:", error);
-      return res
-        .status(500)
-        .json({ message: "Failed to create product", error: error.message });
+      return res.status(500).json({ message: "Failed to create product", error: error.message });
     }
   },
   updateProduct: async (req, res) => {
     try {
       const { id } = req.params;
-      let { newName, category_id, price, admin_discount, description, weight } =
-        req.body;
+      let { newName, category_id, price, admin_discount, description, weight } = req.body;
       const findProduct = await Product.findOne({ where: { id } });
       if (newName === findProduct.name) {
         return res.status(500).json({ message: "Product name already exist" });
@@ -343,13 +333,11 @@ const productController = {
       const cekProduct = await ProductStore.findOne({
         where: { product_id: id, store_id },
       });
-      return res
-        .status(200)
-        .json({
-          message: "Successsss",
-          Item: cekItem,
-          ProductBranch: cekProduct,
-        });
+      return res.status(200).json({
+        message: "Successsss",
+        Item: cekItem,
+        ProductBranch: cekProduct,
+      });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
