@@ -23,6 +23,7 @@ import SearchProducts from "../components/SearchProducts";
 import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 import { AiOutlineInbox } from "react-icons/ai";
 import { getCategory } from "../../redux/reducer/CategoryReducer";
+import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
   const displayDirection = useBreakpointValue({ base: "column", md: "row" });
@@ -34,7 +35,7 @@ const ProductList = () => {
   const maxBoxStore = useBreakpointValue({
     base: "100%",
     md: "80%",
-    lg: "40%",
+    lg: "45%",
   });
   const [isShop, setIsShop] = useState(false);
   const { category } = useSelector((state) => state.CategoryReducer);
@@ -47,7 +48,7 @@ const ProductList = () => {
   const { page } = useSelector((state) => state.ProductReducer);
   const [index, setIndex] = useState(1);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const pathname = window.location.pathname.split("/");
     if (pathname[pathname.length - 1] === "shop") setIsShop(true);
@@ -62,6 +63,40 @@ const ProductList = () => {
   const handleOrder = () => {
     setOrder(order === "ASC" ? "DESC" : "ASC");
   };
+
+  if (!isShop) {
+    return (
+      <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+        <Heading as="h2" mx={"auto"} textAlign={"center"} mb={"20px"}>
+          Our Most Recent Product
+        </Heading>
+
+        <Box mx={{ sm: "50px", md: "40px" }}>
+          <Flex
+            direction="row"
+            ml={location ? { base: "12px", md: "16px" } : "0px"}
+            flexWrap="wrap"
+            w="100%"
+            gap={4}
+            justifyContent={location ? { base: "flex-start", xl: "flex-start" } : "center"}>
+            {products.map((product, index) => (
+              <ProductListItem product={product} key={index} />
+            ))}
+            <Button
+              w={"85%"}
+              bgColor="#5a9819"
+              color={"white"}
+              _hover={{ bgColor: "#3d550f" }}
+              onClick={() => {
+                navigate("/shop");
+              }}>
+              Shop Now
+            </Button>
+          </Flex>
+        </Box>
+      </Box>
+    );
+  }
 
   if (products.length < 1) {
     return (
@@ -151,7 +186,7 @@ const ProductList = () => {
           </Flex>
         )}
       </Stack>
-      <Box mx={{ sm: "50px", md: "0px" }}>
+      <Box mx={{ sm: "50px", md: "40px" }}>
         <Flex
           direction="row"
           ml={location ? { base: "12px", md: "16px" } : "0px"}
