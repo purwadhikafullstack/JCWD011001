@@ -87,7 +87,7 @@ const categoryController = {
       }
 
       const categoryExist = await Category.findOne({
-        where: { name: name },
+        where: { name: name, isactive: true },
         id: { [Op.ne]: id },
       });
 

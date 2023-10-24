@@ -135,19 +135,15 @@ const ProductList = () => {
         px={{ base: "20px" }}
         mx={"auto"}
       >
-        <Stack spacing={4}>
+        <Stack spacing={6} mb={10}>
           <Heading as="h2" mx={"auto"} textAlign={"center"}>
             {store ? store : "Our Most Recent Product"}
           </Heading>
-          <Flex
-            gap={2}
-            justify={{ base: "", md: "space-between" }}
-            flexWrap={"wrap"}
-          >
+          <Flex gap={2} flexWrap={"wrap"}>
             <SearchProducts />
             {isShop && (
               <Select
-                w={{ base: "50%", md: "35%" }}
+                w={{ base: "48%" }}
                 placeholder="Category"
                 onChange={(e) => setCat(e.target.value)}
               >
@@ -187,7 +183,7 @@ const ProductList = () => {
           <Text fontSize="md" color="gray.600">
             There are no product here, we are going to add more soon.
           </Text>
-        </Box>{" "}
+        </Box>
       </Box>
     );
   }
