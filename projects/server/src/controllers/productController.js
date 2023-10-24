@@ -140,11 +140,14 @@ const productController = {
   },
   getSearchProduct: async (req, res) => {
     try {
-      const { name, category_id, store_id } = req.query;
+      const { name, category_id, store_id, page = 1, limit = 6 } = req.query;
 
       const where = { isactive: true };
       if (name) where.name = { [db.Sequelize.Op.like]: `%${name}%` };
       if (category_id) where.category_id = category_id;
+
+      const pagination = setPagination(limit, page);
+
       if (store_id) {
         const id = await ProductStore.findAll({
           where: { store_id, isactive: true },
@@ -152,7 +155,7 @@ const productController = {
         });
         where.id = { [db.Sequelize.Op.in]: id.map((item) => item.product_id) };
       }
-      const product = await Product.findAll({ where, include: Category });
+      const product = await Product.findAll({ where, include: Category, ...pagination });
       res.status(200).json({ data: product });
     } catch (error) {
       res.status(500).json({ message: error.message });

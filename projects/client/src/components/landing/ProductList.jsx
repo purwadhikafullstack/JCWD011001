@@ -18,10 +18,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductListItem from "./ProductListItem";
 import { Pagination } from "../components/Pagination";
-import {
-  getProduct,
-  getStoreProduct,
-} from "../../redux/reducer/ProductReducer";
+import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer";
 import SearchProducts from "../components/SearchProducts";
 import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 import { AiOutlineInbox } from "react-icons/ai";
@@ -29,16 +26,9 @@ import { getCategory } from "../../redux/reducer/CategoryReducer";
 import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
-  const displayDirection = useBreakpointValue({ base: "column", md: "row" });
-  const maxBoxWidth = useBreakpointValue({
-    base: "100%",
-    md: "80%",
-    lg: "60%",
-  });
   const maxBoxStore = useBreakpointValue({
-    base: "100%",
-    md: "80%",
-    lg: "45%",
+    base: "370px",
+    md: "680px",
   });
   const [isShop, setIsShop] = useState(false);
   const { category } = useSelector((state) => state.CategoryReducer);
@@ -56,8 +46,7 @@ const ProductList = () => {
     const pathname = window.location.pathname.split("/");
     if (pathname[pathname.length - 1] === "shop") setIsShop(true);
     dispatch(getCategory());
-    if (!location)
-      dispatch(getProduct({ index, orderBy, order, category: cat }));
+    if (!location) dispatch(getProduct({ index, orderBy, order, category: cat }));
     if (location)
       dispatch(
         getStoreProduct({
@@ -74,35 +63,22 @@ const ProductList = () => {
 
   const handleOrderBy = () => {
     setOrderBy(orderBy === "name" ? "price" : "name");
+    setIndex(1);
   };
   const handleOrder = () => {
     setOrder(order === "ASC" ? "DESC" : "ASC");
+    setIndex(1);
   };
 
-  if (!isShop &&  products.length > 0) {
+  if (!isShop && products.length > 0) {
     return (
-      <Box
-        maxW={maxBoxStore}
-        w="100%"
-        py="40px"
-        px={{ base: "20px" }}
-        mx={"auto"}
-      >
+      <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
         <Heading as="h2" mx={"auto"} textAlign={"center"} mb={"20px"}>
           Our Most Recent Product
         </Heading>
 
-        <Box mx={{ sm: "50px", md: "40px" }}>
-          <Flex
-            direction="row"
-            ml={location ? { base: "12px", md: "16px" } : "0px"}
-            flexWrap="wrap"
-            w="100%"
-            gap={4}
-            justifyContent={
-              location ? "space-evenly" : "center"
-            }
-          >
+        <Box>
+          <Flex direction="row" flexWrap="wrap" w="100%" gap={4} justifyContent={"flex-start"}>
             {products.map((product, index) => (
               <ProductListItem product={product} key={index} />
             ))}
@@ -115,8 +91,7 @@ const ProductList = () => {
                 _active={{ bgColor: "brand.active" }}
                 onClick={() => {
                   navigate("/shop");
-                }}
-              >
+                }}>
                 Shop Now
               </Button>
             </Center>
@@ -128,13 +103,7 @@ const ProductList = () => {
 
   if (products.length < 1) {
     return (
-      <Box
-        maxW={maxBoxStore}
-        w="100%"
-        py="40px"
-        px={{ base: "20px" }}
-        mx={"auto"}
-      >
+      <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
         <Stack spacing={6} mb={10}>
           <Heading as="h2" mx={"auto"} textAlign={"center"}>
             {store ? store : "Our Most Recent Product"}
@@ -142,11 +111,7 @@ const ProductList = () => {
           <Flex gap={2} flexWrap={"wrap"}>
             <SearchProducts />
             {isShop && (
-              <Select
-                w={{ base: "48%" }}
-                placeholder="Category"
-                onChange={(e) => setCat(e.target.value)}
-              >
+              <Select w={{ base: "48%" }} placeholder="Category" onChange={(e) => setCat(e.target.value)}>
                 {category.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -159,8 +124,7 @@ const ProductList = () => {
                 mr={2}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}
-              >
+                _hover={{ bgColor: "#3d550f" }}>
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
               <Button
@@ -168,8 +132,7 @@ const ProductList = () => {
                 onClick={handleOrder}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}
-              >
+                _hover={{ bgColor: "#3d550f" }}>
                 {order === "ASC" ? "ASC" : "DESC"}
               </Button>
             </Box>{" "}
@@ -189,14 +152,8 @@ const ProductList = () => {
   }
 
   return (
-    <Box
-      maxW={maxBoxStore}
-      w="100%"
-      py="40px"
-      px={{ base: "20px" }}
-      mx={"auto"}
-    >
-      <Stack spacing={6} mb={10}>
+    <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+      <Stack spacing={6} mb={10} mx={"auto"}>
         <Heading as="h2" textAlign="center">
           {store ? store : "Our Recent Product"}
         </Heading>
@@ -204,11 +161,7 @@ const ProductList = () => {
           <Flex gap={2} flexWrap={"wrap"}>
             <SearchProducts />
             {isShop && (
-              <Select
-                w={{ base: "48%" }}
-                placeholder="Category"
-                onChange={(e) => setCat(e.target.value)}
-              >
+              <Select w={{ base: "48%" }} placeholder="Category" onChange={(e) => setCat(e.target.value)}>
                 {category.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -221,8 +174,7 @@ const ProductList = () => {
                 mr={2}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}
-              >
+                _hover={{ bgColor: "#3d550f" }}>
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
               <Button
@@ -230,29 +182,21 @@ const ProductList = () => {
                 onClick={handleOrder}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}
-              >
+                _hover={{ bgColor: "#3d550f" }}>
                 {order === "ASC" ? "ASC" : "DESC"}
               </Button>
             </Box>
           </Flex>
         )}
       </Stack>
-      <Box mx={{ sm: "50px", md: "40px" }}>
-        <Flex
-          direction="row"
-          ml={location ? { base: "12px", md: "16px" } : "0px"}
-          flexWrap="wrap"
-          w="100%"
-          gap={4}
-          justifyContent={location ? "space-evenly" : "center"}
-        >
+      <Center justifyContent={"center"}>
+        <Flex direction="row" flexWrap="wrap" w="100%" gap={4}>
           {products.map((product, index) => (
             <ProductListItem product={product} key={index} />
           ))}
         </Flex>
-        {store && <Pagination page={page} index={index} setIndex={setIndex} />}
-      </Box>
+      </Center>
+      {store && <Pagination page={page} index={index} setIndex={setIndex} />}
     </Box>
   );
 };

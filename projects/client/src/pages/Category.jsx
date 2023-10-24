@@ -20,9 +20,8 @@ const Category = () => {
   const pathname = window.location.pathname.split("/");
   const id = pathname[pathname.length - 1];
   const maxBoxWidth = useBreakpointValue({
-    base: "100%",
-    md: "50%",
-    lg: "48%",
+    base: "370px",
+    md: "680px",
   });
 
   const handleOrderBy = () => {
@@ -39,7 +38,7 @@ const Category = () => {
 
   if (products.length < 1) {
     return (
-      <Box maxW={maxBoxWidth} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+      <Box w="100%" px={{ base: "20px" }} mx={"auto"}>
         <Navbar />
         <Center mt={4}>
           <Stack spacing={4} align="center">
@@ -54,12 +53,15 @@ const Category = () => {
             </Flex>
           </Stack>
         </Center>
-        <Center h="30vh" flexDirection="column" border={"1px dashed gray"} m={"10"}>
+        <Box mt={5} textAlign="center" border={"1px dashed gray"} p={4}>
           <Icon as={AiOutlineInbox} boxSize={12} color="gray.500" mb={4} />
-          <Text fontSize="2xl" fontWeight="bold">
-            We Are Going To Add More Product in This Category.
+          <Text fontSize="lg" fontWeight="bold">
+            No products found.
           </Text>
-        </Center>
+          <Text fontSize="md" color="gray.600">
+            There are no product here, we are going to add more soon.
+          </Text>
+        </Box>
       </Box>
     );
   }
@@ -79,19 +81,13 @@ const Category = () => {
           </Button>
         </Flex>
       </Center>
-      <Flex
-        gap={{ base: 4, md: 8 }}
-        justifyContent="center"
-        flexWrap="wrap"
-        maxW={maxBoxWidth}
-        w="100%"
-        py="40px"
-        px={{ base: "20px" }}
-        mx={"auto"}>
-        {products.map((product) => (
-          <ProductListItem product={product} key={product.id} />
-        ))}
-      </Flex>
+      <Center justifyContent={"center"} w={maxBoxWidth} mx={"auto"} p={{ base: "40px 20px", md: "" }}>
+        <Flex direction="row" flexWrap="wrap" w="100%" gap={4}>
+          {products.map((product, index) => (
+            <ProductListItem product={product} key={index} />
+          ))}
+        </Flex>
+      </Center>
       <Center mt={6}>
         <Pagination page={page} index={index} setIndex={setIndex} />
       </Center>
