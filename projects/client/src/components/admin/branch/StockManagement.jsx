@@ -103,7 +103,7 @@ export default function StockManagement() {
           </Text>
         </Box>
       </Box>
-      <Box px={3}>
+      <Box px={8}>
         <Flex mt={4}>
           <ButtonUpdateStock setModalClosedTrigger={setModalClosedTrigger} />
           <InputGroup ml={"12px"}>
@@ -127,7 +127,8 @@ export default function StockManagement() {
               <Box key={item.id}>
                 <Card
                   key={item.id}
-                  w={{ base: "480px", lg: "800px" }}
+                  // w={{ base: "380px", lg: "800px" }}
+                  w={"100%"}
                   mt={"20px"}
                   boxShadow={"lg"}
                   border={"2px"}
@@ -138,11 +139,10 @@ export default function StockManagement() {
                       <Image
                         src={getImage(item.Product?.product_img)}
                         alt="sayur"
-                        w={{ base: "120px", lg: "200px" }}
-                        h={"150px"}
+                        w={"30%"}
                         borderRadius="lg"
                       />
-                      <Stack spacing="3">
+                      <Stack spacing="3" w={"70%"}>
                         <Heading
                           color={item.isactive ? "green" : "gray.400"}
                           fontStyle={item.isactive ? "" : "italic"}
@@ -168,6 +168,7 @@ export default function StockManagement() {
                           fontWeight={"bold"}
                           color={item.isactive ? "green" : "gray.400"}
                           fontStyle={item.isactive ? "" : "italic"}
+                          fontSize={item.isactive ? "16px" : "12px"}
                         >
                           {item.isactive
                             ? `Quantity : ${item.quantity}`
@@ -205,7 +206,10 @@ export default function StockManagement() {
                               variant={""}
                               icon={
                                 <RxCross1
-                                  size={"md"}
+                                  style={{
+                                    width: "40px",
+                                    height: "30px",
+                                  }}
                                   onClick={() => disable(item)}
                                 />
                               }
@@ -219,7 +223,10 @@ export default function StockManagement() {
                                   mt={"12px"}
                                   icon={
                                     <FaCheck
-                                      size={"md"}
+                                      style={{
+                                        width: "40px",
+                                        height: "30px",
+                                      }}
                                       onClick={() => restore(item)}
                                     />
                                   }
@@ -234,7 +241,10 @@ export default function StockManagement() {
                           mt={"12px"}
                           icon={
                             <RiHistoryFill
-                              size={"md"}
+                              style={{
+                                width: "40px",
+                                height: "30px",
+                              }}
                               onClick={() => stockHistory(item)}
                             />
                           }
