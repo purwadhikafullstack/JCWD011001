@@ -18,7 +18,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductListItem from "./ProductListItem";
 import { Pagination } from "../components/Pagination";
-import { getProduct, getStoreProduct } from "../../redux/reducer/ProductReducer";
+import {
+  getProduct,
+  getStoreProduct,
+} from "../../redux/reducer/ProductReducer";
 import SearchProducts from "../components/SearchProducts";
 import { addCart, addToCart } from "../../redux/reducer/CartReducer";
 import { AiOutlineInbox } from "react-icons/ai";
@@ -53,8 +56,20 @@ const ProductList = () => {
     const pathname = window.location.pathname.split("/");
     if (pathname[pathname.length - 1] === "shop") setIsShop(true);
     dispatch(getCategory());
-    if (!location) dispatch(getProduct({ index, orderBy, order, category: cat }));
-    if (location) dispatch(getStoreProduct({ location, lon, lat, index, orderBy, order, category: cat }));
+    if (!location)
+      dispatch(getProduct({ index, orderBy, order, category: cat }));
+    if (location)
+      dispatch(
+        getStoreProduct({
+          location,
+          lon,
+          lat,
+          index,
+          orderBy,
+          order,
+          category: cat,
+        })
+      );
   }, [index, lon, lat, store, store_id, location, orderBy, order, cat]);
 
   const handleOrderBy = () => {
@@ -64,9 +79,15 @@ const ProductList = () => {
     setOrder(order === "ASC" ? "DESC" : "ASC");
   };
 
-  if (!isShop) {
+  if (!isShop &&  products.length > 0) {
     return (
-      <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+      <Box
+        maxW={maxBoxStore}
+        w="100%"
+        py="40px"
+        px={{ base: "20px" }}
+        mx={"auto"}
+      >
         <Heading as="h2" mx={"auto"} textAlign={"center"} mb={"20px"}>
           Our Most Recent Product
         </Heading>
@@ -78,20 +99,27 @@ const ProductList = () => {
             flexWrap="wrap"
             w="100%"
             gap={4}
-            justifyContent={location ? { base: "flex-start", xl: "flex-start" } : "center"}>
+            justifyContent={
+              location ? "space-evenly" : "center"
+            }
+          >
             {products.map((product, index) => (
               <ProductListItem product={product} key={index} />
             ))}
-            <Button
-              w={"85%"}
-              bgColor="#5a9819"
-              color={"white"}
-              _hover={{ bgColor: "#3d550f" }}
-              onClick={() => {
-                navigate("/shop");
-              }}>
-              Shop Now
-            </Button>
+            <Center w={"100%"} mt={4}>
+              <Button
+                w={{ base: "100%", md: "50%" }}
+                bgColor="brand.main"
+                color={"white"}
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
+                onClick={() => {
+                  navigate("/shop");
+                }}
+              >
+                Shop Now
+              </Button>
+            </Center>
           </Flex>
         </Box>
       </Box>
@@ -100,15 +128,29 @@ const ProductList = () => {
 
   if (products.length < 1) {
     return (
-      <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+      <Box
+        maxW={maxBoxStore}
+        w="100%"
+        py="40px"
+        px={{ base: "20px" }}
+        mx={"auto"}
+      >
         <Stack spacing={4}>
           <Heading as="h2" mx={"auto"} textAlign={"center"}>
             {store ? store : "Our Most Recent Product"}
           </Heading>
-          <Flex gap={2} justify={{ base: "", md: "space-between" }} flexWrap={"wrap"}>
+          <Flex
+            gap={2}
+            justify={{ base: "", md: "space-between" }}
+            flexWrap={"wrap"}
+          >
             <SearchProducts />
             {isShop && (
-              <Select w={{ base: "50%", md: "35%" }} placeholder="Category" onChange={(e) => setCat(e.target.value)}>
+              <Select
+                w={{ base: "50%", md: "35%" }}
+                placeholder="Category"
+                onChange={(e) => setCat(e.target.value)}
+              >
                 {category.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -121,7 +163,8 @@ const ProductList = () => {
                 mr={2}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}>
+                _hover={{ bgColor: "#3d550f" }}
+              >
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
               <Button
@@ -129,7 +172,8 @@ const ProductList = () => {
                 onClick={handleOrder}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}>
+                _hover={{ bgColor: "#3d550f" }}
+              >
                 {order === "ASC" ? "ASC" : "DESC"}
               </Button>
             </Box>{" "}
@@ -149,7 +193,13 @@ const ProductList = () => {
   }
 
   return (
-    <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
+    <Box
+      maxW={maxBoxStore}
+      w="100%"
+      py="40px"
+      px={{ base: "20px" }}
+      mx={"auto"}
+    >
       <Stack spacing={6} mb={10}>
         <Heading as="h2" textAlign="center">
           {store ? store : "Our Recent Product"}
@@ -158,7 +208,11 @@ const ProductList = () => {
           <Flex gap={2} flexWrap={"wrap"}>
             <SearchProducts />
             {isShop && (
-              <Select w={{ base: "48%" }} placeholder="Category" onChange={(e) => setCat(e.target.value)}>
+              <Select
+                w={{ base: "48%" }}
+                placeholder="Category"
+                onChange={(e) => setCat(e.target.value)}
+              >
                 {category.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -171,7 +225,8 @@ const ProductList = () => {
                 mr={2}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}>
+                _hover={{ bgColor: "#3d550f" }}
+              >
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
               <Button
@@ -179,7 +234,8 @@ const ProductList = () => {
                 onClick={handleOrder}
                 bgColor="#5a9819"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}>
+                _hover={{ bgColor: "#3d550f" }}
+              >
                 {order === "ASC" ? "ASC" : "DESC"}
               </Button>
             </Box>
@@ -193,7 +249,8 @@ const ProductList = () => {
           flexWrap="wrap"
           w="100%"
           gap={4}
-          justifyContent={location ? { base: "flex-start", xl: "flex-start" } : "center"}>
+          justifyContent={location ? "space-evenly" : "center"}
+        >
           {products.map((product, index) => (
             <ProductListItem product={product} key={index} />
           ))}

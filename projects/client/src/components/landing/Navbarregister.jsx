@@ -75,7 +75,8 @@ const Navbarregister = () => {
       width={{ base: "90%", md: "30vw" }}
       mx="auto"
       border="1px solid grey"
-      borderRadius="10px">
+      borderRadius="10px"
+    >
       <form onSubmit={formik.handleSubmit}>
         <FormControl>
           <Flex justify={"space-between"}>
@@ -96,7 +97,9 @@ const Navbarregister = () => {
           <Flex justify={"space-between"}>
             <FormLabel>Username</FormLabel>
             {formik.touched.username && formik.errors.username ? (
-              <FormHelperText color="red">{formik.errors.username}</FormHelperText>
+              <FormHelperText color="red">
+                {formik.errors.username}
+              </FormHelperText>
             ) : null}
           </Flex>
           <InputGroup mb={4}>
@@ -111,7 +114,9 @@ const Navbarregister = () => {
           <Flex justify={"space-between"}>
             <FormLabel>Password</FormLabel>
             {formik.touched.password && formik.errors.password ? (
-              <FormHelperText color="red">{formik.errors.password}</FormHelperText>
+              <FormHelperText color="red">
+                {formik.errors.password}
+              </FormHelperText>
             ) : null}
           </Flex>
           <InputGroup mb={4}>
@@ -124,9 +129,11 @@ const Navbarregister = () => {
             <InputRightElement width="4.5rem">
               <Button
                 onClick={() => setShowPassword(!showPassword)}
-                bgColor="#5a9819"
+                bgColor="brand.main"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}>
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
+              >
                 Show
               </Button>
             </InputRightElement>
@@ -135,7 +142,9 @@ const Navbarregister = () => {
           <Flex justify={"space-between"}>
             <FormLabel>Confirm Password</FormLabel>
             {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
-              <FormHelperText color="red">{formik.errors.confirmpassword}</FormHelperText>
+              <FormHelperText color="red">
+                {formik.errors.confirmpassword}
+              </FormHelperText>
             ) : null}
           </Flex>
           <InputGroup mb={4}>
@@ -143,14 +152,18 @@ const Navbarregister = () => {
             <Input
               type={showconfirmPassword ? "text" : "password"}
               {...formik.getFieldProps("confirmpassword")}
-              isInvalid={formik.touched.confirmpassword && formik.errors.confirmpassword}
+              isInvalid={
+                formik.touched.confirmpassword && formik.errors.confirmpassword
+              }
             />
             <InputRightElement width="4.5rem">
               <Button
                 onClick={() => setShowconfirmPassword(!showconfirmPassword)}
-                bgColor="#5a9819"
+                bgColor="brand.main"
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}>
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
+              >
                 Show
               </Button>
             </InputRightElement>
@@ -183,9 +196,11 @@ const Navbarregister = () => {
             mt={"2%"}
             width={"100%"}
             isLoading={submitLoading}
-            bgColor="#5a9819"
+            bgColor="brand.main"
             color={"white"}
-            _hover={{ bgColor: "#3d550f" }}>
+            _hover={{ bgColor: "brand.hover" }}
+            _active={{ bgColor: "brand.active" }}
+          >
             Register
           </Button>
         </FormControl>
