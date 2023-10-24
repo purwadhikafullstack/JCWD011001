@@ -78,7 +78,6 @@ const UserOrderOngoingCardDetailOrder = ({
 
   const handleConfirm = () => {
     setConfirmed(true);
-    if (confirmed) console.log("masuk ke confirm order");
   };
   const buttonConfirm = async (item) => {
     const result = await Swal.fire({

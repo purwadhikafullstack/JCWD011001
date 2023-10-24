@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProduct, getProductSearch, getStoreProduct } from "../../redux/reducer/ProductReducer";
 
 const SearchProducts = () => {
+  const [isShop, setIsShop] = useState(false);
   const { location, lon, lat } = useSelector((state) => state.AuthReducer);
   const { store_id } = useSelector((state) => state.ProductReducer);
   const [searchValue, setSearchValue] = useState("");
@@ -24,6 +25,9 @@ const SearchProducts = () => {
   };
 
   useEffect(() => {
+    const pathname = window.location.pathname.split("/");
+    if (pathname[pathname.length - 1] === "shop") setIsShop(true);
+
     if (searchValue === "") {
       const name = document.getElementById("search").value;
       if (name) dispatch(getProductSearch({ name, store_id }));
@@ -33,7 +37,7 @@ const SearchProducts = () => {
   }, [searchValue]);
 
   return (
-    <Box w={"50%"}>
+    <Box w={isShop ? { base: "48%" } : "97%"}>
       <InputGroup bg={"white"}>
         <InputLeftElement>
           <BiSearchAlt color="#37630A" />

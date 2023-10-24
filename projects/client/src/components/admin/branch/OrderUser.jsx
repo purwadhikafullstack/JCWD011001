@@ -37,7 +37,6 @@ const OrderUser = () => {
   const getAllTransaction = async () => {
     try {
       const response = await axios.get(`${URL_API}/admin/branch/transaction`);
-      console.log("all tr", response);
       setAllTransaction(response.data.data);
     } catch (error) {
       console.log(error);

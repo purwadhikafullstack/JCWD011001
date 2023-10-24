@@ -151,7 +151,6 @@ const reportController = {
     }
   },
   getProductTransactionPerId: async (req, res) => {
-    console.log("param", req.params);
     try {
       const { store_id, product_id } = req.params;
       const { startDate = "1970-01-01", endDate = new Date() } = req.query;

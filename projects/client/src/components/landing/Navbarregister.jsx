@@ -15,13 +15,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import {
-  MdAlternateEmail,
-  MdLockOutline,
-  MdPhone,
-  MdPeopleOutline,
-  MdOutlineEscalatorWarning,
-} from "react-icons/md";
+import { MdAlternateEmail, MdLockOutline, MdPhone, MdPeopleOutline, MdOutlineEscalatorWarning } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "../../redux/reducer/AuthReducer";
@@ -37,9 +31,7 @@ const Navbarregister = () => {
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+    email: Yup.string().email("Invalid email address").required("Email is required"),
     password: Yup.string()
       .required("Password is required")
       .matches(
@@ -83,8 +75,7 @@ const Navbarregister = () => {
       width={{ base: "90%", md: "30vw" }}
       mx="auto"
       border="1px solid grey"
-      borderRadius="10px"
-    >
+      borderRadius="10px">
       <form onSubmit={formik.handleSubmit}>
         <FormControl>
           <Flex justify={"space-between"}>
@@ -105,9 +96,7 @@ const Navbarregister = () => {
           <Flex justify={"space-between"}>
             <FormLabel>Username</FormLabel>
             {formik.touched.username && formik.errors.username ? (
-              <FormHelperText color="red">
-                {formik.errors.username}
-              </FormHelperText>
+              <FormHelperText color="red">{formik.errors.username}</FormHelperText>
             ) : null}
           </Flex>
           <InputGroup mb={4}>
@@ -122,9 +111,7 @@ const Navbarregister = () => {
           <Flex justify={"space-between"}>
             <FormLabel>Password</FormLabel>
             {formik.touched.password && formik.errors.password ? (
-              <FormHelperText color="red">
-                {formik.errors.password}
-              </FormHelperText>
+              <FormHelperText color="red">{formik.errors.password}</FormHelperText>
             ) : null}
           </Flex>
           <InputGroup mb={4}>
@@ -135,7 +122,11 @@ const Navbarregister = () => {
               isInvalid={formik.touched.password && formik.errors.password}
             />{" "}
             <InputRightElement width="4.5rem">
-              <Button onClick={() => setShowPassword(!showPassword)}>
+              <Button
+                onClick={() => setShowPassword(!showPassword)}
+                bgColor="#5a9819"
+                color={"white"}
+                _hover={{ bgColor: "#3d550f" }}>
                 Show
               </Button>
             </InputRightElement>
@@ -144,9 +135,7 @@ const Navbarregister = () => {
           <Flex justify={"space-between"}>
             <FormLabel>Confirm Password</FormLabel>
             {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
-              <FormHelperText color="red">
-                {formik.errors.confirmpassword}
-              </FormHelperText>
+              <FormHelperText color="red">{formik.errors.confirmpassword}</FormHelperText>
             ) : null}
           </Flex>
           <InputGroup mb={4}>
@@ -154,14 +143,14 @@ const Navbarregister = () => {
             <Input
               type={showconfirmPassword ? "text" : "password"}
               {...formik.getFieldProps("confirmpassword")}
-              isInvalid={
-                formik.touched.confirmpassword && formik.errors.confirmpassword
-              }
+              isInvalid={formik.touched.confirmpassword && formik.errors.confirmpassword}
             />
             <InputRightElement width="4.5rem">
               <Button
                 onClick={() => setShowconfirmPassword(!showconfirmPassword)}
-              >
+                bgColor="#5a9819"
+                color={"white"}
+                _hover={{ bgColor: "#3d550f" }}>
                 Show
               </Button>
             </InputRightElement>
@@ -194,7 +183,9 @@ const Navbarregister = () => {
             mt={"2%"}
             width={"100%"}
             isLoading={submitLoading}
-          >
+            bgColor="#5a9819"
+            color={"white"}
+            _hover={{ bgColor: "#3d550f" }}>
             Register
           </Button>
         </FormControl>

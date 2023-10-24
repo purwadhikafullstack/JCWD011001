@@ -31,7 +31,6 @@ const SalesReport = () => {
     fetchStore();
   }, []);
 
-  console.log(stores);
 
   if (detail) {
     return (

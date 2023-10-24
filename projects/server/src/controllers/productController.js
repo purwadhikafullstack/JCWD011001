@@ -31,16 +31,18 @@ const setPagination = (limit, page) => {
 const productController = {
   getProduct: async (req, res) => {
     try {
-      const { page = 1, limit = 4, order = "ASC", orderBy = "name", category = "" } = req.query;
+      const { page = 1, limit = 6, order = "ASC", orderBy = "name", category = "" } = req.query;
 
       const where = { isactive: true };
       if (category) where.category_id = category;
+
       const pagination = setPagination(limit, page);
-      const totalProduct = await Product.count(where);
+      const totalProduct = await Product.count({ where });
       const totalPage = Math.ceil(totalProduct / +limit);
+
       const products = await Product.findAll({
         attributes: {
-          exclude: ["createdAt", "updatedAt", "category_id"],
+          exclude: ["createdAt", "updatedAt"],
         },
         where,
         include: includeCategory,
@@ -54,7 +56,7 @@ const productController = {
   },
   getProductStore: async (req, res) => {
     try {
-      const { store_id, page = 1, limit = 9, order = "ASC", orderBy = "name", category = "" } = req.query;
+      const { store_id, page = 1, limit = 6, order = "ASC", orderBy = "name", category = "" } = req.query;
 
       const where = { isactive: true };
       if (category) where.category_id = category;

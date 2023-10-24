@@ -72,7 +72,6 @@ export const getTransactionItem = (id) => {
       const { data } = await axios.get(`${URL_API}/transaction/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      console.log(data.data);
       dispatch(setItemTransaction(data.data));
     } catch (error) {
       console.log(error);

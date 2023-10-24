@@ -171,7 +171,6 @@ export const getProduct = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL_API}/admin/product?limit=100`);
-      console.log(data);
       dispatch(setProduct(data.data));
     } catch (error) {
       console.log(error);
@@ -183,7 +182,6 @@ export const fetchStore = () => {
     try {
       const { data } = await axios.get(`${URL_API}/store/branch`);
       dispatch(setStore(data.data));
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -284,33 +282,33 @@ export const branchUserCancel = (item) => {
     } catch (error) {
       console.log(error);
     }
-  }
-}
+  };
+};
 export const branchUserConfirm = (item) => {
-  return async(dispatch) => {
-    const transaction_id = item.id
-    try { 
-      const response = await axios.patch(`${URL_API}/admin/branch/confirm/${transaction_id}`)
+  return async (dispatch) => {
+    const transaction_id = item.id;
+    try {
+      const response = await axios.patch(`${URL_API}/admin/branch/confirm/${transaction_id}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-}
+  };
+};
 export const branchSendOrder = (item) => {
-  return async(dispatch) => {
-    const transaction_id = item.id
-    try { 
-      const response = await axios.patch(`${URL_API}/admin/branch/send/${transaction_id}`)
+  return async (dispatch) => {
+    const transaction_id = item.id;
+    try {
+      const response = await axios.patch(`${URL_API}/admin/branch/send/${transaction_id}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-}
+  };
+};
 
 export const approveUserPayment = (orderId, toast) => {
-  return async() => {
+  return async () => {
     try {
-      await axios.patch(`${URL_API}/admin/payment/approve/${orderId}`)
+      await axios.patch(`${URL_API}/admin/payment/approve/${orderId}`);
       toast({
         title: "Success",
         description: "Payment approved",
@@ -319,13 +317,13 @@ export const approveUserPayment = (orderId, toast) => {
         isClosable: true,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 };
 
 export const rejectUserPayment = (values, id, toast, onClose, resetForm) => {
-  return async() => {
+  return async () => {
     try {
       await axios.patch(`${URL_API}/admin/payment/reject/${id}`, values);
       toast({
@@ -338,11 +336,12 @@ export const rejectUserPayment = (values, id, toast, onClose, resetForm) => {
       resetForm();
       onClose();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 };
 
-export const { setBranchAdmin,setStore, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } = AdminReducer.actions;
+export const { setBranchAdmin, setStore, setAdmin, loginSuccess, logoutSuccess, setRoleId, setPage, setProduct } =
+  AdminReducer.actions;
 
 export default AdminReducer.reducer;

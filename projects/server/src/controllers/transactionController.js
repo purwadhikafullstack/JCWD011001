@@ -220,7 +220,6 @@ const transactionController = {
     const { id } = req.user;
     try {
       const { id_transaction } = req.body;
-      console.log(id_transaction);
       const findTransaction = await Transaction.findOne({ where: { id: id_transaction, user_id: id, status: 0 } });
       if (!findTransaction) return res.status(404).json({ message: "Transaction not found" });
       const image = req.file.path;

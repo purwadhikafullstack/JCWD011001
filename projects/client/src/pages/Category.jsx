@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Icon,
-  Spinner,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Heading, Icon, Spinner, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/landing/Navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +19,11 @@ const Category = () => {
   const [index, setIndex] = useState(1);
   const pathname = window.location.pathname.split("/");
   const id = pathname[pathname.length - 1];
+  const maxBoxWidth = useBreakpointValue({
+    base: "100%",
+    md: "50%",
+    lg: "48%",
+  });
 
   const handleOrderBy = () => {
     setOrderBy(orderBy === "name" ? "price" : "name");
@@ -38,45 +33,31 @@ const Category = () => {
   };
 
   useEffect(() => {
-    if (!location)
-      dispatch(getProduct({ category: id, orderBy, order, index }));
-    if (location)
-      dispatch(
-        getStoreProduct({
-          location,
-          lon,
-          lat,
-          orderBy,
-          order,
-          category: id,
-          index,
-        })
-      );
+    if (!location) dispatch(getProduct({ category: id, orderBy, order, index }));
+    if (location) dispatch(getStoreProduct({ location, lon, lat, orderBy, order, category: id, index }));
   }, [index, orderBy, order, location, store]);
-
-  console.log(products);
 
   if (products.length < 1) {
     return (
-      <Box>
+      <Box maxW={maxBoxWidth} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
         <Navbar />
         <Center mt={4}>
           <Stack spacing={4} align="center">
             <Heading as="h2">Category</Heading>
             <Flex gap={2}>
-              <Button onClick={handleOrderBy} gap={2}>
+              <Button onClick={handleOrderBy} gap={2} bgColor="#5a9819" color={"white"} _hover={{ bgColor: "#3d550f" }}>
                 {orderBy === "name" ? "NAME" : "PRICE"}
               </Button>
-              <Button onClick={handleOrder} gap={2}>
+              <Button onClick={handleOrder} gap={2} bgColor="#5a9819" color={"white"} _hover={{ bgColor: "#3d550f" }}>
                 {order === "ASC" ? "ASC" : "DESC"}
               </Button>
             </Flex>
           </Stack>
         </Center>
-        <Center h="30vh" flexDirection="column">
+        <Center h="30vh" flexDirection="column" border={"1px dashed gray"} m={"10"}>
           <Icon as={AiOutlineInbox} boxSize={12} color="gray.500" mb={4} />
           <Text fontSize="2xl" fontWeight="bold">
-            No products found.
+            We Are Going To Add More Product in This Category.
           </Text>
         </Center>
       </Box>
@@ -86,27 +67,27 @@ const Category = () => {
     <Box>
       <Navbar />
       <Center my={4}>
-        <Heading mb={4}>
-          Category{" "}
-          {products[0]?.Category?.name || products[0]?.Product?.Category?.name}
-        </Heading>
+        <Heading mb={4}>Category {products[0]?.Category?.name || products[0]?.Product?.Category?.name}</Heading>
       </Center>
       <Center>
         <Flex gap={2} mb={4}>
-          <Button onClick={handleOrderBy} gap={2}>
+          <Button onClick={handleOrderBy} gap={2} bgColor="#5a9819" color={"white"} _hover={{ bgColor: "#3d550f" }}>
             {orderBy === "name" ? "NAME" : "PRICE"}
           </Button>
-          <Button onClick={handleOrder} gap={2}>
+          <Button onClick={handleOrder} gap={2} bgColor="#5a9819" color={"white"} _hover={{ bgColor: "#3d550f" }}>
             {order === "ASC" ? "ASC" : "DESC"}
           </Button>
         </Flex>
       </Center>
       <Flex
         gap={{ base: 4, md: 8 }}
-        w="100%"
         justifyContent="center"
         flexWrap="wrap"
-      >
+        maxW={maxBoxWidth}
+        w="100%"
+        py="40px"
+        px={{ base: "20px" }}
+        mx={"auto"}>
         {products.map((product) => (
           <ProductListItem product={product} key={product.id} />
         ))}
