@@ -251,7 +251,6 @@ const profileController = {
     try {
       const { id, username } = req.user;
       const { newEmail } = req.body;
-      console.log("NEW", newEmail);
       await db.sequelize.transaction(async (t) => {
         let payload = {
           id: id,

@@ -108,7 +108,6 @@ const AboutContent = () => {
           </Text>
           <Box
             display={"flex"}
-            justifyContent={"space-between"}
             flexDirection={{ base: "column", md: "row" }}
             gap={4}
           >

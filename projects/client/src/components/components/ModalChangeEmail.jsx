@@ -86,8 +86,6 @@ export default function ModalChangeEmail({ isOpen, onClose, user }) {
     },
     validationSchema: ChangeEmailSchema,
     onSubmit: (values) => {
-      // console.log("ini masuk");
-      console.log("masuk", values);
       emailChange(values);
     },
   });

@@ -177,9 +177,10 @@ export default function Signin() {
               </Box>
               <Button
                 type="submit"
-                bgColor="#5a9819"
+                bgColor={"brand.main"}
                 color={"white"}
-                _hover={{ bgColor: "#3d550f" }}
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
                 mt={"30px"}
                 w={{ sm: "300px", md: "400px", lg: "500px" }}
               >

@@ -71,7 +71,6 @@ const authController = {
   register: async (req, res) => {
     try {
       const { username, email, phone, password, confirmpassword, refcode } = req.body;
-      console.log(req.body);
       if (!(username || email || phone || password))
         return res.status(400).json({ message: "Please fill in all fields" });
       const finduser = await User.findOne({ where: { [Sequelize.Op.or]: [{ username }, { email }] } });
@@ -172,7 +171,6 @@ const authController = {
   keepLogin: async (req, res) => {
     try {
       const { id } = req.user;
-      console.log(req.user);
       if (req.user.role) {
         const findAdmin = await Admin.findOne({ where: { id } });
         return res.status(200).json({ message: "Still Login", findAdmin });

@@ -32,7 +32,6 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
     { status: "Finished", color: "Green" },
   ];
 
-  console.log(transactionDetail, transactionProducts);
 
   const RenderStatus = () => {
     if (transactionDetail.status === 6)
@@ -73,7 +72,6 @@ const UserOrderFinishedCardDetails = ({ transactionDetail, transactionProducts }
             <Box key={item.id}>
               <Flex justify={"space-between"}>
                 <Stack spacing="2">
-                  {console.log(item)}
                   <Text fontWeight={"bold"} fontSize={"20px"}>
                     {item?.Product?.name}
                   </Text>

@@ -18,7 +18,6 @@ function findMaxNumber(input) {
 }
 
 const DeliveryDetail = ({ storeCityId, city_id, deliveryDetail, products, setDeliveryprice, setDelivDuration }) => {
-  console.log(storeCityId, city_id, deliveryDetail, products);
   const weightsArray = products.map((product) => product.Product.weight * product.quantity);
   const totalWeight = weightsArray.reduce((acc, currentWeight) => acc + currentWeight, 0);
   const [rajaongkir, setRajaongkir] = useState();
@@ -32,7 +31,6 @@ const DeliveryDetail = ({ storeCityId, city_id, deliveryDetail, products, setDel
         { storeCityId, city_id, totalWeight, deliveryDetail },
         { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-      console.log(data.data.rajaongkir);
       setRajaongkir(data.data.rajaongkir);
     } catch (error) {
       console.log(error);
@@ -40,7 +38,6 @@ const DeliveryDetail = ({ storeCityId, city_id, deliveryDetail, products, setDel
   };
 
   const handlePickDeliv = (option) => {
-    console.log(option);
     setPick(option);
     setDeliveryprice(option.cost[0].value);
     setDelivDuration(findMaxNumber(option.cost[0].etd));

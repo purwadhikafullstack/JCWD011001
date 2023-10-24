@@ -69,7 +69,6 @@ export const registerUser = (value, toast) => {
   return async () => {
     try {
       const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/user`, value);
-      console.log(data);
       toast({
         title: "Register Success",
         description: `${value.username} berhasil dibuat`,

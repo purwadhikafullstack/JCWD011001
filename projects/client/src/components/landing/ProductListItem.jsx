@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  Image,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, Center, Divider, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import getImage from "../../utils/getImage";
 
@@ -31,7 +20,7 @@ const ProductListItem = ({ product }) => {
         align="center"
         bg="white"
         rounded="3xl"
-        w={{ base: "210px", md: "200px" }}
+        w={{ base: "150px", md: "200px" }}
         p={2}
         pb={6}
         boxShadow={{ base: "lg", md: "xl" }}
@@ -41,8 +30,7 @@ const ProductListItem = ({ product }) => {
         }}
         onClick={() => {
           navigate(`/product/${product.Product.id}`);
-        }}
-      >
+        }}>
         <Image
           src={getImage(product.Product.product_img) || null}
           w="50%"
@@ -69,13 +57,7 @@ const ProductListItem = ({ product }) => {
               />
             )}
           </Flex>
-          <Box
-            mt={1}
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            noOfLines={2}
-          >
+          <Box mt={1} fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={2}>
             {product.Product.name}
           </Box>
           {isDiscount && (
@@ -85,8 +67,7 @@ const ProductListItem = ({ product }) => {
                   fontWeight={"bold"}
                   textDecoration={"line-through"}
                   color={"#9b9b9b"}
-                  fontSize={{ base: "xs", md: "lg" }}
-                >
+                  fontSize={{ base: "xs", md: "lg" }}>
                   Rp.{product?.Product.price},-
                 </Text>
                 <Text fontWeight={"bold"} fontSize={{ base: "xs", md: "lg" }}>
@@ -111,7 +92,7 @@ const ProductListItem = ({ product }) => {
       align="center"
       bg="white"
       rounded="3xl"
-      w={{ base: "210px", md: "200px" }}
+      w={{ base: "150px", md: "200px" }}
       p={2}
       pb={8}
       boxShadow={{ base: "lg", md: "xl" }}
@@ -121,8 +102,7 @@ const ProductListItem = ({ product }) => {
       }}
       onClick={() => {
         navigate(`/product/${product.id}`);
-      }}
-    >
+      }}>
       <Image
         src={getImage(product.product_img) || null}
         w="50%"
@@ -149,13 +129,7 @@ const ProductListItem = ({ product }) => {
             />
           )}
         </Flex>
-        <Box
-          mt={1}
-          fontWeight="semibold"
-          as="h4"
-          lineHeight="tight"
-          noOfLines={2}
-        >
+        <Box mt={1} fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={2}>
           {product.name}
         </Box>
         {isDiscount && (
@@ -165,8 +139,7 @@ const ProductListItem = ({ product }) => {
                 fontWeight={"bold"}
                 textDecoration={"line-through"}
                 color={"#9b9b9b"}
-                fontSize={{ base: "xs", md: "lg" }}
-              >
+                fontSize={{ base: "xs", md: "lg" }}>
                 Rp.{product?.price},-
               </Text>
               <Text fontWeight={"bold"} fontSize={{ base: "xs", md: "lg" }}>

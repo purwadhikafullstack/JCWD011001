@@ -136,7 +136,6 @@ const addressController = {
   getDefaultAddress: async (req, res) => {
     try {
       const { id } = req.user;
-      console.log(req.user.id);
       const result = await UserAddress.findOne({
         where: { user_id: id, isdefault: 1, isactive: true },
         attributes: { exclude: ["createdAt", "updatedAt"] },

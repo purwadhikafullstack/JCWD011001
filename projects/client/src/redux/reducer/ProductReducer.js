@@ -128,6 +128,7 @@ export const getProductSearch = ({ category, name, store_id }) => {
 
       const { data } = await axios.get(`${URL_API}/product/search/${query}`);
       dispatch(setProduct(data.data));
+      dispatch(setPage(1));
     } catch (error) {
       console.log(error);
     }

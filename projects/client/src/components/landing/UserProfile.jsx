@@ -26,7 +26,6 @@ import getImage from "../../utils/getImage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 const URL_API = process.env.REACT_APP_API_BASE_URL;
-console.log("URL_API", URL_API);
 export default function UserProfile() {
   const { user } = useSelector((state) => state.AuthReducer);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,7 +33,6 @@ export default function UserProfile() {
   const toast = useToast();
 
   const resend = async (values) => {
-    console.log("resend", values);
     const token = localStorage.getItem("token");
     try {
       setLoading(true);
@@ -49,7 +47,6 @@ export default function UserProfile() {
           },
         }
       );
-      console.log(respon);
       toast({
         title: "Success",
         description: "check your email",

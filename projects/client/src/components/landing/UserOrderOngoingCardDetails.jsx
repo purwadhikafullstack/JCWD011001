@@ -68,7 +68,6 @@ const UserOrderOngoingCardDetails = ({ transactionDetail, transactionProducts, s
     );
   };
 
-  console.log(transactionDetail);
 
   return (
     <Card>

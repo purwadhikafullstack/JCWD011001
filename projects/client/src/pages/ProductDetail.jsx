@@ -78,7 +78,6 @@ const ProductDetail = () => {
       await getItemDetails(id);
       const { data } = await axios.get(apiUrl);
       const productData = data.data?.Product || data.data;
-      console.log(data.data);
       await setProduct(productData);
       if (productData.admin_discount > 0) await setIsDiscount(true);
       if (data.data.quantity) await setStock(data.data);
@@ -206,7 +205,9 @@ const ProductDetail = () => {
                               jumlah === branchProduct?.quantity ||
                               jumlah ===
                                 branchProduct?.quantity - sold?.quantity ||
-                              (sold?.quantity ?? 0) === branchProduct?.quantity
+                              (sold?.quantity ?? 0) ===
+                                (branchProduct?.quantity ?? 0) ||
+                              jumlah + (sold?.quantity ?? 0) >= stock.quantity
                             }
                             onClick={incrementQuantity}
                           ></IconButton>
@@ -222,7 +223,8 @@ const ProductDetail = () => {
                         isDisabled={
                           login === false ||
                           (sold?.quantity ?? 0) ===
-                            (branchProduct?.quantity ?? 0)
+                            (branchProduct?.quantity ?? 0) ||
+                          jumlah + (sold?.quantity ?? 0) > stock.quantity
                         }
                       >
                         {(sold?.quantity ?? 0) ===
@@ -274,6 +276,9 @@ const ProductDetail = () => {
                   {stock.map((product) => (
                     <ProductStock key={product.id} product={product} />
                   ))}
+                  {stock.length === 0 && (
+                    <Text>WE ARE GOING TO ADD THIS PRODUCT MORE STORE</Text>
+                  )}
                 </Flex>
               </>
             )}

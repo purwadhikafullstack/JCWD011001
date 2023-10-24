@@ -8,7 +8,7 @@ import StoreLogin from "../../components/landing/StoreLogin";
 import { useSelector } from "react-redux";
 
 const Shop = () => {
-  const { store_id, store } = useSelector((state) => state.ProductReducer);
+  const { store } = useSelector((state) => state.ProductReducer);
   return (
     <Box>
       <Navbar />

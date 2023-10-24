@@ -15,13 +15,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import {
-  MdAlternateEmail,
-  MdLockOutline,
-  MdPhone,
-  MdPeopleOutline,
-  MdOutlineEscalatorWarning,
-} from "react-icons/md";
+import { MdAlternateEmail, MdLockOutline, MdPhone, MdPeopleOutline, MdOutlineEscalatorWarning } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "../../redux/reducer/AuthReducer";
@@ -37,9 +31,7 @@ const Navbarregister = () => {
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+    email: Yup.string().email("Invalid email address").required("Email is required"),
     password: Yup.string()
       .required("Password is required")
       .matches(
@@ -135,7 +127,13 @@ const Navbarregister = () => {
               isInvalid={formik.touched.password && formik.errors.password}
             />{" "}
             <InputRightElement width="4.5rem">
-              <Button onClick={() => setShowPassword(!showPassword)}>
+              <Button
+                onClick={() => setShowPassword(!showPassword)}
+                bgColor="brand.main"
+                color={"white"}
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
+              >
                 Show
               </Button>
             </InputRightElement>
@@ -161,6 +159,10 @@ const Navbarregister = () => {
             <InputRightElement width="4.5rem">
               <Button
                 onClick={() => setShowconfirmPassword(!showconfirmPassword)}
+                bgColor="brand.main"
+                color={"white"}
+                _hover={{ bgColor: "brand.hover" }}
+                _active={{ bgColor: "brand.active" }}
               >
                 Show
               </Button>
@@ -194,6 +196,10 @@ const Navbarregister = () => {
             mt={"2%"}
             width={"100%"}
             isLoading={submitLoading}
+            bgColor="brand.main"
+            color={"white"}
+            _hover={{ bgColor: "brand.hover" }}
+            _active={{ bgColor: "brand.active" }}
           >
             Register
           </Button>

@@ -569,7 +569,7 @@ const adminController = {
         );
         const twoDaysFromNow = new Date();
         twoDaysFromNow.setDate(
-          twoDaysFromNow.getDate() + (findTransaction.duration || 2)
+          twoDaysFromNow.getDate() + (findTransaction.duration)
         );
         await trans.update(
           { expiredIn: twoDaysFromNow },
