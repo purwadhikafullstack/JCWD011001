@@ -30,18 +30,12 @@ const reportController = {
         col: "user_id",
         where: { store_id, status: 6 },
       });
-      const totalProductBuy = await Transaction.sum(
-        "Transactionitems.quantity",
-        {
-          where: { store_id, status: 6 },
-          include: [{ model: Transactionitem, attributes: [] }],
-        }
-      );
+      const totalProductBuy = await Transaction.sum("Transactionitems.quantity", {
+        where: { store_id, status: 6 },
+        include: [{ model: Transactionitem, attributes: [] }],
+      });
       const mostSoldProduct = await Transactionitem.findOne({
-        attributes: [
-          "product_id",
-          [sequelize.fn("SUM", sequelize.col("quantity")), "totalQuantitySold"],
-        ],
+        attributes: ["product_id", [sequelize.fn("SUM", sequelize.col("quantity")), "totalQuantitySold"]],
         where: {
           "$Transaction.store_id$": store_id,
           "$Transaction.status$": 6,
@@ -67,16 +61,12 @@ const reportController = {
       const { store_id } = req.params;
       const { order, orderBy = "user_id", startDate, endDate } = req.query;
       let filter = {};
-      if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
-      if (endDate)
-        filter.createdAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
+      if (startDate) filter.updatedAt = { [Op.gte]: new Date(startDate) };
+      if (endDate) filter.updatedAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
       if (startDate && endDate) {
         filter = {
-          createdAt: {
-            [Op.between]: [
-              new Date(startDate),
-              new Date(endDate).setHours(23, 59, 59),
-            ],
+          updatedAt: {
+            [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)],
           },
         };
       }
@@ -85,10 +75,7 @@ const reportController = {
           "user_id",
           [sequelize.fn("COUNT", sequelize.col("*")), "totalTransactions"],
           [sequelize.fn("SUM", sequelize.col("total_price")), "total_price"],
-          [
-            sequelize.fn("SUM", sequelize.col("total_discount")),
-            "total_discount",
-          ],
+          [sequelize.fn("SUM", sequelize.col("total_discount")), "total_discount"],
         ],
         where: {
           store_id,
@@ -109,16 +96,12 @@ const reportController = {
       const { user_id, store_id } = req.params;
       const { startDate, endDate } = req.query;
       let filter = {};
-      if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
-      if (endDate)
-        filter.createdAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
+      if (startDate) filter.updatedAt = { [Op.gte]: new Date(startDate) };
+      if (endDate) filter.updatedAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
       if (startDate && endDate) {
         filter = {
-          createdAt: {
-            [Op.between]: [
-              new Date(startDate),
-              new Date(endDate).setHours(23, 59, 59),
-            ],
+          updatedAt: {
+            [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)],
           },
         };
       }
@@ -143,9 +126,7 @@ const reportController = {
         include: includeProduct,
         ...pagination,
       });
-      res
-        .status(200)
-        .json({ message: "Success", totalPage, data: StoreProduct });
+      res.status(200).json({ message: "Success", totalPage, data: StoreProduct });
     } catch (error) {
       res.status(500).json({ message: "Failed", error: error.message });
     }
@@ -155,10 +136,7 @@ const reportController = {
       const { store_id, product_id } = req.params;
       const { startDate = "1970-01-01", endDate = new Date() } = req.query;
       const SoldProduct = await Transactionitem.findOne({
-        attributes: [
-          "product_id",
-          [sequelize.fn("SUM", sequelize.col("quantity")), "totalProductSold"],
-        ],
+        attributes: ["product_id", [sequelize.fn("SUM", sequelize.col("quantity")), "totalProductSold"]],
         where: {
           "$Transaction.store_id$": store_id,
           "$Transaction.status$": 6,
@@ -170,17 +148,14 @@ const reportController = {
       });
       const SoldProductsByMonth = await Transactionitem.findAll({
         attributes: [
-          [
-            sequelize.literal('DATE_FORMAT(Transaction.createdAt, "%Y-%m")'),
-            "month",
-          ],
+          [sequelize.literal('DATE_FORMAT(Transaction.updatedAt, "%Y-%m")'), "month"],
           [sequelize.fn("SUM", sequelize.col("quantity")), "totalProductSold"],
         ],
         where: {
           "$Transaction.store_id$": store_id,
           "$Transaction.status$": 6,
           product_id,
-          "$Transaction.createdAt$": {
+          "$Transaction.updatedAt$": {
             [Op.between]: [startDate, endDate],
           },
         },
@@ -189,7 +164,7 @@ const reportController = {
             model: Transaction,
             attributes: [],
             where: {
-              createdAt: {
+              updatedAt: {
                 [Op.between]: [startDate, endDate],
               },
             },
@@ -199,13 +174,11 @@ const reportController = {
         order: [[sequelize.literal("month"), "DESC"]],
       });
 
-      res
-        .status(200)
-        .json({
-          message: "Success",
-          data: SoldProduct,
-          month: SoldProductsByMonth,
-        });
+      res.status(200).json({
+        message: "Success",
+        data: SoldProduct,
+        month: SoldProductsByMonth,
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed", error: error.message });
     }
@@ -213,26 +186,15 @@ const reportController = {
   getReportTransactionStatusAll: async (req, res) => {
     try {
       const { store_id } = req.params;
-      const {
-        order,
-        orderBy = "createdAt",
-        startDate,
-        endDate,
-        page = 1,
-        limit = 4,
-      } = req.query;
+      const { order, orderBy = "updatedAt", startDate, endDate, page = 1, limit = 4 } = req.query;
 
       let filter = {};
-      if (startDate) filter.createdAt = { [Op.gte]: new Date(startDate) };
-      if (endDate)
-        filter.createdAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
+      if (startDate) filter.updatedAt = { [Op.gte]: new Date(startDate) };
+      if (endDate) filter.updatedAt = { [Op.lte]: new Date(endDate).setHours(23, 59, 59) };
       if (startDate && endDate) {
         filter = {
-          createdAt: {
-            [Op.between]: [
-              new Date(startDate),
-              new Date(endDate).setHours(23, 59, 59),
-            ],
+          updatedAt: {
+            [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)],
           },
         };
       }
@@ -246,9 +208,7 @@ const reportController = {
         order: [[orderBy, order]],
         ...pagination,
       });
-      res
-        .status(200)
-        .json({ message: "Success", totalPage, data: totalTransactions });
+      res.status(200).json({ message: "Success", totalPage, data: totalTransactions });
     } catch (error) {
       res.status(500).json({ message: "Failed", error: error.message });
     }
@@ -272,18 +232,12 @@ const reportController = {
         col: "user_id",
         where: { status: 6 },
       });
-      const totalProductBuy = await Transaction.sum(
-        "Transactionitems.quantity",
-        {
-          where: { status: 6 },
-          include: [{ model: Transactionitem, attributes: [] }],
-        }
-      );
+      const totalProductBuy = await Transaction.sum("Transactionitems.quantity", {
+        where: { status: 6 },
+        include: [{ model: Transactionitem, attributes: [] }],
+      });
       const mostSoldProduct = await Transactionitem.findOne({
-        attributes: [
-          "product_id",
-          [sequelize.fn("SUM", sequelize.col("quantity")), "totalQuantitySold"],
-        ],
+        attributes: ["product_id", [sequelize.fn("SUM", sequelize.col("quantity")), "totalQuantitySold"]],
         where: {
           "$Transaction.status$": 6,
         },

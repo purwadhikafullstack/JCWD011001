@@ -139,7 +139,7 @@ const BranchSalesReportTransaction = ({ id, orderState, endDateState, startDateS
                     {item.user_id}
                     {item.id}
                   </Td>
-                  <Td>{changeDate(item.createdAt)}</Td>
+                  <Td>{changeDate(item.updatedAt)}</Td>
                   <Td>Rp.{item.total_price},-</Td>
                   <Td>Rp.{item.delivery_price},-</Td>
                   <Td>Rp.{item.total_discount},-</Td>

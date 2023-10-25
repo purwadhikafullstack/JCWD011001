@@ -73,7 +73,7 @@ const BranchSalesReportUserDetail = ({ user, setSelectedUser, id, startDateState
               <Td>Rp.{item.total_price},-</Td>
               <Td>Rp.{item.delivery_price},-</Td>
               <Td>Rp.{item.total_discount},-</Td>
-              <Td>{changeDate(item.createdAt)}</Td>
+              <Td>{changeDate(item.updatedAt)}</Td>
             </Tr>
           ))}
         </Tbody>
