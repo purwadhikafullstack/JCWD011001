@@ -70,6 +70,11 @@ const ProductList = () => {
     setIndex(1);
   };
 
+  const handleCat = (e) => {
+    setCat(e);
+    setIndex(1);
+  };
+
   if (!isShop && products.length > 0) {
     return (
       <Box maxW={maxBoxStore} w="100%" py="40px" px={{ base: "20px" }} mx={"auto"}>
@@ -111,7 +116,12 @@ const ProductList = () => {
           <Flex gap={2} flexWrap={"wrap"}>
             <SearchProducts />
             {isShop && (
-              <Select w={{ base: "48%" }} placeholder="Category" onChange={(e) => setCat(e.target.value)}>
+              <Select
+                w={{ base: "48%" }}
+                placeholder="Category"
+                onChange={(e) => {
+                  handleCat(e.target.value);
+                }}>
                 {category.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -161,7 +171,7 @@ const ProductList = () => {
           <Flex gap={2} flexWrap={"wrap"}>
             <SearchProducts />
             {isShop && (
-              <Select w={{ base: "48%" }} placeholder="Category" onChange={(e) => setCat(e.target.value)}>
+              <Select w={{ base: "48%" }} placeholder="Category" onChange={(e) => handleCat(e.target.value)}>
                 {category.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}

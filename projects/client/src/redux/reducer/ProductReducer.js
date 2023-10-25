@@ -42,13 +42,14 @@ export const ProductReducer = createSlice({
   },
 });
 
-export const getProduct = ({ index = 1, order = "ASC", orderBy = "name", category }) => {
+export const getProduct = ({ index = 1, order = "ASC", orderBy = "name", category, limit }) => {
   return async (dispatch) => {
     try {
       let query = `?page=${index}`;
       if (order) query += `&order=${order}`;
       if (orderBy) query += `&orderBy=${orderBy}`;
       if (category) query += `&category=${category}`;
+      if (limit) query += `&limit=${limit}`;
       const { data } = await axios.get(`${URL_API}/product/${query}`);
       dispatch(setPage(data.totalPage));
       dispatch(setProduct(data.data));
