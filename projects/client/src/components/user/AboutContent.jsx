@@ -129,7 +129,11 @@ const AboutContent = () => {
                   boxShadow={"lg"}
                 >
                   <Center>
-                    <Image src={item.image} w={"200px"} h={"200px"} />
+                    <Image
+                      src={item.image}
+                      w={{ base: "200px", md: "150px", lg: "200px" }}
+                      h={{ base: "200px", md: "150px", lg: "200px" }}
+                    />
                   </Center>
                   <Text fontWeight={"bold"} fontSize={"lg"}>
                     {item.name}
