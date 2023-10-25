@@ -59,6 +59,8 @@ const AboutContent = () => {
           </Text>
           <Box
             display={"flex"}
+            justifyContent={"center"}
+            flexWrap={{ base: "nowrap", md: "wrap", lg: "nowrap" }}
             flexDirection={{ base: "column", md: "row" }}
             gap={4}
           >
@@ -70,7 +72,6 @@ const AboutContent = () => {
                   display={"flex"}
                   flexDirection={"column"}
                   rounded={"xl"}
-                  flexWrap={"wrap"}
                   w={{ base: "100%", md: "300px" }}
                   borderWidth={"1px"}
                   gap={2}
@@ -109,6 +110,7 @@ const AboutContent = () => {
           <Box
             display={"flex"}
             flexDirection={{ base: "column", md: "row" }}
+            justifyContent={"center"}
             gap={4}
           >
             {TeamData &&
@@ -119,7 +121,6 @@ const AboutContent = () => {
                   display={"flex"}
                   flexDirection={"column"}
                   rounded={"xl"}
-                  flexWrap={"wrap"}
                   w={{ base: "100%", md: "300px" }}
                   borderWidth={"1px"}
                   gap={2}
