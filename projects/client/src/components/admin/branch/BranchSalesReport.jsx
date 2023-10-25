@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Stack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import BranchSalesReportMonthStatistic from "./BranchSalesReportMonthStatistic";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -66,8 +54,7 @@ const BranchSalesReport = () => {
         borderStyle={"solid"}
         borderColor={"#D7F0AA"}
         py={4}
-        px={8}
-      >
+        px={8}>
         <Box>
           <Text fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"medium"}>
             Sales Report {storeData.name}
@@ -90,10 +77,7 @@ const BranchSalesReport = () => {
             onChange={(e) => setEndDate(e.target.value)}
             w={{ base: "30%", md: "20%" }}
           />
-          <Button
-            onClick={() => setOrder(order === "DESC" ? "ASC" : "DESC")}
-            colorScheme="green"
-          >
+          <Button onClick={() => setOrder(order === "DESC" ? "ASC" : "DESC")} colorScheme="green">
             {order}
           </Button>{" "}
         </Flex>
@@ -101,9 +85,7 @@ const BranchSalesReport = () => {
           <TabList mb="1em">
             <Tab _selected={{ color: "white", bg: "green.500" }}>User</Tab>
             <Tab _selected={{ color: "white", bg: "green.500" }}>Product</Tab>
-            <Tab _selected={{ color: "white", bg: "green.500" }}>
-              Transaction
-            </Tab>
+            <Tab _selected={{ color: "white", bg: "green.500" }}>Transaction</Tab>
           </TabList>
 
           <TabPanels>
